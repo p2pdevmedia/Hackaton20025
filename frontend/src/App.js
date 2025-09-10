@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { ethers } from 'ethers';
+
 import PropertyMarketplace from './PropertyMarketplace.json';
+
 
 const contractAddress = '0xYourContractAddress'; // replace after deployment
 

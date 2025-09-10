@@ -17,7 +17,9 @@ npm test
 
 ## Frontend
 
+
 La carpeta `frontend` contiene una app React sencilla que interactúa con el contrato. Después de desplegar el contrato, coloque su dirección en `frontend/src/App.js` en la variable `contractAddress` y asegúrese de que el ABI del contrato se encuentre en `frontend/src/PropertyMarketplace.json`.
+
 
 ### Comandos frontend
 
