@@ -1,0 +1,91 @@
+{
+  "abi": [
+    {
+      "inputs": [
+        {"internalType": "string", "name": "uri", "type": "string"},
+        {"internalType": "uint256", "name": "price", "type": "uint256"},
+        {"internalType": "bool", "name": "forSale", "type": "bool"},
+        {"internalType": "bool", "name": "forRent", "type": "bool"}
+      ],
+      "name": "listProperty",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {"internalType": "uint256", "name": "id", "type": "uint256"}
+      ],
+      "name": "buyProperty",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {"internalType": "uint256", "name": "id", "type": "uint256"}
+      ],
+      "name": "rentProperty",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {"internalType": "uint256", "name": "", "type": "uint256"}
+      ],
+      "name": "properties",
+      "outputs": [
+        {"internalType": "uint256", "name": "id", "type": "uint256"},
+        {"internalType": "address", "name": "owner", "type": "address"},
+        {"internalType": "string", "name": "uri", "type": "string"},
+        {"internalType": "uint256", "name": "price", "type": "uint256"},
+        {"internalType": "bool", "name": "forSale", "type": "bool"},
+        {"internalType": "bool", "name": "forRent", "type": "bool"},
+        {"internalType": "bool", "name": "rented", "type": "bool"}
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "propertyCount",
+      "outputs": [
+        {"internalType": "uint256", "name": "", "type": "uint256"}
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {"indexed": false, "internalType": "uint256", "name": "id", "type": "uint256"},
+        {"indexed": false, "internalType": "address", "name": "owner", "type": "address"},
+        {"indexed": false, "internalType": "string", "name": "uri", "type": "string"},
+        {"indexed": false, "internalType": "uint256", "name": "price", "type": "uint256"},
+        {"indexed": false, "internalType": "bool", "name": "forSale", "type": "bool"},
+        {"indexed": false, "internalType": "bool", "name": "forRent", "type": "bool"}
+      ],
+      "name": "PropertyListed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {"indexed": false, "internalType": "uint256", "name": "id", "type": "uint256"},
+        {"indexed": false, "internalType": "address", "name": "buyer", "type": "address"}
+      ],
+      "name": "PropertyPurchased",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {"indexed": false, "internalType": "uint256", "name": "id", "type": "uint256"},
+        {"indexed": false, "internalType": "address", "name": "renter", "type": "address"}
+      ],
+      "name": "PropertyRented",
+      "type": "event"
+    }
+  ]
+}
