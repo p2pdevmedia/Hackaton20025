@@ -20,6 +20,10 @@ function App() {
     setAccount(acc);
   };
 
+  const logout = () => {
+    setAccount(null);
+  };
+
   const listProperty = async () => {
     if (!uri || !price) return;
     const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -36,6 +40,7 @@ function App() {
       {!account && <button onClick={connect}>Connect Wallet</button>}
       {account && (
         <div>
+          <button onClick={logout}>Logout</button>
           <input placeholder="Property URI" value={uri} onChange={e => setUri(e.target.value)} />
           <input placeholder="Price in ETH" value={price} onChange={e => setPrice(e.target.value)} />
           <button onClick={listProperty}>List Property for Sale</button>
