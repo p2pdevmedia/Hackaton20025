@@ -9,7 +9,18 @@ describe('PropertyMarketplace', function () {
     await marketplace.deployed();
 
     await expect(
-      marketplace.connect(user).listProperty('ipfs://uri', ethers.utils.parseEther('1'), true, false)
+      marketplace.connect(user).listProperty(
+        'Titulo',
+        'Descripcion',
+        ethers.utils.parseEther('1'),
+        ethers.utils.parseEther('0.1'),
+        'slider',
+        'mini',
+        'avatar',
+        'url',
+        true,
+        false
+      )
     ).to.be.revertedWith('Not verified');
 
     await marketplace
@@ -27,9 +38,23 @@ describe('PropertyMarketplace', function () {
         'A1234567'
       );
     await marketplace.verifyKYC(user.address);
-    await marketplace.connect(user).listProperty('ipfs://uri', ethers.utils.parseEther('1'), true, false);
+    await marketplace
+      .connect(user)
+      .listProperty(
+        'Titulo',
+        'Descripcion',
+        ethers.utils.parseEther('1'),
+        ethers.utils.parseEther('0.1'),
+        'slider',
+        'mini',
+        'avatar',
+        'url',
+        true,
+        false
+      );
     const prop = await marketplace.properties(1);
     expect(prop.owner).to.equal(user.address);
+    expect(prop.titulo).to.equal('Titulo');
   });
 
   it('admin can cancel a sale', async function () {
@@ -53,7 +78,20 @@ describe('PropertyMarketplace', function () {
         'A1234567'
       );
     await marketplace.verifyKYC(user.address);
-    await marketplace.connect(user).listProperty('ipfs://uri', ethers.utils.parseEther('1'), true, false);
+    await marketplace
+      .connect(user)
+      .listProperty(
+        'Titulo',
+        'Descripcion',
+        ethers.utils.parseEther('1'),
+        ethers.utils.parseEther('0.1'),
+        'slider',
+        'mini',
+        'avatar',
+        'url',
+        true,
+        false
+      );
     await marketplace.adminCancelSale(1);
     const prop = await marketplace.properties(1);
     expect(prop.forSale).to.equal(false);

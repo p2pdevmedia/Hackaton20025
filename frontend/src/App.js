@@ -10,8 +10,14 @@ const contractAddress = '0xYourContractAddress'; // replace after deployment
 
 function App() {
   const [account, setAccount] = useState(null);
-  const [uri, setUri] = useState('');
-  const [price, setPrice] = useState('');
+  const [titulo, setTitulo] = useState('');
+  const [descripcion, setDescripcion] = useState('');
+  const [precioUSDT, setPrecioUSDT] = useState('');
+  const [seniaUSDT, setSeniaUSDT] = useState('');
+  const [fotoSlider, setFotoSlider] = useState('');
+  const [fotosMini, setFotosMini] = useState('');
+  const [fotoAvatar, setFotoAvatar] = useState('');
+  const [url, setUrl] = useState('');
 
   const connect = async () => {
     if (!window.ethereum) {
@@ -27,14 +33,31 @@ function App() {
   };
 
   const listProperty = async () => {
-    if (!uri || !price) return;
+    if (!titulo || !descripcion || !precioUSDT || !fotoSlider || !fotosMini || !fotoAvatar || !url) return;
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     const contract = new ethers.Contract(contractAddress, PropertyMarketplace.abi, signer);
-    const tx = await contract.listProperty(uri, ethers.utils.parseEther(price), true, false);
+    const tx = await contract.listProperty(
+      titulo,
+      descripcion,
+      ethers.utils.parseEther(precioUSDT),
+      ethers.utils.parseEther(seniaUSDT || '0'),
+      fotoSlider,
+      fotosMini,
+      fotoAvatar,
+      url,
+      true,
+      false
+    );
     await tx.wait();
-    setUri('');
-    setPrice('');
+    setTitulo('');
+    setDescripcion('');
+    setPrecioUSDT('');
+    setSeniaUSDT('');
+    setFotoSlider('');
+    setFotosMini('');
+    setFotoAvatar('');
+    setUrl('');
   };
 
   const properties = [
@@ -69,15 +92,51 @@ function App() {
           <div className="flex flex-col gap-4">
             <input
               className="border p-2 rounded"
-              placeholder="Property URI"
-              value={uri}
-              onChange={e => setUri(e.target.value)}
+              placeholder="Titulo"
+              value={titulo}
+              onChange={e => setTitulo(e.target.value)}
             />
             <input
               className="border p-2 rounded"
-              placeholder="Price in ETH"
-              value={price}
-              onChange={e => setPrice(e.target.value)}
+              placeholder="Descripcion"
+              value={descripcion}
+              onChange={e => setDescripcion(e.target.value)}
+            />
+            <input
+              className="border p-2 rounded"
+              placeholder="Precio en ETH"
+              value={precioUSDT}
+              onChange={e => setPrecioUSDT(e.target.value)}
+            />
+            <input
+              className="border p-2 rounded"
+              placeholder="Seña en ETH"
+              value={seniaUSDT}
+              onChange={e => setSeniaUSDT(e.target.value)}
+            />
+            <input
+              className="border p-2 rounded"
+              placeholder="Foto Slider URI"
+              value={fotoSlider}
+              onChange={e => setFotoSlider(e.target.value)}
+            />
+            <input
+              className="border p-2 rounded"
+              placeholder="Fotos Mini URI"
+              value={fotosMini}
+              onChange={e => setFotosMini(e.target.value)}
+            />
+            <input
+              className="border p-2 rounded"
+              placeholder="Foto Avatar URI"
+              value={fotoAvatar}
+              onChange={e => setFotoAvatar(e.target.value)}
+            />
+            <input
+              className="border p-2 rounded"
+              placeholder="URL"
+              value={url}
+              onChange={e => setUrl(e.target.value)}
             />
             <button
               onClick={listProperty}
