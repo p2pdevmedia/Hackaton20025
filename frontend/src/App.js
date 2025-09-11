@@ -3,6 +3,8 @@ import { ethers } from 'ethers';
 
 import PropertyMarketplace from './PropertyMarketplace.json';
 import PropertySlider from './components/PropertySlider';
+import Navbar from './components/Navbar';
+import KYCForm from './components/KYCForm';
 
 const contractAddress = '0xYourContractAddress'; // replace after deployment
 
@@ -18,6 +20,10 @@ function App() {
     }
     const [acc] = await window.ethereum.request({ method: 'eth_requestAccounts' });
     setAccount(acc);
+  };
+
+  const disconnect = () => {
+    setAccount(null);
   };
 
   const listProperty = async () => {
@@ -53,20 +59,10 @@ function App() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
-      <header className="max-w-4xl mx-auto py-6">
-        <h1 className="text-3xl font-bold text-center mb-4">Property Marketplace</h1>
-        {!account && (
-          <div className="text-center">
-            <button
-              onClick={connect}
-              className="px-4 py-2 bg-blue-600 text-white rounded"
-            >
-              Connect Wallet
-            </button>
-          </div>
-        )}
-      </header>
+    <div className="min-h-screen bg-gray-100">
+      <Navbar account={account} connect={connect} disconnect={disconnect} />
+
+      {account && <KYCForm account={account} />}
 
       {account && (
         <div className="max-w-4xl mx-auto bg-white p-4 rounded shadow mb-8">
@@ -93,7 +89,7 @@ function App() {
         </div>
       )}
 
-      <section className="max-w-4xl mx-auto">
+      <section className="max-w-4xl mx-auto p-4">
         <h2 className="text-2xl font-semibold mb-4">Featured Properties</h2>
         <PropertySlider properties={properties} />
       </section>
