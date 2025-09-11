@@ -32,6 +32,66 @@
     },
     {
       "inputs": [
+        {"internalType": "uint256", "name": "id", "type": "uint256"}
+      ],
+      "name": "adminCancelSale",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {"internalType": "uint256", "name": "id", "type": "uint256"},
+        {"internalType": "address", "name": "previousOwner", "type": "address"}
+      ],
+      "name": "adminCancelPurchase",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {"internalType": "address", "name": "newAdmin", "type": "address"}
+      ],
+      "name": "setAdmin",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {"internalType": "string", "name": "name", "type": "string"},
+        {"internalType": "string", "name": "email", "type": "string"}
+      ],
+      "name": "submitKYC",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {"internalType": "address", "name": "user", "type": "address"}
+      ],
+      "name": "verifyKYC",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {"internalType": "address", "name": "user", "type": "address"}
+      ],
+      "name": "getKYC",
+      "outputs": [
+        {"internalType": "string", "name": "", "type": "string"},
+        {"internalType": "string", "name": "", "type": "string"},
+        {"internalType": "bool", "name": "", "type": "bool"}
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
         {"internalType": "uint256", "name": "", "type": "uint256"}
       ],
       "name": "properties",

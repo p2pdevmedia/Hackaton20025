@@ -1,26 +1,41 @@
 import { useState, useEffect } from 'react';
+import { ethers } from 'ethers';
+import PropertyMarketplace from '../PropertyMarketplace.json';
 
-function KYCForm({ account }) {
-  const storageKey = `kyc_${account}`;
+function KYCForm({ account, contractAddress }) {
   const [formData, setFormData] = useState({ name: '', email: '' });
   const [completed, setCompleted] = useState(false);
+  const [verified, setVerified] = useState(false);
 
   useEffect(() => {
-    const stored = localStorage.getItem(storageKey);
-    if (stored) {
-      setFormData(JSON.parse(stored));
-      setCompleted(true);
+    const fetchKYC = async () => {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const contract = new ethers.Contract(contractAddress, PropertyMarketplace.abi, provider);
+      const [name, email, isVerified] = await contract.getKYC(account);
+      if (name) {
+        setFormData({ name, email });
+        setCompleted(true);
+        setVerified(isVerified);
+      }
+    };
+    if (account) {
+      fetchKYC();
     }
-  }, [storageKey]);
+  }, [account, contractAddress]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    localStorage.setItem(storageKey, JSON.stringify(formData));
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const contract = new ethers.Contract(contractAddress, PropertyMarketplace.abi, signer);
+    const tx = await contract.submitKYC(formData.name, formData.email);
+    await tx.wait();
     setCompleted(true);
+    setVerified(false);
   };
 
   const handleEdit = () => {
@@ -36,6 +51,7 @@ function KYCForm({ account }) {
         <div className="space-y-2">
           <p><strong>Name:</strong> {formData.name}</p>
           <p><strong>Email:</strong> {formData.email}</p>
+          <p><strong>Verified:</strong> {verified ? 'Yes' : 'Pending'}</p>
           <button
             onClick={handleEdit}
             className="mt-2 px-4 py-2 bg-blue-600 text-white rounded"

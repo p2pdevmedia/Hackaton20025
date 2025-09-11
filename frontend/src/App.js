@@ -62,7 +62,7 @@ function App() {
     <div className="min-h-screen bg-gray-100">
       <Navbar account={account} connect={connect} disconnect={disconnect} />
 
-      {account && <KYCForm account={account} />}
+      {account && <KYCForm account={account} contractAddress={contractAddress} />}
 
       {account && (
         <div className="max-w-4xl mx-auto bg-white p-4 rounded shadow mb-8">
