@@ -60,8 +60,16 @@
     },
     {
       "inputs": [
-        {"internalType": "string", "name": "name", "type": "string"},
-        {"internalType": "string", "name": "email", "type": "string"}
+        {"internalType": "string", "name": "firstName", "type": "string"},
+        {"internalType": "string", "name": "lastName", "type": "string"},
+        {"internalType": "string", "name": "email", "type": "string"},
+        {"internalType": "string", "name": "street", "type": "string"},
+        {"internalType": "string", "name": "city", "type": "string"},
+        {"internalType": "string", "name": "country", "type": "string"},
+        {"internalType": "string", "name": "postalCode", "type": "string"},
+        {"internalType": "string", "name": "phone", "type": "string"},
+        {"internalType": "string", "name": "idType", "type": "string"},
+        {"internalType": "string", "name": "idNumber", "type": "string"}
       ],
       "name": "submitKYC",
       "outputs": [],
@@ -83,6 +91,14 @@
       ],
       "name": "getKYC",
       "outputs": [
+        {"internalType": "string", "name": "", "type": "string"},
+        {"internalType": "string", "name": "", "type": "string"},
+        {"internalType": "string", "name": "", "type": "string"},
+        {"internalType": "string", "name": "", "type": "string"},
+        {"internalType": "string", "name": "", "type": "string"},
+        {"internalType": "string", "name": "", "type": "string"},
+        {"internalType": "string", "name": "", "type": "string"},
+        {"internalType": "string", "name": "", "type": "string"},
         {"internalType": "string", "name": "", "type": "string"},
         {"internalType": "string", "name": "", "type": "string"},
         {"internalType": "bool", "name": "", "type": "bool"}

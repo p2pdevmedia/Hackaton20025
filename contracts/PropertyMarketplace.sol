@@ -10,8 +10,16 @@ contract PropertyMarketplace {
     }
 
     struct KYC {
-        string name;
+        string firstName;
+        string lastName;
         string email;
+        string street;
+        string city;
+        string country;
+        string postalCode;
+        string phone;
+        string idType;
+        string idNumber;
         bool verified;
     }
 
@@ -46,18 +54,69 @@ contract PropertyMarketplace {
         admin = newAdmin;
     }
 
-    function submitKYC(string calldata name, string calldata email) external {
-        kycs[msg.sender] = KYC(name, email, false);
+    function submitKYC(
+        string calldata firstName,
+        string calldata lastName,
+        string calldata email,
+        string calldata street,
+        string calldata city,
+        string calldata country,
+        string calldata postalCode,
+        string calldata phone,
+        string calldata idType,
+        string calldata idNumber
+    ) external {
+        kycs[msg.sender] = KYC(
+            firstName,
+            lastName,
+            email,
+            street,
+            city,
+            country,
+            postalCode,
+            phone,
+            idType,
+            idNumber,
+            false
+        );
     }
 
     function verifyKYC(address user) external onlyAdmin {
-        require(bytes(kycs[user].name).length > 0, "No KYC");
+        require(bytes(kycs[user].firstName).length > 0, "No KYC");
         kycs[user].verified = true;
     }
 
-    function getKYC(address user) external view returns (string memory, string memory, bool) {
+    function getKYC(address user)
+        external
+        view
+        returns (
+            string memory,
+            string memory,
+            string memory,
+            string memory,
+            string memory,
+            string memory,
+            string memory,
+            string memory,
+            string memory,
+            string memory,
+            bool
+        )
+    {
         KYC storage info = kycs[user];
-        return (info.name, info.email, info.verified);
+        return (
+            info.firstName,
+            info.lastName,
+            info.email,
+            info.street,
+            info.city,
+            info.country,
+            info.postalCode,
+            info.phone,
+            info.idType,
+            info.idNumber,
+            info.verified
+        );
     }
 
     function listProperty(string memory uri, uint price, bool forSale, bool forRent) external onlyVerified {
