@@ -2,8 +2,14 @@
   "abi": [
     {
       "inputs": [
-        {"internalType": "string", "name": "uri", "type": "string"},
-        {"internalType": "uint256", "name": "price", "type": "uint256"},
+        {"internalType": "string", "name": "titulo", "type": "string"},
+        {"internalType": "string", "name": "descripcion", "type": "string"},
+        {"internalType": "uint256", "name": "precioUSDT", "type": "uint256"},
+        {"internalType": "uint256", "name": "seniaUSDT", "type": "uint256"},
+        {"internalType": "string", "name": "fotoSlider", "type": "string"},
+        {"internalType": "string", "name": "fotosMini", "type": "string"},
+        {"internalType": "string", "name": "fotoAvatar", "type": "string"},
+        {"internalType": "string", "name": "url", "type": "string"},
         {"internalType": "bool", "name": "forSale", "type": "bool"},
         {"internalType": "bool", "name": "forRent", "type": "bool"}
       ],
@@ -114,8 +120,14 @@
       "outputs": [
         {"internalType": "uint256", "name": "id", "type": "uint256"},
         {"internalType": "address", "name": "owner", "type": "address"},
-        {"internalType": "string", "name": "uri", "type": "string"},
-        {"internalType": "uint256", "name": "price", "type": "uint256"},
+        {"internalType": "string", "name": "titulo", "type": "string"},
+        {"internalType": "string", "name": "descripcion", "type": "string"},
+        {"internalType": "uint256", "name": "precioUSDT", "type": "uint256"},
+        {"internalType": "uint256", "name": "seniaUSDT", "type": "uint256"},
+        {"internalType": "string", "name": "fotoSlider", "type": "string"},
+        {"internalType": "string", "name": "fotosMini", "type": "string"},
+        {"internalType": "string", "name": "fotoAvatar", "type": "string"},
+        {"internalType": "string", "name": "url", "type": "string"},
         {"internalType": "bool", "name": "forSale", "type": "bool"},
         {"internalType": "bool", "name": "forRent", "type": "bool"},
         {"internalType": "bool", "name": "rented", "type": "bool"}
@@ -137,8 +149,8 @@
       "inputs": [
         {"indexed": false, "internalType": "uint256", "name": "id", "type": "uint256"},
         {"indexed": false, "internalType": "address", "name": "owner", "type": "address"},
-        {"indexed": false, "internalType": "string", "name": "uri", "type": "string"},
-        {"indexed": false, "internalType": "uint256", "name": "price", "type": "uint256"},
+        {"indexed": false, "internalType": "string", "name": "titulo", "type": "string"},
+        {"indexed": false, "internalType": "uint256", "name": "precioUSDT", "type": "uint256"},
         {"indexed": false, "internalType": "bool", "name": "forSale", "type": "bool"},
         {"indexed": false, "internalType": "bool", "name": "forRent", "type": "bool"}
       ],

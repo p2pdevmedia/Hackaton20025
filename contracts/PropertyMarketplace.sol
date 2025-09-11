@@ -26,8 +26,14 @@ contract PropertyMarketplace {
     struct Property {
         uint id;
         address payable owner;
-        string uri;
-        uint price;
+        string titulo;
+        string descripcion;
+        uint precioUSDT;
+        uint seniaUSDT;
+        string fotoSlider;
+        string fotosMini;
+        string fotoAvatar;
+        string url;
         bool forSale;
         bool forRent;
         bool rented;
@@ -36,7 +42,7 @@ contract PropertyMarketplace {
     mapping(uint => Property) public properties;
     mapping(address => KYC) public kycs;
 
-    event PropertyListed(uint id, address owner, string uri, uint price, bool forSale, bool forRent);
+    event PropertyListed(uint id, address owner, string titulo, uint precioUSDT, bool forSale, bool forRent);
     event PropertyPurchased(uint id, address buyer);
     event PropertyRented(uint id, address renter);
 
@@ -119,18 +125,50 @@ contract PropertyMarketplace {
         );
     }
 
-    function listProperty(string memory uri, uint price, bool forSale, bool forRent) external onlyVerified {
+    function listProperty(
+        string memory titulo,
+        string memory descripcion,
+        uint precioUSDT,
+        uint seniaUSDT,
+        string memory fotoSlider,
+        string memory fotosMini,
+        string memory fotoAvatar,
+        string memory url,
+        bool forSale,
+        bool forRent
+    ) external onlyVerified {
+        require(bytes(titulo).length > 0, "Title required");
+        require(bytes(descripcion).length > 0, "Description required");
+        require(precioUSDT > 0, "Price required");
+        require(bytes(fotoSlider).length > 0, "Slider photo required");
+        require(bytes(fotosMini).length > 0, "Mini photos required");
+        require(bytes(fotoAvatar).length > 0, "Avatar photo required");
+        require(bytes(url).length > 0, "URL required");
         require(forSale || forRent, "Must be for sale or rent");
         propertyCount++;
-        properties[propertyCount] = Property(propertyCount, payable(msg.sender), uri, price, forSale, forRent, false);
-        emit PropertyListed(propertyCount, msg.sender, uri, price, forSale, forRent);
+        properties[propertyCount] = Property(
+            propertyCount,
+            payable(msg.sender),
+            titulo,
+            descripcion,
+            precioUSDT,
+            seniaUSDT,
+            fotoSlider,
+            fotosMini,
+            fotoAvatar,
+            url,
+            forSale,
+            forRent,
+            false
+        );
+        emit PropertyListed(propertyCount, msg.sender, titulo, precioUSDT, forSale, forRent);
     }
 
     function buyProperty(uint id) external payable onlyVerified {
         Property storage prop = properties[id];
         require(prop.owner != address(0), "Property not found");
         require(prop.forSale, "Not for sale");
-        require(msg.value == prop.price, "Incorrect price");
+        require(msg.value == prop.precioUSDT, "Incorrect price");
 
         address payable seller = prop.owner;
         prop.owner = payable(msg.sender);
@@ -145,7 +183,7 @@ contract PropertyMarketplace {
         require(prop.owner != address(0), "Property not found");
         require(prop.forRent, "Not for rent");
         require(!prop.rented, "Already rented");
-        require(msg.value == prop.price, "Incorrect rent");
+        require(msg.value == prop.precioUSDT, "Incorrect rent");
 
         prop.owner.transfer(msg.value);
         prop.rented = true;
