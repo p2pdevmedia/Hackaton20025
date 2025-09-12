@@ -12,7 +12,7 @@ function Navbar({ account, connect, disconnect }) {
               onClick={disconnect}
               className="px-3 py-1 bg-red-500 text-white rounded"
             >
-              Disconnect
+              Logout
             </button>
           </div>
         ) : (
@@ -20,7 +20,7 @@ function Navbar({ account, connect, disconnect }) {
             onClick={connect}
             className="px-3 py-1 bg-blue-600 text-white rounded"
           >
-            Connect Wallet
+            Login
           </button>
         )}
       </div>

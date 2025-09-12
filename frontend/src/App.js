@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ethers } from 'ethers';
+import { usePrivy, useWallets } from '@privy-io/react-auth';
 
 import PropertyMarketplace from './PropertyMarketplace.json';
 import PropertySlider from './components/PropertySlider';
@@ -9,26 +10,26 @@ import KYCForm from './components/KYCForm';
 const contractAddress = '0xYourContractAddress'; // replace after deployment
 
 function App() {
+  const { login, logout, authenticated } = usePrivy();
+  const { wallets } = useWallets();
   const [account, setAccount] = useState(null);
   const [uri, setUri] = useState('');
   const [price, setPrice] = useState('');
 
-  const connect = async () => {
-    if (!window.ethereum) {
-      alert('Please install MetaMask');
-      return;
+  useEffect(() => {
+    if (authenticated && wallets.length > 0) {
+      setAccount(wallets[0].address);
+    } else {
+      setAccount(null);
     }
-    const [acc] = await window.ethereum.request({ method: 'eth_requestAccounts' });
-    setAccount(acc);
-  };
+  }, [authenticated, wallets]);
 
-  const disconnect = () => {
-    setAccount(null);
-  };
+  const connect = () => login();
+  const disconnect = () => logout();
 
   const listProperty = async () => {
-    if (!uri || !price) return;
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    if (!uri || !price || wallets.length === 0) return;
+    const provider = new ethers.providers.Web3Provider(wallets[0].ethereum);
     const signer = provider.getSigner();
     const contract = new ethers.Contract(contractAddress, PropertyMarketplace.abi, signer);
     const tx = await contract.listProperty(uri, ethers.utils.parseEther(price), true, false);
