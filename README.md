@@ -1,11 +1,22 @@
 # Hackaton20025
 
-Este proyecto incluye un smart contract en Solidity para el manejo de ventas y alquileres de propiedades y una aplicación React que permite a los usuarios conectarse con MetaMask y publicar sus propiedades.
+Aplicación descentralizada para gestionar venta y alquiler de propiedades en la blockchain. El proyecto combina un contrato inteligente en Solidity con un frontend en React, permitiendo a los usuarios conectar su billetera MetaMask, completar un proceso de KYC, publicar propiedades y realizar transacciones de compra o renta.
+
+## Características principales
+
+- Registro KYC en cadena y verificación por un administrador.
+- Listado de propiedades con imágenes, precio y URL de referencia.
+- Compra o alquiler de propiedades mediante transacciones en Ether.
+- Interfaz web que muestra propiedades destacadas y formulario para listar nuevos inmuebles.
 
 ## Smart Contract
 
-- **contracts/PropertyMarketplace.sol**: contrato que permite listar propiedades, comprarlas o rentarlas.
-- Usa Hardhat para compilar y ejecutar pruebas.
+El contrato [`contracts/PropertyMarketplace.sol`](contracts/PropertyMarketplace.sol) contiene la lógica de negocio:
+
+- Mantiene los datos de KYC y de las propiedades.
+- Permite a usuarios verificados listar, comprar o rentar propiedades.
+- Emite eventos para cada publicación, compra o alquiler.
+- Incluye funciones administrativas para verificar identidades y cancelar operaciones.
 
 ### Comandos principales
 
@@ -17,9 +28,14 @@ npm test
 
 ## Frontend
 
+La carpeta [`frontend`](frontend) incluye la app React que interactúa con el contrato. Una vez desplegado el contrato, actualice la variable `contractAddress` en `frontend/src/App.js` y asegúrese de copiar el ABI a `frontend/src/PropertyMarketplace.json`.
 
-La carpeta `frontend` contiene una app React sencilla que interactúa con el contrato. Después de desplegar el contrato, coloque su dirección en `frontend/src/App.js` en la variable `contractAddress` y asegúrese de que el ABI del contrato se encuentre en `frontend/src/PropertyMarketplace.json`.
+La interfaz permite:
 
+- Conectarse con MetaMask.
+- Completar el formulario KYC.
+- Publicar propiedades indicando precio, seña e imágenes.
+- Visualizar propiedades destacadas en un carrusel.
 
 ### Comandos frontend
 
@@ -28,3 +44,4 @@ cd frontend
 npm install
 npm start
 ```
+
