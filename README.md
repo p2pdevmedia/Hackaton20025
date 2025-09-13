@@ -1,12 +1,12 @@
-# Hackaton20025
+# Airbnbit.com
 
-Aplicación descentralizada para gestionar venta y alquiler de propiedades en la blockchain. El proyecto combina un contrato inteligente en Solidity con un frontend en React, permitiendo a los usuarios conectar su billetera MetaMask, completar un proceso de KYC, publicar propiedades y realizar transacciones de compra o renta.
+Aplicación descentralizada enfocada principalmente en el **alquiler de propiedades** en la blockchain. El proyecto combina un contrato inteligente en Solidity con un frontend en React, permitiendo a los usuarios conectar su billetera MetaMask, completar un proceso de KYC, publicar inmuebles y realizar reservas o pagos de renta en Ether. También admite la venta de propiedades si se requiere.
 
 ## Características principales
 
 - Registro KYC en cadena y verificación por un administrador.
-- Listado de propiedades con imágenes, precio y URL de referencia.
-- Compra o alquiler de propiedades mediante transacciones en Ether.
+- Listado de propiedades para alquiler con imágenes, precio y URL de referencia.
+- Reserva y pago de rentas mediante transacciones en Ether.
 - Interfaz web que muestra propiedades destacadas y formulario para listar nuevos inmuebles.
 
 ## Smart Contract
@@ -17,6 +17,16 @@ El contrato [`contracts/PropertyMarketplace.sol`](contracts/PropertyMarketplace.
 - Permite a usuarios verificados listar, comprar o rentar propiedades.
 - Emite eventos para cada publicación, compra o alquiler.
 - Incluye funciones administrativas para verificar identidades y cancelar operaciones.
+
+## Gobernanza y token GOV
+
+El contrato [`contracts/GovernanceToken.sol`](contracts/GovernanceToken.sol) define el token de gobernanza **GOV** utilizado para la administración del protocolo. Los administradores pueden:
+
+- Actualizar el token de pago aceptado para comprar GOV.
+- Ajustar el precio del token.
+- Pausar o reanudar la venta de GOV.
+
+Adicionalmente, el administrador del marketplace verifica identidades, puede asignar un nuevo administrador y cancelar operaciones de compra o alquiler en caso de disputas.
 
 ### Comandos principales
 

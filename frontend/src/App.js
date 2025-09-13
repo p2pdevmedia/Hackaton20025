@@ -68,18 +68,18 @@ function App() {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     const contract = new ethers.Contract(contractAddress, PropertyMarketplace.abi, signer);
-    const tx = await contract.listProperty(
-      titulo,
-      descripcion,
-      ethers.utils.parseEther(precioUSDT),
-      ethers.utils.parseEther(seniaUSDT || '0'),
-      fotoSlider,
-      fotosMini,
-      fotoAvatar,
-      url,
-      true,
-      false
-    );
+      const tx = await contract.listProperty(
+        titulo,
+        descripcion,
+        ethers.utils.parseEther(precioUSDT),
+        ethers.utils.parseEther(seniaUSDT || '0'),
+        fotoSlider,
+        fotosMini,
+        fotoAvatar,
+        url,
+        false,
+        true
+      );
     await tx.wait();
     setTitulo('');
     setDescripcion('');
@@ -207,20 +207,20 @@ function App() {
               onClick={listProperty}
               className="self-start px-4 py-2 bg-green-600 text-white rounded"
             >
-              List Property for Sale
+              List Property for Rent
             </button>
           </div>
         </div>
       )}
 
-      <section className="max-w-4xl mx-auto p-4">
-        <h2 className="text-2xl font-semibold mb-4">Featured Properties</h2>
-        <PropertySlider properties={sliderProps} />
-      </section>
+        <section className="max-w-4xl mx-auto p-4">
+          <h2 className="text-2xl font-semibold mb-4">Featured Rentals</h2>
+          <PropertySlider properties={sliderProps} />
+        </section>
 
-      <section className="max-w-4xl mx-auto p-4">
-        <h2 className="text-2xl font-semibold mb-4">Available Properties</h2>
-        {properties.map(p => (
+        <section className="max-w-4xl mx-auto p-4">
+          <h2 className="text-2xl font-semibold mb-4">Available Rentals</h2>
+          {properties.map(p => (
           <div key={p.id} className="bg-white p-4 rounded shadow mb-4">
             <img src={p.foto} alt={p.titulo} className="w-full h-48 object-cover mb-2" />
             <h3 className="text-xl font-semibold">{p.titulo}</h3>
