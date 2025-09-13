@@ -94,12 +94,14 @@ function KYCForm({ account, contractAddress }) {
           <p><strong>ID Type:</strong> {formData.idType}</p>
           <p><strong>ID Number:</strong> {formData.idNumber}</p>
           <p><strong>Verified:</strong> {verified ? 'Yes' : 'Pending'}</p>
-          <button
-            onClick={handleEdit}
-            className="mt-2 px-4 py-2 bg-blue-600 text-white rounded"
-          >
-            Edit
-          </button>
+          {!verified && (
+            <button
+              onClick={handleEdit}
+              className="mt-2 px-4 py-2 bg-blue-600 text-white rounded"
+            >
+              Edit
+            </button>
+          )}
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
