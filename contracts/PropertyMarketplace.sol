@@ -39,12 +39,24 @@ contract PropertyMarketplace {
         bool rented;
     }
 
+    // Booking information per property and day (Unix timestamp at 00:00)
+    struct Reservation {
+        address renter;
+        bool paid;
+        bytes32 accessCode;
+    }
+
+    // propertyId => day => Reservation
+    mapping(uint => mapping(uint => Reservation)) public reservations;
+
     mapping(uint => Property) public properties;
     mapping(address => KYC) public kycs;
 
     event PropertyListed(uint id, address owner, string titulo, uint precioUSDT, bool forSale, bool forRent);
     event PropertyPurchased(uint id, address buyer);
     event PropertyRented(uint id, address renter);
+    event ReservationMade(uint id, address renter, uint date);
+    event AccessCodeGenerated(uint id, address renter, uint date, bytes32 code);
 
     modifier onlyAdmin() {
         require(msg.sender == admin, "Not admin");
@@ -189,6 +201,43 @@ contract PropertyMarketplace {
         prop.rented = true;
 
         emit PropertyRented(id, msg.sender);
+    }
+
+    // Check if a specific day is free for booking
+    function isDateAvailable(uint id, uint date) public view returns (bool) {
+        return reservations[id][date].renter == address(0);
+    }
+
+    // Reserve a day by paying the deposit (seña)
+    function reserveDate(uint id, uint date) external payable onlyVerified {
+        Property storage prop = properties[id];
+        require(prop.owner != address(0), "Property not found");
+        require(prop.forRent, "Not for rent");
+        require(isDateAvailable(id, date), "Date reserved");
+        require(msg.value == prop.seniaUSDT, "Incorrect deposit");
+
+        reservations[id][date].renter = msg.sender;
+        prop.owner.transfer(msg.value);
+
+        emit ReservationMade(id, msg.sender, date);
+    }
+
+    // Pay the remaining rent and receive an access code for the smart lock
+    function payRent(uint id, uint date) external payable onlyVerified returns (bytes32) {
+        Property storage prop = properties[id];
+        Reservation storage res = reservations[id][date];
+
+        require(res.renter == msg.sender, "Not renter");
+        require(!res.paid, "Already paid");
+        require(msg.value == prop.precioUSDT - prop.seniaUSDT, "Incorrect payment");
+
+        prop.owner.transfer(msg.value);
+
+        res.paid = true;
+        res.accessCode = keccak256(abi.encodePacked(block.timestamp, msg.sender, id, date));
+
+        emit AccessCodeGenerated(id, msg.sender, date, res.accessCode);
+        return res.accessCode;
     }
 
     function adminCancelSale(uint id) external onlyAdmin {
