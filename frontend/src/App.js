@@ -5,6 +5,7 @@ import PropertyMarketplace from './PropertyMarketplace.json';
 import PropertySlider from './components/PropertySlider';
 import Navbar from './components/Navbar';
 import KYCForm from './components/KYCForm';
+import MyProperties from './components/MyProperties';
 
 const contractAddress = '0xYourContractAddress'; // replace after deployment
 
@@ -19,6 +20,7 @@ function App() {
   const [fotosMini, setFotosMini] = useState('');
   const [fotoAvatar, setFotoAvatar] = useState('');
   const [url, setUrl] = useState('');
+  const [page, setPage] = useState('home');
 
   const connect = async () => {
     if (!window.ethereum) {
@@ -148,11 +150,17 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <Navbar account={account} connect={connect} disconnect={disconnect} />
+      <Navbar account={account} connect={connect} disconnect={disconnect} setPage={setPage} />
 
-      {account && <KYCForm account={account} contractAddress={contractAddress} />}
+      {account && page === 'kyc' && (
+        <KYCForm account={account} contractAddress={contractAddress} />
+      )}
 
-      {account && (
+      {account && page === 'myProperties' && (
+        <MyProperties account={account} contractAddress={contractAddress} />
+      )}
+
+      {account && page === 'home' && (
         <div className="max-w-4xl mx-auto bg-white p-4 rounded shadow mb-8">
           <div className="flex flex-col gap-4">
             <input
@@ -213,6 +221,8 @@ function App() {
         </div>
       )}
 
+      {page === 'home' && (
+        <>
         <section className="max-w-4xl mx-auto p-4">
           <h2 className="text-2xl font-semibold mb-4">Featured Rentals</h2>
           <PropertySlider properties={sliderProps} />
@@ -256,6 +266,8 @@ function App() {
           </div>
         ))}
       </section>
+      </>
+      )}
     </div>
   );
 }

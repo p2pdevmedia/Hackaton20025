@@ -49,6 +49,9 @@ contract PropertyMarketplace {
     // propertyId => day => Reservation
     mapping(uint => mapping(uint => Reservation)) public reservations;
 
+    // track active reservations per property
+    mapping(uint => uint) public reservationCount;
+
     mapping(uint => Property) public properties;
     mapping(address => KYC) public kycs;
 
@@ -219,6 +222,8 @@ contract PropertyMarketplace {
         reservations[id][date].renter = msg.sender;
         prop.owner.transfer(msg.value);
 
+        reservationCount[id]++;
+
         emit ReservationMade(id, msg.sender, date);
     }
 
@@ -236,8 +241,29 @@ contract PropertyMarketplace {
         res.paid = true;
         res.accessCode = keccak256(abi.encodePacked(block.timestamp, msg.sender, id, date));
 
+        reservationCount[id]--;
+
         emit AccessCodeGenerated(id, msg.sender, date, res.accessCode);
         return res.accessCode;
+    }
+
+    function pauseProperty(uint id) external {
+        Property storage prop = properties[id];
+        require(prop.owner == msg.sender, "Not owner");
+        prop.forRent = false;
+    }
+
+    function resumeProperty(uint id) external {
+        Property storage prop = properties[id];
+        require(prop.owner == msg.sender, "Not owner");
+        prop.forRent = true;
+    }
+
+    function removeProperty(uint id) external {
+        Property storage prop = properties[id];
+        require(prop.owner == msg.sender, "Not owner");
+        require(reservationCount[id] == 0, "Active reservations");
+        delete properties[id];
     }
 
     function adminCancelSale(uint id) external onlyAdmin {
