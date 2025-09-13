@@ -213,6 +213,7 @@ contract PropertyMarketplace {
         Property storage prop = properties[id];
         require(prop.owner != address(0), "Property not found");
         require(prop.forRent, "Not for rent");
+        require(date >= block.timestamp + 1 days, "Same-day booking not allowed");
         require(isDateAvailable(id, date), "Date reserved");
         require(msg.value == prop.seniaUSDT, "Incorrect deposit");
 
