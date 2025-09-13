@@ -1,4 +1,4 @@
-# Airbnbit.com
+# [Airbnbit.com](http://hackaton20025.vercel.app)
 
 Aplicación descentralizada enfocada principalmente en el **alquiler de propiedades** en la blockchain. El proyecto combina un contrato inteligente en Solidity con un frontend en React, permitiendo a los usuarios conectar su billetera MetaMask, completar un proceso de KYC, publicar inmuebles y realizar reservas o pagos de renta en Ether. También admite la venta de propiedades si se requiere.
 
