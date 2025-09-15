@@ -36,10 +36,26 @@ function App() {
   const [fotosMini, setFotosMini] = useState('');
   const [fotoAvatar, setFotoAvatar] = useState('');
   const [url, setUrl] = useState('');
-  const [page, setPage] = useState('home');
+  const [page, setPage] = useState(() =>
+    window.location.pathname.slice(1) || 'home'
+  );
   const [searchCity, setSearchCity] = useState('');
   const [searchPostal, setSearchPostal] = useState('');
   const [searchName, setSearchName] = useState('');
+
+  useEffect(() => {
+    const handlePop = () => {
+      setPage(window.location.pathname.slice(1) || 'home');
+    };
+    window.addEventListener('popstate', handlePop);
+    return () => window.removeEventListener('popstate', handlePop);
+  }, []);
+
+  const navigate = newPage => {
+    setPage(newPage);
+    const path = newPage === 'home' ? '/' : `/${newPage}`;
+    window.history.pushState(null, '', path);
+  };
 
   const connect = async () => {
     if (!window.ethereum) {
@@ -198,7 +214,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <Navbar account={account} connect={connect} disconnect={disconnect} setPage={setPage} />
+      <Navbar account={account} connect={connect} disconnect={disconnect} navigate={navigate} />
 
       {account && isValidAddress && page === 'kyc' && (
         <KYCForm account={account} contractAddress={contractAddress} />
