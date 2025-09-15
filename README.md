@@ -1,12 +1,12 @@
 # [Airbnbit.com](http://hackaton20025.vercel.app)
 
-Aplicación descentralizada enfocada principalmente en el **alquiler de propiedades** en la blockchain. El proyecto combina un contrato inteligente en Solidity con un frontend en React, permitiendo a los usuarios conectar su billetera MetaMask, completar un proceso de KYC, publicar inmuebles y realizar reservas o pagos de renta en Ether. También admite la venta de propiedades si se requiere.
+Aplicación descentralizada enfocada principalmente en el **alquiler de propiedades** en la blockchain. El proyecto combina un contrato inteligente en Solidity con un frontend en React, permitiendo a los usuarios conectar su billetera MetaMask, completar un proceso de KYC, publicar inmuebles y realizar reservas o pagos de renta en **USDT**. También admite la venta de propiedades si se requiere.
 
 ## Características principales
 
 - Registro KYC en cadena y verificación por un administrador.
 - Listado de propiedades para alquiler con imágenes, precio y URL de referencia.
-- Reserva y pago de rentas mediante transacciones en Ether.
+- Reserva y pago de rentas mediante transacciones en USDT.
 - Interfaz web que muestra propiedades destacadas y formulario para listar nuevos inmuebles.
 
 ## Smart Contract
@@ -38,7 +38,7 @@ npm test
 
 ## Frontend
 
-La carpeta [`frontend`](frontend) incluye la app React que interactúa con el contrato. Una vez desplegado el contrato, actualice la variable `contractAddress` en `frontend/src/App.js` y asegúrese de copiar el ABI a `frontend/src/PropertyMarketplace.json`.
+La carpeta [`frontend`](frontend) incluye la app React que interactúa con el contrato. Una vez desplegado el contrato, configure la variable `REACT_APP_CONTRACT_ADDRESS` en el archivo `.env` dentro de `frontend` y asegúrese de copiar el ABI a `frontend/src/PropertyMarketplace.json`.
 
 La interfaz permite:
 

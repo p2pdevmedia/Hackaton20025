@@ -7,7 +7,7 @@ import Navbar from './components/Navbar';
 import KYCForm from './components/KYCForm';
 import MyProperties from './components/MyProperties';
 
-const contractAddress = '0xYourContractAddress'; // replace after deployment
+const contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS || '';
 
 function App() {
   const [account, setAccount] = useState(null);
@@ -143,19 +143,19 @@ function App() {
       id: 1,
       title: 'Modern Apartment',
       image: 'https://via.placeholder.com/800x400?text=Property+1',
-      price: '100 ETH',
+      price: '100 USDT',
     },
     {
       id: 2,
       title: 'Cozy House',
       image: 'https://via.placeholder.com/800x400?text=Property+2',
-      price: '80 ETH',
+      price: '80 USDT',
     },
     {
       id: 3,
       title: 'Beach Villa',
       image: 'https://via.placeholder.com/800x400?text=Property+3',
-      price: '200 ETH',
+      price: '200 USDT',
     },
   ];
 
@@ -207,13 +207,13 @@ function App() {
             />
             <input
               className="border p-2 rounded"
-              placeholder="Precio en ETH"
+              placeholder="Precio en USDT"
               value={precioUSDT}
               onChange={e => setPrecioUSDT(e.target.value)}
             />
             <input
               className="border p-2 rounded"
-              placeholder="Seña en ETH"
+              placeholder="Seña en USDT"
               value={seniaUSDT}
               onChange={e => setSeniaUSDT(e.target.value)}
             />
@@ -286,7 +286,7 @@ function App() {
                 <h3 className="text-xl font-semibold">{p.titulo}</h3>
                 <p className="text-sm mb-2">{p.descripcion}</p>
                 <p className="text-sm">{p.city} - {p.postalCode}</p>
-                <p className="text-sm">Precio: {p.precio} ETH</p>
+                <p className="text-sm">Precio: {p.precio} USDT</p>
                 {p.forRent && (
                   <div className="mt-2 flex flex-col gap-2">
                     <input
@@ -300,7 +300,7 @@ function App() {
                         onClick={() => reserve(p.id)}
                         className="px-4 py-2 bg-blue-600 text-white rounded"
                       >
-                        Reservar ({p.senia} ETH)
+                        Reservar ({p.senia} USDT)
                       </button>
                       <button
                         onClick={() => payRent(p.id)}
