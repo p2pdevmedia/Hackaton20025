@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Navbar({ account, connect, disconnect, setPage }) {
+function Navbar({ account, connect, disconnect, navigate }) {
   return (
     <nav className="bg-white shadow mb-8">
       <div className="max-w-4xl mx-auto p-4 flex justify-between items-center">
@@ -9,19 +9,19 @@ function Navbar({ account, connect, disconnect, setPage }) {
             <h1 className="text-xl font-bold">Airbnbit.com</h1>
             <p className="text-sm text-gray-600">Alquiler de propiedades en blockchain</p>
           </div>
-          <button onClick={() => setPage('home')} className="text-blue-600">
+          <button onClick={() => navigate('home')} className="text-blue-600">
             Home
           </button>
-          <button onClick={() => setPage('kyc')} className="text-blue-600">
+          <button onClick={() => navigate('kyc')} className="text-blue-600">
             KYC
           </button>
           {account && (
-            <button onClick={() => setPage('myProperties')} className="text-blue-600">
+            <button onClick={() => navigate('myProperties')} className="text-blue-600">
               My Properties
             </button>
           )}
           {account && (
-            <button onClick={() => setPage('create')} className="text-blue-600">
+            <button onClick={() => navigate('create')} className="text-blue-600">
               Create Property
             </button>
           )}
