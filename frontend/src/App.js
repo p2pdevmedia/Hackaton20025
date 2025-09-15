@@ -53,10 +53,10 @@ function App() {
         descripcion: p.descripcion,
         city: p.city,
         postalCode: p.postalCode,
-        precioWei: p.precioUSDT,
-        seniaWei: p.seniaUSDT,
-        precio: ethers.utils.formatEther(p.precioUSDT),
-        senia: ethers.utils.formatEther(p.seniaUSDT),
+        precioRaw: p.precioUSDT,
+        seniaRaw: p.seniaUSDT,
+        precio: ethers.utils.formatUnits(p.precioUSDT, 6),
+        senia: ethers.utils.formatUnits(p.seniaUSDT, 6),
         foto: p.fotoSlider,
         forRent: p.forRent,
         date: '',
@@ -82,8 +82,8 @@ function App() {
       descripcion,
       city,
       postalCode,
-      ethers.utils.parseEther(precioUSDT),
-      ethers.utils.parseEther(seniaUSDT || '0'),
+      ethers.utils.parseUnits(precioUSDT, 6),
+      ethers.utils.parseUnits(seniaUSDT || '0', 6),
       fotoSlider,
       fotosMini,
       fotoAvatar,
@@ -116,8 +116,11 @@ function App() {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     const contract = new ethers.Contract(contractAddress, PropertyMarketplace.abi, signer);
+    const tokenAddress = await contract.paymentToken();
+    const token = new ethers.Contract(tokenAddress, ['function approve(address,uint256) external returns (bool)'], signer);
     const timestamp = Math.floor(new Date(prop.date).setHours(0, 0, 0, 0) / 1000);
-    const tx = await contract.reserveDate(id, timestamp, { value: prop.seniaWei });
+    await token.approve(contractAddress, prop.seniaRaw);
+    const tx = await contract.reserveDate(id, timestamp);
     await tx.wait();
   };
 
@@ -127,9 +130,12 @@ function App() {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     const contract = new ethers.Contract(contractAddress, PropertyMarketplace.abi, signer);
+    const tokenAddress = await contract.paymentToken();
+    const token = new ethers.Contract(tokenAddress, ['function approve(address,uint256) external returns (bool)'], signer);
     const timestamp = Math.floor(new Date(prop.date).setHours(0, 0, 0, 0) / 1000);
-    const value = prop.precioWei.sub(prop.seniaWei);
-    const tx = await contract.payRent(id, timestamp, { value });
+    const value = prop.precioRaw.sub(prop.seniaRaw);
+    await token.approve(contractAddress, value);
+    const tx = await contract.payRent(id, timestamp);
     const receipt = await tx.wait();
     const event = receipt.events?.find(e => e.event === 'AccessCodeGenerated');
     const code = event && event.args ? event.args.code : '';

@@ -1,12 +1,18 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
+interface IERC20 {
+    function transferFrom(address from, address to, uint256 amount) external returns (bool);
+}
+
 contract PropertyMarketplace {
     uint public propertyCount;
     address public admin;
+    IERC20 public paymentToken;
 
-    constructor() {
+    constructor(address tokenAddress) {
         admin = msg.sender;
+        paymentToken = IERC20(tokenAddress);
     }
 
     struct KYC {
@@ -25,7 +31,7 @@ contract PropertyMarketplace {
 
     struct Property {
         uint id;
-        address payable owner;
+        address owner;
         string titulo;
         string descripcion;
         string city;
@@ -169,7 +175,7 @@ contract PropertyMarketplace {
         propertyCount++;
         properties[propertyCount] = Property(
             propertyCount,
-            payable(msg.sender),
+            msg.sender,
             titulo,
             descripcion,
             city,
@@ -187,28 +193,24 @@ contract PropertyMarketplace {
         emit PropertyListed(propertyCount, msg.sender, titulo, precioUSDT, forSale, forRent);
     }
 
-    function buyProperty(uint id) external payable onlyVerified {
+    function buyProperty(uint id) external onlyVerified {
         Property storage prop = properties[id];
         require(prop.owner != address(0), "Property not found");
         require(prop.forSale, "Not for sale");
-        require(msg.value == prop.precioUSDT, "Incorrect price");
+        require(paymentToken.transferFrom(msg.sender, prop.owner, prop.precioUSDT), "Payment failed");
 
-        address payable seller = prop.owner;
-        prop.owner = payable(msg.sender);
+        prop.owner = msg.sender;
         prop.forSale = false;
-        seller.transfer(msg.value);
 
         emit PropertyPurchased(id, msg.sender);
     }
 
-    function rentProperty(uint id) external payable onlyVerified {
+    function rentProperty(uint id) external onlyVerified {
         Property storage prop = properties[id];
         require(prop.owner != address(0), "Property not found");
         require(prop.forRent, "Not for rent");
         require(!prop.rented, "Already rented");
-        require(msg.value == prop.precioUSDT, "Incorrect rent");
-
-        prop.owner.transfer(msg.value);
+        require(paymentToken.transferFrom(msg.sender, prop.owner, prop.precioUSDT), "Payment failed");
         prop.rented = true;
 
         emit PropertyRented(id, msg.sender);
@@ -220,31 +222,28 @@ contract PropertyMarketplace {
     }
 
     // Reserve a day by paying the deposit (seña)
-    function reserveDate(uint id, uint date) external payable onlyVerified {
+    function reserveDate(uint id, uint date) external onlyVerified {
         Property storage prop = properties[id];
         require(prop.owner != address(0), "Property not found");
         require(prop.forRent, "Not for rent");
         require(isDateAvailable(id, date), "Date reserved");
-        require(msg.value == prop.seniaUSDT, "Incorrect deposit");
+        require(paymentToken.transferFrom(msg.sender, prop.owner, prop.seniaUSDT), "Payment failed");
 
         reservations[id][date].renter = msg.sender;
-        prop.owner.transfer(msg.value);
-
         reservationCount[id]++;
 
         emit ReservationMade(id, msg.sender, date);
     }
 
     // Pay the remaining rent and receive an access code for the smart lock
-    function payRent(uint id, uint date) external payable onlyVerified returns (bytes32) {
+    function payRent(uint id, uint date) external onlyVerified returns (bytes32) {
         Property storage prop = properties[id];
         Reservation storage res = reservations[id][date];
 
         require(res.renter == msg.sender, "Not renter");
         require(!res.paid, "Already paid");
-        require(msg.value == prop.precioUSDT - prop.seniaUSDT, "Incorrect payment");
-
-        prop.owner.transfer(msg.value);
+        uint remaining = prop.precioUSDT - prop.seniaUSDT;
+        require(paymentToken.transferFrom(msg.sender, prop.owner, remaining), "Payment failed");
 
         res.paid = true;
         res.accessCode = keccak256(abi.encodePacked(block.timestamp, msg.sender, id, date));
@@ -281,7 +280,7 @@ contract PropertyMarketplace {
         prop.forRent = false;
     }
 
-    function adminCancelPurchase(uint id, address payable previousOwner) external onlyAdmin {
+    function adminCancelPurchase(uint id, address previousOwner) external onlyAdmin {
         Property storage prop = properties[id];
         require(prop.owner != address(0), "Property not found");
         prop.owner = previousOwner;

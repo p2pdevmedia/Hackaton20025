@@ -17,6 +17,7 @@ El contrato [`contracts/PropertyMarketplace.sol`](contracts/PropertyMarketplace.
 - Permite a usuarios verificados listar, comprar o rentar propiedades.
 - Emite eventos para cada publicación, compra o alquiler.
 - Incluye funciones administrativas para verificar identidades y cancelar operaciones.
+- Se despliega recibiendo la dirección del token USDT (ERC-20) que se utilizará para todos los pagos.
 
 ## Gobernanza y token GOV
 

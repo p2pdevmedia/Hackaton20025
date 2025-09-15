@@ -4,8 +4,11 @@ const { ethers } = require('hardhat');
 describe('PropertyMarketplace', function () {
   it('only verified users can list property', async function () {
     const [admin, user] = await ethers.getSigners();
+    const Token = await ethers.getContractFactory('TestToken');
+    const usdt = await Token.deploy('Tether', 'USDT');
+    await usdt.deployed();
     const Marketplace = await ethers.getContractFactory('PropertyMarketplace');
-    const marketplace = await Marketplace.deploy();
+    const marketplace = await Marketplace.deploy(usdt.address);
     await marketplace.deployed();
 
     await expect(
@@ -14,8 +17,8 @@ describe('PropertyMarketplace', function () {
         'Descripcion',
         'Metropolis',
         '12345',
-        ethers.utils.parseEther('1'),
-        ethers.utils.parseEther('0.1'),
+        ethers.utils.parseUnits('1', 6),
+        ethers.utils.parseUnits('0.1', 6),
         'slider',
         'mini',
         'avatar',
@@ -47,8 +50,8 @@ describe('PropertyMarketplace', function () {
         'Descripcion',
         'Metropolis',
         '12345',
-        ethers.utils.parseEther('1'),
-        ethers.utils.parseEther('0.1'),
+        ethers.utils.parseUnits('1', 6),
+        ethers.utils.parseUnits('0.1', 6),
         'slider',
         'mini',
         'avatar',
@@ -63,8 +66,11 @@ describe('PropertyMarketplace', function () {
 
   it('admin can cancel a sale', async function () {
     const [admin, user] = await ethers.getSigners();
+    const Token = await ethers.getContractFactory('TestToken');
+    const usdt = await Token.deploy('Tether', 'USDT');
+    await usdt.deployed();
     const Marketplace = await ethers.getContractFactory('PropertyMarketplace');
-    const marketplace = await Marketplace.deploy();
+    const marketplace = await Marketplace.deploy(usdt.address);
     await marketplace.deployed();
 
     await marketplace
@@ -89,8 +95,8 @@ describe('PropertyMarketplace', function () {
         'Descripcion',
         'Metropolis',
         '12345',
-        ethers.utils.parseEther('1'),
-        ethers.utils.parseEther('0.1'),
+        ethers.utils.parseUnits('1', 6),
+        ethers.utils.parseUnits('0.1', 6),
         'slider',
         'mini',
         'avatar',
@@ -105,8 +111,11 @@ describe('PropertyMarketplace', function () {
 
   it('allows reserving and paying rent with access code generation', async function () {
     const [admin, owner, renter] = await ethers.getSigners();
+    const Token = await ethers.getContractFactory('TestToken');
+    const usdt = await Token.deploy('Tether', 'USDT');
+    await usdt.deployed();
     const Marketplace = await ethers.getContractFactory('PropertyMarketplace');
-    const marketplace = await Marketplace.deploy();
+    const marketplace = await Marketplace.deploy(usdt.address);
     await marketplace.deployed();
 
     // Owner lists a property for rent
@@ -132,8 +141,8 @@ describe('PropertyMarketplace', function () {
         'Linda casa',
         'Metropolis',
         '12345',
-        ethers.utils.parseEther('1'),
-        ethers.utils.parseEther('0.1'),
+        ethers.utils.parseUnits('1', 6),
+        ethers.utils.parseUnits('0.1', 6),
         'slider',
         'mini',
         'avatar',
@@ -161,23 +170,22 @@ describe('PropertyMarketplace', function () {
 
     const day = 1700000000; // example day timestamp
 
+    // Mint and approve tokens for renter
+    await usdt.mint(renter.address, ethers.utils.parseUnits('1', 6));
+    await usdt.connect(renter).approve(marketplace.address, ethers.utils.parseUnits('0.1', 6));
+
     // Reserve the day with deposit
-    await marketplace
-      .connect(renter)
-      .reserveDate(1, day, { value: ethers.utils.parseEther('0.1') });
+    await marketplace.connect(renter).reserveDate(1, day);
 
     expect(await marketplace.isDateAvailable(1, day)).to.equal(false);
 
     await expect(
-      marketplace
-        .connect(renter)
-        .reserveDate(1, day, { value: ethers.utils.parseEther('0.1') })
+      marketplace.connect(renter).reserveDate(1, day)
     ).to.be.revertedWith('Date reserved');
 
     // Pay remaining amount and receive code
-    const tx = await marketplace
-      .connect(renter)
-      .payRent(1, day, { value: ethers.utils.parseEther('0.9') });
+    await usdt.connect(renter).approve(marketplace.address, ethers.utils.parseUnits('0.9', 6));
+    const tx = await marketplace.connect(renter).payRent(1, day);
     const receipt = await tx.wait();
     const event = receipt.events.find((e) => e.event === 'AccessCodeGenerated');
     expect(event.args.code).to.not.equal(ethers.constants.HashZero);
@@ -185,8 +193,11 @@ describe('PropertyMarketplace', function () {
 
   it('owner can pause, resume, and remove property without active reservations', async function () {
     const [admin, owner] = await ethers.getSigners();
+    const Token = await ethers.getContractFactory('TestToken');
+    const usdt = await Token.deploy('Tether', 'USDT');
+    await usdt.deployed();
     const Marketplace = await ethers.getContractFactory('PropertyMarketplace');
-    const marketplace = await Marketplace.deploy();
+    const marketplace = await Marketplace.deploy(usdt.address);
     await marketplace.deployed();
 
     await marketplace
@@ -211,8 +222,8 @@ describe('PropertyMarketplace', function () {
         'Linda casa',
         'Metropolis',
         '12345',
-        ethers.utils.parseEther('1'),
-        ethers.utils.parseEther('0.1'),
+        ethers.utils.parseUnits('1', 6),
+        ethers.utils.parseUnits('0.1', 6),
         'slider',
         'mini',
         'avatar',
@@ -236,8 +247,11 @@ describe('PropertyMarketplace', function () {
 
   it('cannot remove property with active reservations', async function () {
     const [admin, owner, renter] = await ethers.getSigners();
+    const Token = await ethers.getContractFactory('TestToken');
+    const usdt = await Token.deploy('Tether', 'USDT');
+    await usdt.deployed();
     const Marketplace = await ethers.getContractFactory('PropertyMarketplace');
-    const marketplace = await Marketplace.deploy();
+    const marketplace = await Marketplace.deploy(usdt.address);
     await marketplace.deployed();
 
     await marketplace
@@ -260,8 +274,8 @@ describe('PropertyMarketplace', function () {
       .listProperty(
         'Casa',
         'Linda casa',
-        ethers.utils.parseEther('1'),
-        ethers.utils.parseEther('0.1'),
+        ethers.utils.parseUnits('1', 6),
+        ethers.utils.parseUnits('0.1', 6),
         'slider',
         'mini',
         'avatar',
@@ -287,9 +301,9 @@ describe('PropertyMarketplace', function () {
     await marketplace.verifyKYC(renter.address);
 
     const day = 1700000000;
-    await marketplace
-      .connect(renter)
-      .reserveDate(1, day, { value: ethers.utils.parseEther('0.1') });
+    await usdt.mint(renter.address, ethers.utils.parseUnits('1', 6));
+    await usdt.connect(renter).approve(marketplace.address, ethers.utils.parseUnits('0.1', 6));
+    await marketplace.connect(renter).reserveDate(1, day);
 
     await expect(
       marketplace.connect(owner).removeProperty(1)
