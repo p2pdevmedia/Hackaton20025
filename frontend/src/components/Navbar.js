@@ -20,6 +20,11 @@ function Navbar({ account, connect, disconnect, setPage }) {
               My Properties
             </button>
           )}
+          {account && (
+            <button onClick={() => setPage('create')} className="text-blue-600">
+              Create Property
+            </button>
+          )}
         </div>
         {account ? (
           <div className="flex items-center gap-4">
