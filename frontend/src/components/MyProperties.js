@@ -6,6 +6,7 @@ function MyProperties({ account, contractAddress }) {
   const [properties, setProperties] = useState([]);
 
   const load = async () => {
+    if (!ethers.utils.isAddress(contractAddress)) return;
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const contract = new ethers.Contract(contractAddress, PropertyMarketplace.abi, provider);
     const count = await contract.propertyCount();
@@ -30,6 +31,7 @@ function MyProperties({ account, contractAddress }) {
   }, [account]);
 
   const remove = async (id) => {
+    if (!ethers.utils.isAddress(contractAddress)) return;
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     const contract = new ethers.Contract(contractAddress, PropertyMarketplace.abi, signer);
@@ -39,6 +41,7 @@ function MyProperties({ account, contractAddress }) {
   };
 
   const toggleRent = async (id, forRent) => {
+    if (!ethers.utils.isAddress(contractAddress)) return;
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     const contract = new ethers.Contract(contractAddress, PropertyMarketplace.abi, signer);

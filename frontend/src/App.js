@@ -7,7 +7,21 @@ import Navbar from './components/Navbar';
 import KYCForm from './components/KYCForm';
 import MyProperties from './components/MyProperties';
 
-const contractAddress = '0xYourContractAddress'; // replace after deployment
+// The contract address is provided via an environment variable so that
+// deployments don't accidentally use the placeholder value. When the value is
+// missing or malformed, interactions with the contract are skipped to avoid
+// ethers.js trying to resolve it as an ENS name (which results in the
+// "network does not support ENS" error).
+const contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS || '';
+const isValidAddress = ethers.utils.isAddress(contractAddress);
+
+const getContract = (providerOrSigner) => {
+  if (!isValidAddress) {
+    console.warn('Contract address is not configured correctly');
+    return null;
+  }
+  return new ethers.Contract(contractAddress, PropertyMarketplace.abi, providerOrSigner);
+};
 
 function App() {
   const [account, setAccount] = useState(null);
@@ -42,7 +56,8 @@ function App() {
 
   const fetchProperties = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const contract = new ethers.Contract(contractAddress, PropertyMarketplace.abi, provider);
+    const contract = getContract(provider);
+    if (!contract) return;
     const count = await contract.propertyCount();
     const props = [];
     for (let i = 1; i <= count; i++) {
@@ -67,16 +82,29 @@ function App() {
   };
 
   useEffect(() => {
-    if (account) {
+    if (account && isValidAddress) {
       fetchProperties();
     }
-  }, [account]);
+  }, [account, isValidAddress]);
 
   const listProperty = async () => {
-    if (!titulo || !descripcion || !city || !postalCode || !precioUSDT || !fotoSlider || !fotosMini || !fotoAvatar || !url) return;
+    if (
+      !titulo ||
+      !descripcion ||
+      !city ||
+      !postalCode ||
+      !precioUSDT ||
+      !fotoSlider ||
+      !fotosMini ||
+      !fotoAvatar ||
+      !url ||
+      !isValidAddress
+    )
+      return;
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
-    const contract = new ethers.Contract(contractAddress, PropertyMarketplace.abi, signer);
+    const contract = getContract(signer);
+    if (!contract) return;
     const tx = await contract.listProperty(
       titulo,
       descripcion,
@@ -112,10 +140,11 @@ function App() {
 
   const reserve = async id => {
     const prop = properties.find(p => p.id === id);
-    if (!prop || !prop.date) return;
+    if (!prop || !prop.date || !isValidAddress) return;
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
-    const contract = new ethers.Contract(contractAddress, PropertyMarketplace.abi, signer);
+    const contract = getContract(signer);
+    if (!contract) return;
     const timestamp = Math.floor(new Date(prop.date).setHours(0, 0, 0, 0) / 1000);
     const tx = await contract.reserveDate(id, timestamp, { value: prop.seniaWei });
     await tx.wait();
@@ -123,10 +152,11 @@ function App() {
 
   const payRent = async id => {
     const prop = properties.find(p => p.id === id);
-    if (!prop || !prop.date) return;
+    if (!prop || !prop.date || !isValidAddress) return;
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
-    const contract = new ethers.Contract(contractAddress, PropertyMarketplace.abi, signer);
+    const contract = getContract(signer);
+    if (!contract) return;
     const timestamp = Math.floor(new Date(prop.date).setHours(0, 0, 0, 0) / 1000);
     const value = prop.precioWei.sub(prop.seniaWei);
     const tx = await contract.payRent(id, timestamp, { value });
@@ -170,15 +200,15 @@ function App() {
     <div className="min-h-screen bg-gray-100">
       <Navbar account={account} connect={connect} disconnect={disconnect} setPage={setPage} />
 
-      {account && page === 'kyc' && (
+      {account && isValidAddress && page === 'kyc' && (
         <KYCForm account={account} contractAddress={contractAddress} />
       )}
 
-      {account && page === 'myProperties' && (
+      {account && isValidAddress && page === 'myProperties' && (
         <MyProperties account={account} contractAddress={contractAddress} />
       )}
 
-      {account && page === 'create' && (
+      {account && isValidAddress && page === 'create' && (
         <div className="max-w-4xl mx-auto bg-white p-4 rounded shadow mb-8">
           <div className="flex flex-col gap-4">
             <input
