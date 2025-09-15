@@ -12,6 +12,8 @@ describe('PropertyMarketplace', function () {
       marketplace.connect(user).listProperty(
         'Titulo',
         'Descripcion',
+        'Metropolis',
+        '12345',
         ethers.utils.parseEther('1'),
         ethers.utils.parseEther('0.1'),
         'slider',
@@ -43,6 +45,8 @@ describe('PropertyMarketplace', function () {
       .listProperty(
         'Titulo',
         'Descripcion',
+        'Metropolis',
+        '12345',
         ethers.utils.parseEther('1'),
         ethers.utils.parseEther('0.1'),
         'slider',
@@ -83,6 +87,8 @@ describe('PropertyMarketplace', function () {
       .listProperty(
         'Titulo',
         'Descripcion',
+        'Metropolis',
+        '12345',
         ethers.utils.parseEther('1'),
         ethers.utils.parseEther('0.1'),
         'slider',
@@ -124,6 +130,8 @@ describe('PropertyMarketplace', function () {
       .listProperty(
         'Casa',
         'Linda casa',
+        'Metropolis',
+        '12345',
         ethers.utils.parseEther('1'),
         ethers.utils.parseEther('0.1'),
         'slider',
@@ -201,6 +209,8 @@ describe('PropertyMarketplace', function () {
       .listProperty(
         'Casa',
         'Linda casa',
+        'Metropolis',
+        '12345',
         ethers.utils.parseEther('1'),
         ethers.utils.parseEther('0.1'),
         'slider',

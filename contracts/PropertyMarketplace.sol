@@ -28,6 +28,8 @@ contract PropertyMarketplace {
         address payable owner;
         string titulo;
         string descripcion;
+        string city;
+        string postalCode;
         uint precioUSDT;
         uint seniaUSDT;
         string fotoSlider;
@@ -143,6 +145,8 @@ contract PropertyMarketplace {
     function listProperty(
         string memory titulo,
         string memory descripcion,
+        string memory city,
+        string memory postalCode,
         uint precioUSDT,
         uint seniaUSDT,
         string memory fotoSlider,
@@ -154,6 +158,8 @@ contract PropertyMarketplace {
     ) external onlyVerified {
         require(bytes(titulo).length > 0, "Title required");
         require(bytes(descripcion).length > 0, "Description required");
+        require(bytes(city).length > 0, "City required");
+        require(bytes(postalCode).length > 0, "Postal code required");
         require(precioUSDT > 0, "Price required");
         require(bytes(fotoSlider).length > 0, "Slider photo required");
         require(bytes(fotosMini).length > 0, "Mini photos required");
@@ -166,6 +172,8 @@ contract PropertyMarketplace {
             payable(msg.sender),
             titulo,
             descripcion,
+            city,
+            postalCode,
             precioUSDT,
             seniaUSDT,
             fotoSlider,
