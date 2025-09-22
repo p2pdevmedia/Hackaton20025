@@ -212,88 +212,118 @@ function App() {
       (!searchName || p.titulo.toLowerCase().includes(searchName.toLowerCase()))
   );
 
+  const renderProtectedContent = (content, { wrap = true } = {}) => {
+    if (!isValidAddress) {
+      const message = (
+        <p className="text-sm text-red-600">
+          Configura la variable de entorno <code>REACT_APP_CONTRACT_ADDRESS</code> con la dirección del
+          contrato desplegado para poder interactuar con la aplicación.
+        </p>
+      );
+      return wrap ? (
+        <div className="max-w-4xl mx-auto bg-white p-4 rounded shadow mb-8">{message}</div>
+      ) : (
+        message
+      );
+    }
+    if (!account) {
+      const message = (
+        <p className="text-sm text-gray-700">
+          Conecta tu wallet para acceder a esta sección.
+        </p>
+      );
+      return wrap ? (
+        <div className="max-w-4xl mx-auto bg-white p-4 rounded shadow mb-8">{message}</div>
+      ) : (
+        message
+      );
+    }
+    return content;
+  };
+
   return (
     <div className="min-h-screen bg-gray-100">
       <Navbar account={account} connect={connect} disconnect={disconnect} navigate={navigate} />
 
-      {account && isValidAddress && page === 'kyc' && (
-        <KYCForm account={account} contractAddress={contractAddress} />
-      )}
+      {page === 'kyc' &&
+        renderProtectedContent(<KYCForm account={account} contractAddress={contractAddress} />)}
 
-      {account && isValidAddress && page === 'myProperties' && (
-        <MyProperties account={account} contractAddress={contractAddress} />
-      )}
+      {page === 'myProperties' &&
+        renderProtectedContent(<MyProperties account={account} contractAddress={contractAddress} />)}
 
-      {account && isValidAddress && page === 'create' && (
+      {page === 'create' && (
         <div className="max-w-4xl mx-auto bg-white p-4 rounded shadow mb-8">
-          <div className="flex flex-col gap-4">
-            <input
-              className="border p-2 rounded"
-              placeholder="Titulo"
-              value={titulo}
-              onChange={e => setTitulo(e.target.value)}
-            />
-            <input
-              className="border p-2 rounded"
-              placeholder="Descripcion"
-              value={descripcion}
-              onChange={e => setDescripcion(e.target.value)}
-            />
-            <input
-              className="border p-2 rounded"
-              placeholder="Ciudad"
-              value={city}
-              onChange={e => setCity(e.target.value)}
-            />
-            <input
-              className="border p-2 rounded"
-              placeholder="Codigo Postal"
-              value={postalCode}
-              onChange={e => setPostalCode(e.target.value)}
-            />
-            <input
-              className="border p-2 rounded"
-              placeholder="Precio en ETH"
-              value={precioUSDT}
-              onChange={e => setPrecioUSDT(e.target.value)}
-            />
-            <input
-              className="border p-2 rounded"
-              placeholder="Seña en ETH"
-              value={seniaUSDT}
-              onChange={e => setSeniaUSDT(e.target.value)}
-            />
-            <input
-              className="border p-2 rounded"
-              placeholder="Foto Slider URI"
-              value={fotoSlider}
-              onChange={e => setFotoSlider(e.target.value)}
-            />
-            <input
-              className="border p-2 rounded"
-              placeholder="Fotos Mini URI"
-              value={fotosMini}
-              onChange={e => setFotosMini(e.target.value)}
-            />
-            <input
-              className="border p-2 rounded"
-              placeholder="Foto Avatar URI"
-              value={fotoAvatar}
-              onChange={e => setFotoAvatar(e.target.value)}
-            />
-            <input
-              className="border p-2 rounded"
-              placeholder="URL"
-              value={url}
-              onChange={e => setUrl(e.target.value)}
-            />
-            <button
-              onClick={listProperty}
-              className="self-start px-4 py-2 bg-green-600 text-white rounded"
-            >
-              List Property for Rent
-            </button>
-          </div>
+          {renderProtectedContent(
+            <div className="flex flex-col gap-4">
+              <input
+                className="border p-2 rounded"
+                placeholder="Titulo"
+                value={titulo}
+                onChange={e => setTitulo(e.target.value)}
+              />
+              <input
+                className="border p-2 rounded"
+                placeholder="Descripcion"
+                value={descripcion}
+                onChange={e => setDescripcion(e.target.value)}
+              />
+              <input
+                className="border p-2 rounded"
+                placeholder="Ciudad"
+                value={city}
+                onChange={e => setCity(e.target.value)}
+              />
+              <input
+                className="border p-2 rounded"
+                placeholder="Codigo Postal"
+                value={postalCode}
+                onChange={e => setPostalCode(e.target.value)}
+              />
+              <input
+                className="border p-2 rounded"
+                placeholder="Precio en ETH"
+                value={precioUSDT}
+                onChange={e => setPrecioUSDT(e.target.value)}
+              />
+              <input
+                className="border p-2 rounded"
+                placeholder="Seña en ETH"
+                value={seniaUSDT}
+                onChange={e => setSeniaUSDT(e.target.value)}
+              />
+              <input
+                className="border p-2 rounded"
+                placeholder="Foto Slider URI"
+                value={fotoSlider}
+                onChange={e => setFotoSlider(e.target.value)}
+              />
+              <input
+                className="border p-2 rounded"
+                placeholder="Fotos Mini URI"
+                value={fotosMini}
+                onChange={e => setFotosMini(e.target.value)}
+              />
+              <input
+                className="border p-2 rounded"
+                placeholder="Foto Avatar URI"
+                value={fotoAvatar}
+                onChange={e => setFotoAvatar(e.target.value)}
+              />
+              <input
+                className="border p-2 rounded"
+                placeholder="URL"
+                value={url}
+                onChange={e => setUrl(e.target.value)}
+              />
+              <button
+                onClick={listProperty}
+                className="self-start px-4 py-2 bg-green-600 text-white rounded"
+              >
+                List Property for Rent
+              </button>
+            </div>,
+            { wrap: false }
+          )}
         </div>
       )}
 
