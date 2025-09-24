@@ -437,12 +437,6 @@ function App() {
         </div>
       </header>
       <main className="max-w-5xl mx-auto px-4 py-10 space-y-12">
-        <ActivityCalendar
-          months={calendarMonths}
-          events={seasonalEvents}
-          locale={locale}
-          text={text.calendar}
-        />
         <section className="grid gap-6 md:grid-cols-2">
           {heroActivities.map(activity => (
             <article key={activity.id} className="overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-slate-100">
@@ -661,6 +655,13 @@ function App() {
             </div>
           )}
         </section>
+
+        <ActivityCalendar
+          months={calendarMonths}
+          events={seasonalEvents}
+          locale={locale}
+          text={text.calendar}
+        />
 
         {isAdmin && (
           <section className="rounded bg-white p-6 shadow space-y-4">
