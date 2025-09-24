@@ -157,7 +157,65 @@ function App() {
       console.error('Error fetching USDT balance', err);
       setUsdtBalance('0');
     }
-  }, [account, getProvider, usdtDecimals]);
+  }, [account, getProvider, isValidUsdt, usdtDecimals]);
+
+  const register = useCallback(
+    async activity => {
+      setStatusKey(null);
+      if (!activity) {
+        setStatusKey('activityUnavailable');
+        return;
+      }
+      if (!account) {
+        setStatusKey('connectWalletToRegister');
+        return;
+      }
+      if (!isValidContract) {
+        setStatusKey('contractMissing');
+        return;
+      }
+      if (activity.isRegistered) {
+        setStatusKey('registrationComplete');
+        return;
+      }
+      const remainingSpots = activity.maxParticipants - activity.registeredCount;
+      if (remainingSpots <= 0 || activity.date * 1000 <= Date.now()) {
+        setStatusKey('activityUnavailable');
+        return;
+      }
+      if (!activity.active) {
+        setStatusKey('activityUnavailable');
+        return;
+      }
+      const provider = getProvider();
+      if (!provider) return;
+
+      try {
+        const signer = provider.getSigner();
+        const contract = new ethers.Contract(contractAddress, ActivityRegistry.abi, signer);
+
+        if (activity.priceRaw.gt(0) && isValidUsdt) {
+          const token = new ethers.Contract(usdtAddress, ERC20_ABI, signer);
+          const allowance = await token.allowance(account, contractAddress);
+          if (allowance.lt(activity.priceRaw)) {
+            const approveTx = await token.approve(contractAddress, activity.priceRaw);
+            setStatusKey('approvingUsdt');
+            await approveTx.wait();
+          }
+        }
+
+        const tx = await contract.registerForActivity(activity.id);
+        setStatusKey('confirmingRegistration');
+        await tx.wait();
+        setStatusKey('registrationComplete');
+        await Promise.all([fetchActivities(), fetchUsdtBalance()]);
+      } catch (error) {
+        console.error('Error registering', error);
+        setStatusKey('registrationFailed');
+      }
+    },
+    [account, fetchActivities, fetchUsdtBalance, getProvider, isValidContract, isValidUsdt]
+  );
 
   useEffect(() => {
     fetchActivities();
@@ -222,12 +280,19 @@ function App() {
     });
   };
 
-  const openActivity = useCallback(activityId => {
-    setSelectedActivityId(activityId);
-    if (typeof window !== 'undefined') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  }, []);
+  const openActivity = useCallback(
+    activity => {
+      if (!activity) {
+        return;
+      }
+      setSelectedActivityId(activity.id);
+      if (typeof window !== 'undefined') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      register(activity);
+    },
+    [register]
+  );
 
   const closeActivity = useCallback(() => {
     setSelectedActivityId(null);
@@ -272,48 +337,6 @@ function App() {
     } catch (error) {
       console.error('Error creating activity', error);
       setStatusKey('activityCreationFailed');
-    }
-  };
-
-  const register = async activity => {
-    setStatusKey(null);
-    if (!activity) {
-      setStatusKey('activityUnavailable');
-      return;
-    }
-    if (!account) {
-      setStatusKey('connectWalletToRegister');
-      return;
-    }
-    if (!activity.active) {
-      setStatusKey('activityUnavailable');
-      return;
-    }
-    const provider = getProvider();
-    if (!provider) return;
-
-    try {
-      const signer = provider.getSigner();
-      const contract = new ethers.Contract(contractAddress, ActivityRegistry.abi, signer);
-
-      if (activity.priceRaw.gt(0) && isValidUsdt) {
-        const token = new ethers.Contract(usdtAddress, ERC20_ABI, signer);
-        const allowance = await token.allowance(account, contractAddress);
-        if (allowance.lt(activity.priceRaw)) {
-          const approveTx = await token.approve(contractAddress, activity.priceRaw);
-          setStatusKey('approvingUsdt');
-          await approveTx.wait();
-        }
-      }
-
-      const tx = await contract.registerForActivity(activity.id);
-      setStatusKey('confirmingRegistration');
-      await tx.wait();
-      setStatusKey('registrationComplete');
-      await Promise.all([fetchActivities(), fetchUsdtBalance()]);
-    } catch (error) {
-      console.error('Error registering', error);
-      setStatusKey('registrationFailed');
     }
   };
 
@@ -579,7 +602,7 @@ function App() {
                           </span>
                         )}
                         <button
-                          onClick={() => openActivity(activity.id)}
+                          onClick={() => openActivity(activity)}
                           className="px-4 py-2 rounded border border-blue-600 text-blue-600 transition-colors hover:bg-blue-50"
                         >
                           {text.agenda.detailsButton}
