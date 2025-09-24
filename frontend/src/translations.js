@@ -24,6 +24,38 @@ export const translations = {
         'Spots, payments, and deliverables secured by the Edge City contract.'
       ]
     },
+    calendar: {
+      heading: 'October & November expedition calendar',
+      description: 'Preview the exact days blocked for climbing and kayak sessions during the residency.',
+      legendTitle: 'Activities',
+      legend: {
+        climb: 'Climbing',
+        kayak: 'Kayak'
+      },
+      months: {
+        october: 'October 2024',
+        november: 'November 2024'
+      },
+      location: 'Lago Lolog · Patagonia, Argentina',
+      addToGoogle: 'Add to Google Calendar',
+      events: {
+        octoberClimb: {
+          title: 'Rock climbing immersion',
+          shortLabel: 'Climb',
+          description: 'Guided multi-pitch progression on the granite walls from October 20 to 23.'
+        },
+        novemberKayak: {
+          title: 'Kayak crossings on Lolog Lake',
+          shortLabel: 'Kayak',
+          description: 'Sunrise and sunset paddles across the lake from November 1 to 3.'
+        },
+        novemberClimb: {
+          title: 'Granite summit climbing block',
+          shortLabel: 'Climb',
+          description: 'Advanced crack and slab clinics from November 10 to 13.'
+        }
+      }
+    },
     contract: {
       heading: 'Edge City x Patagonia smart contract',
       paragraph1:
@@ -107,6 +139,38 @@ export const translations = {
         'Cocina de territorio y rituales artísticos con Iván Moritz Karl.',
         'Cupos, pagos y entregables asegurados en el contrato Edge City.'
       ]
+    },
+    calendar: {
+      heading: 'Calendario de expediciones octubre y noviembre',
+      description: 'Visualizá los días exactos reservados para las sesiones de escalada y kayak durante la residencia.',
+      legendTitle: 'Actividades',
+      legend: {
+        climb: 'Escalada',
+        kayak: 'Kayak'
+      },
+      months: {
+        october: 'Octubre 2024',
+        november: 'Noviembre 2024'
+      },
+      location: 'Lago Lolog · Patagonia, Argentina',
+      addToGoogle: 'Agregar a Google Calendar',
+      events: {
+        octoberClimb: {
+          title: 'Inmersión de escalada en roca',
+          shortLabel: 'Escalada',
+          description: 'Progresión guiada en rutas de granito del 20 al 23 de octubre.'
+        },
+        novemberKayak: {
+          title: 'Travesías en kayak por el lago Lolog',
+          shortLabel: 'Kayak',
+          description: 'Remadas al amanecer y atardecer del 1 al 3 de noviembre.'
+        },
+        novemberClimb: {
+          title: 'Bloque de cumbres en granito',
+          shortLabel: 'Escalada',
+          description: 'Clínicas avanzadas de fisura y placa del 10 al 13 de noviembre.'
+        }
+      }
     },
     contract: {
       heading: 'Contrato Edge City x Patagonia',

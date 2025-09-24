@@ -3,6 +3,7 @@ import { ethers } from 'ethers';
 
 import ActivityRegistry from './ActivityRegistry.json';
 import Navbar from './components/Navbar';
+import ActivityCalendar from './components/ActivityCalendar';
 import { translations, residencyActivities as residencyCatalog, localeMap } from './translations';
 
 const contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS || '';
@@ -50,6 +51,45 @@ function App() {
     [language]
   );
   const locale = useMemo(() => localeMap[language] || localeMap.en, [language]);
+  const calendarMonths = useMemo(
+    () => [
+      { year: 2024, month: 9, label: text.calendar.months.october },
+      { year: 2024, month: 10, label: text.calendar.months.november }
+    ],
+    [text.calendar.months]
+  );
+  const seasonalEvents = useMemo(() => {
+    const createDate = (month, day) => new Date(Date.UTC(2024, month, day));
+    return [
+      {
+        id: 'october-climb',
+        title: text.calendar.events.octoberClimb.title,
+        shortLabel: text.calendar.events.octoberClimb.shortLabel,
+        description: text.calendar.events.octoberClimb.description,
+        type: 'climb',
+        start: createDate(9, 20),
+        end: createDate(9, 23)
+      },
+      {
+        id: 'november-kayak',
+        title: text.calendar.events.novemberKayak.title,
+        shortLabel: text.calendar.events.novemberKayak.shortLabel,
+        description: text.calendar.events.novemberKayak.description,
+        type: 'kayak',
+        start: createDate(10, 1),
+        end: createDate(10, 3)
+      },
+      {
+        id: 'november-climb',
+        title: text.calendar.events.novemberClimb.title,
+        shortLabel: text.calendar.events.novemberClimb.shortLabel,
+        description: text.calendar.events.novemberClimb.description,
+        type: 'climb',
+        start: createDate(10, 10),
+        end: createDate(10, 13)
+      }
+    ];
+  }, [text.calendar.events]);
   const statusMessage = statusKey ? text.status[statusKey] : '';
   const selectedActivity = useMemo(() => {
     if (selectedActivityId === null) {
@@ -374,6 +414,12 @@ function App() {
         </div>
       </header>
       <main className="max-w-5xl mx-auto px-4 py-10 space-y-12">
+        <ActivityCalendar
+          months={calendarMonths}
+          events={seasonalEvents}
+          locale={locale}
+          text={text.calendar}
+        />
         <section className="grid gap-6 md:grid-cols-2">
           {heroActivities.map(activity => (
             <article key={activity.id} className="overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-slate-100">
