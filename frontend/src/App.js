@@ -34,6 +34,7 @@ function App() {
   });
   const [statusKey, setStatusKey] = useState(null);
   const [language, setLanguage] = useState('en');
+  const [selectedActivityId, setSelectedActivityId] = useState(null);
 
   const text = useMemo(() => translations[language] || translations.en, [language]);
   const languageOptions = useMemo(
@@ -50,6 +51,12 @@ function App() {
   );
   const locale = useMemo(() => localeMap[language] || localeMap.en, [language]);
   const statusMessage = statusKey ? text.status[statusKey] : '';
+  const selectedActivity = useMemo(() => {
+    if (selectedActivityId === null) {
+      return null;
+    }
+    return activities.find(activity => activity.id === selectedActivityId) || null;
+  }, [activities, selectedActivityId]);
 
   const hasProvider = useMemo(() => typeof window !== 'undefined' && window.ethereum, []);
 
@@ -197,6 +204,7 @@ function App() {
     setAccount(null);
     setIsAdmin(false);
     setUsdtBalance('0');
+    setSelectedActivityId(null);
   };
 
   const handleInputChange = event => {
@@ -213,6 +221,17 @@ function App() {
       price: ''
     });
   };
+
+  const openActivity = useCallback(activityId => {
+    setSelectedActivityId(activityId);
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, []);
+
+  const closeActivity = useCallback(() => {
+    setSelectedActivityId(null);
+  }, []);
 
   const createActivity = async event => {
     event.preventDefault();
@@ -258,6 +277,10 @@ function App() {
 
   const register = async activity => {
     setStatusKey(null);
+    if (!activity) {
+      setStatusKey('activityUnavailable');
+      return;
+    }
     if (!account) {
       setStatusKey('connectWalletToRegister');
       return;
@@ -413,7 +436,100 @@ function App() {
             )}
           </div>
 
-          {loading ? (
+          {selectedActivityId !== null ? (
+            selectedActivity ? (
+              (() => {
+                const remaining = selectedActivity.maxParticipants - selectedActivity.registeredCount;
+                const dateString = new Date(selectedActivity.date * 1000).toLocaleString(locale, {
+                  dateStyle: 'medium',
+                  timeStyle: 'short'
+                });
+                const canRegister =
+                  account &&
+                  !selectedActivity.isRegistered &&
+                  remaining > 0 &&
+                  selectedActivity.active &&
+                  selectedActivity.date * 1000 > Date.now();
+
+                return (
+                  <div className="space-y-4">
+                    <button
+                      onClick={closeActivity}
+                      className="inline-flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700"
+                    >
+                      ← {text.agenda.detailBackButton}
+                    </button>
+                    <div className="rounded border bg-white p-6 shadow space-y-4">
+                      <div className="space-y-2">
+                        <p className="text-xs uppercase tracking-wide text-blue-600">{text.agenda.detailHeading}</p>
+                        <h3 className="text-2xl font-semibold text-slate-900">{selectedActivity.name}</h3>
+                        <p className="text-sm text-gray-600 whitespace-pre-line">{selectedActivity.description}</p>
+                      </div>
+                      <dl className="grid gap-4 sm:grid-cols-3 text-sm text-gray-700">
+                        <div>
+                          <dt className="font-medium text-gray-900">{text.agenda.dateLabel}</dt>
+                          <dd>{dateString}</dd>
+                        </div>
+                        <div>
+                          <dt className="font-medium text-gray-900">{text.agenda.spotsLabel}</dt>
+                          <dd>
+                            {selectedActivity.registeredCount}/{selectedActivity.maxParticipants}
+                          </dd>
+                        </div>
+                        <div>
+                          <dt className="font-medium text-gray-900">{text.agenda.priceLabel}</dt>
+                          <dd>{selectedActivity.price} USDT</dd>
+                        </div>
+                      </dl>
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                        {selectedActivity.isRegistered ? (
+                          <span className="rounded bg-green-100 text-green-700 px-3 py-2 text-center">
+                            {text.agenda.registeredBadge}
+                          </span>
+                        ) : (
+                          <button
+                            onClick={() => register(selectedActivity)}
+                            disabled={!canRegister || !isValidContract}
+                            className={`px-4 py-2 rounded text-white transition-colors ${
+                              canRegister && isValidContract
+                                ? 'bg-blue-600 hover:bg-blue-700'
+                                : 'bg-gray-300 cursor-not-allowed'
+                            }`}
+                          >
+                            {text.agenda.subscribeButton}
+                          </button>
+                        )}
+                        <div className="flex flex-wrap gap-2">
+                          {!selectedActivity.active && (
+                            <span className="rounded bg-gray-200 text-gray-600 px-3 py-2 text-center">
+                              {text.agenda.inactiveBadge}
+                            </span>
+                          )}
+                          {remaining <= 0 && (
+                            <span className="rounded bg-amber-100 text-amber-700 px-3 py-2 text-center">
+                              {text.agenda.noSpotsButton}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })()
+            ) : (
+              <div className="space-y-4">
+                <button
+                  onClick={closeActivity}
+                  className="inline-flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700"
+                >
+                  ← {text.agenda.detailBackButton}
+                </button>
+                <div className="rounded border border-dashed border-gray-300 p-6 text-center text-gray-500">
+                  {text.agenda.activityNotFound}
+                </div>
+              </div>
+            )
+          ) : loading ? (
             <div className="text-center text-gray-500">{text.agenda.loading}</div>
           ) : activities.length === 0 ? (
             <div className="rounded border border-dashed border-gray-300 p-6 text-center text-gray-500">
@@ -427,20 +543,14 @@ function App() {
                   dateStyle: 'medium',
                   timeStyle: 'short'
                 });
-                const canRegister =
-                  account &&
-                  !activity.isRegistered &&
-                  remaining > 0 &&
-                  activity.active &&
-                  activity.date * 1000 > Date.now();
 
                 return (
                   <div key={activity.id} className="rounded border bg-white p-5 shadow-sm">
                     <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-                      <div>
-                        <h3 className="text-lg font-semibold text-blue-600">{activity.name}</h3>
-                        <p className="text-gray-700 whitespace-pre-line">{activity.description}</p>
-                        <div className="mt-2 text-sm text-gray-600 space-y-1">
+                      <div className="space-y-2">
+                        <h3 className="text-lg font-semibold text-slate-900">{activity.name}</h3>
+                        <p className="text-sm text-gray-600 whitespace-pre-line">{activity.description}</p>
+                        <div className="text-sm text-gray-500 space-y-1">
                           <p>
                             <span className="font-medium">{text.agenda.dateLabel}:</span> {dateString}
                           </p>
@@ -453,28 +563,27 @@ function App() {
                         </div>
                       </div>
                       <div className="flex flex-col gap-2 items-stretch min-w-[200px]">
-                        {activity.isRegistered ? (
+                        {activity.isRegistered && (
                           <span className="rounded bg-green-100 text-green-700 px-3 py-2 text-center">
                             {text.agenda.registeredBadge}
                           </span>
-                        ) : (
-                          <button
-                            onClick={() => register(activity)}
-                            disabled={!canRegister || !isValidContract}
-                            className={`px-4 py-2 rounded text-white transition-colors ${
-                              canRegister && isValidContract
-                                ? 'bg-blue-600 hover:bg-blue-700'
-                                : 'bg-gray-300 cursor-not-allowed'
-                            }`}
-                          >
-                            {remaining > 0 ? text.agenda.registerButton : text.agenda.noSpotsButton}
-                          </button>
                         )}
                         {!activity.active && (
                           <span className="rounded bg-gray-200 text-gray-600 px-3 py-2 text-center">
                             {text.agenda.inactiveBadge}
                           </span>
                         )}
+                        {remaining <= 0 && (
+                          <span className="rounded bg-amber-100 text-amber-700 px-3 py-2 text-center">
+                            {text.agenda.noSpotsButton}
+                          </span>
+                        )}
+                        <button
+                          onClick={() => openActivity(activity.id)}
+                          className="px-4 py-2 rounded border border-blue-600 text-blue-600 transition-colors hover:bg-blue-50"
+                        >
+                          {text.agenda.detailsButton}
+                        </button>
                       </div>
                     </div>
                   </div>
