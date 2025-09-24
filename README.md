@@ -1,34 +1,41 @@
-# [Airbnbit.com](http://hackaton20025.vercel.app)
+# Edge City · Residency Activity Registry
 
-Aplicación descentralizada enfocada principalmente en el **alquiler de propiedades** en la blockchain. El proyecto combina un contrato inteligente en Solidity con un frontend en React, permitiendo a los usuarios conectar su billetera MetaMask, completar un proceso de KYC, publicar inmuebles y realizar reservas o pagos de renta en Ether. También admite la venta de propiedades si se requiere.
+Edge City documents its Patagonia residency program on-chain. The project combines a Solidity
+smart contract with a React dashboard so organizers can publish activities, manage spots and
+collect USDT payments directly from participant wallets.
 
-## Características principales
+## Platform overview
 
-- Registro KYC en cadena y verificación por un administrador.
-- Listado de propiedades para alquiler con imágenes, precio y URL de referencia.
-- Reserva y pago de rentas mediante transacciones en Ether.
-- Interfaz web que muestra propiedades destacadas y formulario para listar nuevos inmuebles.
+- Curate multi-day cultural and nature activities for each residency edition.
+- Accept USDT payments that are validated and escrowed by the smart contract.
+- Track real-time availability, registrations and participant wallets from the dashboard.
+- Offer a multilingual interface (English, Spanish and French) connected to the blockchain data.
 
-## Smart Contract
+## Smart contracts
 
-El contrato [`contracts/PropertyMarketplace.sol`](contracts/PropertyMarketplace.sol) contiene la lógica de negocio:
+### `contracts/ActivityRegistry.sol`
 
-- Mantiene los datos de KYC y de las propiedades.
-- Permite a usuarios verificados listar, comprar o rentar propiedades.
-- Emite eventos para cada publicación, compra o alquiler.
-- Incluye funciones administrativas para verificar identidades y cancelar operaciones.
+The core contract stores the activity catalog. Administrators can create experiences, toggle their
+status and configure pricing in USDT. Participants call `registerForActivity` to secure their spot
+and transfer the required stablecoin amount to the organizer in a single transaction. Public getters
+expose activity metadata, availability counters, the current admin and the stablecoin address used
+for payments.
 
-## Gobernanza y token GOV
+### `contracts/mocks/TestToken.sol`
 
-El contrato [`contracts/GovernanceToken.sol`](contracts/GovernanceToken.sol) define el token de gobernanza **GOV** utilizado para la administración del protocolo. Los administradores pueden:
+A lightweight ERC20-like token included for local development and testing. It exposes minting and
+standard allowance flows so Hardhat tests can emulate USDT behaviour.
 
-- Actualizar el token de pago aceptado para comprar GOV.
-- Ajustar el precio del token.
-- Pausar o reanudar la venta de GOV.
+## Frontend
 
-Adicionalmente, el administrador del marketplace verifica identidades, puede asignar un nuevo administrador y cancelar operaciones de compra o alquiler en caso de disputas.
+The `frontend` folder contains a React application that surfaces contract data and lets admins
+publish activities once they connect their wallet. Update the following environment variables to
+point at your deployment:
 
-### Comandos principales
+- `REACT_APP_CONTRACT_ADDRESS`: address of the deployed `ActivityRegistry` contract.
+- `REACT_APP_USDT_ADDRESS`: address of the ERC20 token accepted for payments.
+
+## Getting started
 
 ```bash
 npm install
@@ -36,18 +43,7 @@ npm run compile
 npm test
 ```
 
-## Frontend
-
-La carpeta [`frontend`](frontend) incluye la app React que interactúa con el contrato. Una vez desplegado el contrato, actualice la variable `contractAddress` en `frontend/src/App.js` y asegúrese de copiar el ABI a `frontend/src/PropertyMarketplace.json`.
-
-La interfaz permite:
-
-- Conectarse con MetaMask.
-- Completar el formulario KYC.
-- Publicar propiedades indicando precio, seña e imágenes.
-- Visualizar propiedades destacadas en un carrusel.
-
-### Comandos frontend
+To work on the UI:
 
 ```bash
 cd frontend
@@ -55,3 +51,5 @@ npm install
 npm start
 ```
 
+Deploy the contracts with Hardhat, configure the frontend environment variables, and the dashboard
+will reflect the live on-chain activity data.

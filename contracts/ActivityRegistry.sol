@@ -1,6 +1,20 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
+/**
+ * @title ActivityRegistry
+ * @notice Manages a catalog of residency activities, tracks available spots and
+ *         coordinates USDT-denominated registrations directly on-chain.
+ * @dev External interface:
+ * - `createActivity(string,string,uint64,uint32,uint256)` creates a new activity (admin only).
+ * - `setActivityStatus(uint256,bool)` toggles availability (admin only).
+ * - `registerForActivity(uint256)` validates allowance, transfers USDT and reserves a spot.
+ * - `getActivities()` returns the full list of activities with metadata.
+ * - `getParticipants(uint256)` exposes the wallet addresses registered for an activity.
+ *
+ * The contract depends on a minimal `IERC20` interface for the stablecoin used to
+ * charge registrations (`allowance` and `transferFrom`).
+ */
 interface IERC20 {
     function transferFrom(address from, address to, uint256 amount) external returns (bool);
     function allowance(address owner, address spender) external view returns (uint256);
