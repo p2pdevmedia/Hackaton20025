@@ -3,6 +3,7 @@ import { ethers } from 'ethers';
 
 import ActivityRegistry from './ActivityRegistry.json';
 import Navbar from './components/Navbar';
+import { translations, residencyActivities as residencyCatalog, localeMap } from './translations';
 
 const contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS || '';
 const usdtAddress = process.env.REACT_APP_USDT_ADDRESS || '';
@@ -15,65 +16,6 @@ const ERC20_ABI = [
   'function approve(address spender, uint256 amount) returns (bool)',
   'function decimals() view returns (uint8)',
   'function balanceOf(address owner) view returns (uint256)'
-];
-
-const residencyActivities = [
-  {
-    id: 'mountain-expedition',
-    title: 'Salida de montaña al corazón de la cordillera',
-    summary:
-      'Ascenso guiado entre bosques nativos, miradores ocultos y relatos locales para sentir la energía del Parque Nacional Lanín.',
-    highlights: [
-      'Guía habilitado de Edge City y equipo de trekking incluido',
-      'Registro fotográfico y checkpoints sincronizados con el contrato electrónico',
-      'Cierre con breathwork frente al volcán Lanín'
-    ],
-    image:
-      'https://images.unsplash.com/photo-1549887534-1541e9326642?auto=format&fit=crop&w=1200&q=80',
-    guide: 'Coordinada por Iván Moritz Karl y la comunidad residente'
-  },
-  {
-    id: 'lake-kayak',
-    title: 'Travesía en kayak por el lago Lolog',
-    summary:
-      'Remada suave entre bahías transparentes, aprendiendo lectura del clima patagónico y navegando en silencio al atardecer.',
-    highlights: [
-      'Kayaks dobles, chalecos y briefing de seguridad incluidos',
-      'Check-in en cadena al embarcar y tracking de cupos en vivo',
-      'Brindis con cocina de campamento en la playa de arena volcánica'
-    ],
-    image:
-      'https://images.unsplash.com/photo-1526481280695-3c46973ed107?auto=format&fit=crop&w=1200&q=80',
-    guide: 'Logística junto al club náutico de Lolog y artistas residentes'
-  },
-  {
-    id: 'rock-climbing',
-    title: 'Clínica de escalada en roca y movimientos conscientes',
-    summary:
-      'Sesión progresiva en la escuela de granito local para conectar fuerza, respiración y foco creativo.',
-    highlights: [
-      'Todos los niveles: desde boulder introductorio a vías con cuerda',
-      'Seguimiento de progresos y liberación de responsabilidad digital firmada on-chain',
-      'Círculo de integración sonora al pie de la pared'
-    ],
-    image:
-      'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1200&q=80',
-    guide: 'Mentoreada por guías IFMGA y performers de Edge City'
-  },
-  {
-    id: 'patagonian-asado',
-    title: 'Asado patagónico íntimo en la orilla del lago',
-    summary:
-      'Fuego lento, productos locales y pintura en vivo de Iván Moritz Karl mientras cae la noche sobre Lolog.',
-    highlights: [
-      'Menú de carnes, hongos y vegetales de productores aliados',
-      'Registro audiovisual conectado al contrato para actualizar memorabilia digital',
-      'Jam session con residentes y comunidad invitada'
-    ],
-    image:
-      'https://images.unsplash.com/photo-1529694157877-4b9a0c7d3ec6?auto=format&fit=crop&w=1200&q=80',
-    guide: 'Curaduría gastronómica de la cocina Edge City'
-  }
 ];
 
 function App() {
@@ -90,7 +32,24 @@ function App() {
     maxParticipants: '',
     price: ''
   });
-  const [statusMessage, setStatusMessage] = useState('');
+  const [statusKey, setStatusKey] = useState(null);
+  const [language, setLanguage] = useState('en');
+
+  const text = useMemo(() => translations[language] || translations.en, [language]);
+  const languageOptions = useMemo(
+    () => Object.entries(translations).map(([code, value]) => ({ code, label: value.languageName })),
+    []
+  );
+  const heroActivities = useMemo(
+    () =>
+      residencyCatalog.map(activity => {
+        const localized = activity.translations[language] || activity.translations.en;
+        return { ...localized, id: activity.id, image: activity.image };
+      }),
+    [language]
+  );
+  const locale = useMemo(() => localeMap[language] || localeMap.en, [language]);
+  const statusMessage = statusKey ? text.status[statusKey] : '';
 
   const hasProvider = useMemo(() => typeof window !== 'undefined' && window.ethereum, []);
 
@@ -219,7 +178,7 @@ function App() {
 
   const connect = async () => {
     if (!hasProvider) {
-      alert('Instalá MetaMask para continuar');
+      alert(text.alerts.metaMask);
       return;
     }
     try {
@@ -257,14 +216,14 @@ function App() {
 
   const createActivity = async event => {
     event.preventDefault();
-    setStatusMessage('');
+    setStatusKey(null);
 
     if (!isValidContract) {
-      setStatusMessage('Configura la dirección del contrato para crear actividades.');
+      setStatusKey('contractMissing');
       return;
     }
     if (!account) {
-      setStatusMessage('Conectá tu wallet para crear actividades.');
+      setStatusKey('connectWalletToCreate');
       return;
     }
 
@@ -286,25 +245,25 @@ function App() {
         maxParticipants,
         price
       );
-      setStatusMessage('Creando actividad...');
+      setStatusKey('creatingActivity');
       await tx.wait();
-      setStatusMessage('Actividad creada con éxito.');
+      setStatusKey('activityCreated');
       resetForm();
       await fetchActivities();
     } catch (error) {
       console.error('Error creating activity', error);
-      setStatusMessage('No se pudo crear la actividad. Revisá la consola para más información.');
+      setStatusKey('activityCreationFailed');
     }
   };
 
   const register = async activity => {
-    setStatusMessage('');
+    setStatusKey(null);
     if (!account) {
-      setStatusMessage('Conectá tu wallet para registrarte.');
+      setStatusKey('connectWalletToRegister');
       return;
     }
     if (!activity.active) {
-      setStatusMessage('Esta actividad no está disponible.');
+      setStatusKey('activityUnavailable');
       return;
     }
     const provider = getProvider();
@@ -319,37 +278,45 @@ function App() {
         const allowance = await token.allowance(account, contractAddress);
         if (allowance.lt(activity.priceRaw)) {
           const approveTx = await token.approve(contractAddress, activity.priceRaw);
-          setStatusMessage('Aprobando USDT...');
+          setStatusKey('approvingUsdt');
           await approveTx.wait();
         }
       }
 
       const tx = await contract.registerForActivity(activity.id);
-      setStatusMessage('Confirmando registro...');
+      setStatusKey('confirmingRegistration');
       await tx.wait();
-      setStatusMessage('¡Registro completado!');
+      setStatusKey('registrationComplete');
       await Promise.all([fetchActivities(), fetchUsdtBalance()]);
     } catch (error) {
       console.error('Error registering', error);
-      setStatusMessage('No se pudo completar el registro. Revisá la consola para más detalles.');
+      setStatusKey('registrationFailed');
     }
   };
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar account={account} connect={connect} disconnect={disconnect} />
+      <Navbar
+        account={account}
+        connect={connect}
+        disconnect={disconnect}
+        language={language}
+        setLanguage={setLanguage}
+        text={text.navbar}
+        languageLabel={text.languageSelectorLabel}
+        languageOptions={languageOptions}
+      />
       <header className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
         <div className="max-w-5xl mx-auto px-4 py-16 grid gap-8 lg:grid-cols-[1.2fr,0.8fr] items-center">
           <div className="space-y-4">
             <span className="inline-flex items-center gap-2 rounded-full border border-white/40 px-3 py-1 text-xs uppercase tracking-widest">
-              Nueva edición 2024 · Lago Lolog
+              {text.hero.badge}
             </span>
             <h2 className="text-3xl sm:text-4xl font-semibold leading-tight">
-              Residencia Edge City Patagonia: arte vivo, naturaleza y comunidad conectada on-chain.
+              {text.hero.title}
             </h2>
             <p className="text-base text-slate-200">
-              Diseñamos una inmersión de varios días donde exploramos la cordillera, activamos prácticas físicas y culinarias,
-              y documentamos cada momento con contratos inteligentes que resguardan cupos, pagos y memorias.
+              {text.hero.description}
             </p>
             <div className="flex flex-wrap gap-3">
               <a
@@ -358,36 +325,34 @@ function App() {
                 rel="noreferrer"
                 className="inline-flex items-center justify-center rounded bg-white px-5 py-2 text-sm font-semibold text-slate-900 shadow hover:bg-slate-100"
               >
-                Ver programa completo
+                {text.hero.primaryLink}
               </a>
               <div className="inline-flex items-center gap-2 rounded border border-white/40 px-4 py-2 text-xs sm:text-sm">
                 <span className="h-2 w-2 rounded-full bg-emerald-400" />
-                Datos actualizados en contrato electrónico
+                {text.hero.dataBadge}
               </div>
             </div>
           </div>
           <div className="rounded-3xl border border-white/20 bg-white/5 p-6 backdrop-blur">
-            <h3 className="text-lg font-medium">Lo que activa la residencia</h3>
+            <h3 className="text-lg font-medium">{text.heroCard.heading}</h3>
             <ul className="mt-4 space-y-3 text-sm text-slate-200">
-              <li className="flex items-start gap-2">
-                <span className="mt-1 h-2 w-2 rounded-full bg-emerald-400" />
-                Salidas curadas a montaña, agua y roca con guías locales.
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="mt-1 h-2 w-2 rounded-full bg-sky-400" />
-                Cocina de territorio y rituales artísticos con Iván Moritz Karl.
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="mt-1 h-2 w-2 rounded-full bg-amber-400" />
-                Cupos, pagos y entregables asegurados en el contrato Edge City.
-              </li>
+              {text.heroCard.items.map((item, index) => (
+                <li key={item} className="flex items-start gap-2">
+                  <span
+                    className={`mt-1 h-2 w-2 rounded-full ${
+                      index === 0 ? 'bg-emerald-400' : index === 1 ? 'bg-sky-400' : 'bg-amber-400'
+                    }`}
+                  />
+                  {item}
+                </li>
+              ))}
             </ul>
           </div>
         </div>
       </header>
       <main className="max-w-5xl mx-auto px-4 py-10 space-y-12">
         <section className="grid gap-6 md:grid-cols-2">
-          {residencyActivities.map(activity => (
+          {heroActivities.map(activity => (
             <article key={activity.id} className="overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-slate-100">
               <div className="relative h-56 overflow-hidden">
                 <img
@@ -415,26 +380,19 @@ function App() {
         </section>
 
         <section className="rounded-3xl border border-dashed border-blue-200 bg-blue-50/60 p-6 text-sm text-blue-900 shadow-inner">
-          <h2 className="text-lg font-semibold text-blue-900">Contrato Edge City x Patagonia</h2>
-          <p className="mt-2">
-            Cada actividad se sincroniza con este panel en tiempo real. Los datos que ves (cupos, precios, descripciones y
-            fotos) son los que se escriben o actualizan cuando firmás el contrato electrónico desde tu wallet.
-          </p>
-          <p className="mt-3">
-            Al registrar participantes, el smart contract valida el pago en USDT, reserva el cupo y deja registro auditable para
-            la comunidad y los organizadores. Las imágenes se almacenan como referencias IPFS/NFT que podés actualizar en cada
-            edición.
-          </p>
+          <h2 className="text-lg font-semibold text-blue-900">{text.contract.heading}</h2>
+          <p className="mt-2">{text.contract.paragraph1}</p>
+          <p className="mt-3">{text.contract.paragraph2}</p>
         </section>
 
         {!isValidContract && (
           <div className="p-4 rounded bg-yellow-100 text-yellow-900">
-            Configurá <code>REACT_APP_CONTRACT_ADDRESS</code> para interactuar con el contrato de actividades.
+            <span dangerouslySetInnerHTML={{ __html: text.warnings.contract }} />
           </div>
         )}
         {!isValidUsdt && (
           <div className="p-4 rounded bg-yellow-100 text-yellow-900">
-            Configurá <code>REACT_APP_USDT_ADDRESS</code> para apuntar al token USDT que se utilizará para los pagos.
+            <span dangerouslySetInnerHTML={{ __html: text.warnings.usdt }} />
           </div>
         )}
 
@@ -445,29 +403,30 @@ function App() {
         <section className="space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
             <div>
-              <h2 className="text-xl font-semibold text-slate-900">Agenda Web3 en vivo</h2>
-              <p className="text-sm text-gray-600">
-                Gestioná disponibilidad, precios y registros confirmados directamente en la cadena de bloques.
-              </p>
+              <h2 className="text-xl font-semibold text-slate-900">{text.agenda.heading}</h2>
+              <p className="text-sm text-gray-600">{text.agenda.description}</p>
             </div>
             {account && isValidUsdt && (
               <div className="text-sm text-gray-700">
-                Balance USDT: <span className="font-semibold">{usdtBalance}</span>
+                {text.agenda.balanceLabel}: <span className="font-semibold">{usdtBalance}</span>
               </div>
             )}
           </div>
 
           {loading ? (
-            <div className="text-center text-gray-500">Cargando actividades...</div>
+            <div className="text-center text-gray-500">{text.agenda.loading}</div>
           ) : activities.length === 0 ? (
             <div className="rounded border border-dashed border-gray-300 p-6 text-center text-gray-500">
-              Aún no hay actividades creadas.
+              {text.agenda.empty}
             </div>
           ) : (
             <div className="space-y-4">
               {activities.map(activity => {
                 const remaining = activity.maxParticipants - activity.registeredCount;
-                const dateString = new Date(activity.date * 1000).toLocaleString();
+                const dateString = new Date(activity.date * 1000).toLocaleString(locale, {
+                  dateStyle: 'medium',
+                  timeStyle: 'short'
+                });
                 const canRegister =
                   account &&
                   !activity.isRegistered &&
@@ -483,20 +442,20 @@ function App() {
                         <p className="text-gray-700 whitespace-pre-line">{activity.description}</p>
                         <div className="mt-2 text-sm text-gray-600 space-y-1">
                           <p>
-                            <span className="font-medium">Fecha:</span> {dateString}
+                            <span className="font-medium">{text.agenda.dateLabel}:</span> {dateString}
                           </p>
                           <p>
-                            <span className="font-medium">Cupos:</span> {activity.registeredCount}/{activity.maxParticipants}
+                            <span className="font-medium">{text.agenda.spotsLabel}:</span> {activity.registeredCount}/{activity.maxParticipants}
                           </p>
                           <p>
-                            <span className="font-medium">Precio:</span> {activity.price} USDT
+                            <span className="font-medium">{text.agenda.priceLabel}:</span> {activity.price} USDT
                           </p>
                         </div>
                       </div>
                       <div className="flex flex-col gap-2 items-stretch min-w-[200px]">
                         {activity.isRegistered ? (
                           <span className="rounded bg-green-100 text-green-700 px-3 py-2 text-center">
-                            Ya estás registrado/a
+                            {text.agenda.registeredBadge}
                           </span>
                         ) : (
                           <button
@@ -508,12 +467,12 @@ function App() {
                                 : 'bg-gray-300 cursor-not-allowed'
                             }`}
                           >
-                            {remaining > 0 ? 'Registrarme' : 'Sin cupos disponibles'}
+                            {remaining > 0 ? text.agenda.registerButton : text.agenda.noSpotsButton}
                           </button>
                         )}
                         {!activity.active && (
                           <span className="rounded bg-gray-200 text-gray-600 px-3 py-2 text-center">
-                            Actividad inactiva
+                            {text.agenda.inactiveBadge}
                           </span>
                         )}
                       </div>
@@ -528,25 +487,23 @@ function App() {
         {isAdmin && (
           <section className="rounded bg-white p-6 shadow space-y-4">
             <div>
-              <h2 className="text-xl font-semibold">Crear nueva actividad</h2>
-              <p className="text-sm text-gray-600">
-                Definí la experiencia, fecha y cupos disponibles. El precio se expresará en USDT.
-              </p>
+              <h2 className="text-xl font-semibold">{text.adminForm.heading}</h2>
+              <p className="text-sm text-gray-600">{text.adminForm.description}</p>
             </div>
             <form className="space-y-4" onSubmit={createActivity}>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Nombre</label>
+                <label className="block text-sm font-medium text-gray-700">{text.adminForm.nameLabel}</label>
                 <input
                   required
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
                   className="mt-1 w-full rounded border px-3 py-2"
-                  placeholder="Nombre de la actividad"
+                  placeholder={text.adminForm.namePlaceholder}
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Descripción</label>
+                <label className="block text-sm font-medium text-gray-700">{text.adminForm.descriptionLabel}</label>
                 <textarea
                   required
                   name="description"
@@ -554,12 +511,12 @@ function App() {
                   onChange={handleInputChange}
                   className="mt-1 w-full rounded border px-3 py-2"
                   rows={4}
-                  placeholder="Contanos de qué trata la experiencia"
+                  placeholder={text.adminForm.descriptionPlaceholder}
                 />
               </div>
               <div className="grid gap-4 sm:grid-cols-3">
                 <div className="sm:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700">Fecha y horario</label>
+                  <label className="block text-sm font-medium text-gray-700">{text.adminForm.dateLabel}</label>
                   <input
                     required
                     type="datetime-local"
@@ -570,7 +527,7 @@ function App() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">Cupos máximos</label>
+                  <label className="block text-sm font-medium text-gray-700">{text.adminForm.maxParticipantsLabel}</label>
                   <input
                     required
                     type="number"
@@ -583,7 +540,7 @@ function App() {
                 </div>
               </div>
               <div className="sm:w-1/2">
-                <label className="block text-sm font-medium text-gray-700">Precio en USDT</label>
+                <label className="block text-sm font-medium text-gray-700">{text.adminForm.priceLabel}</label>
                 <input
                   type="number"
                   min="0"
@@ -592,14 +549,14 @@ function App() {
                   value={formData.price}
                   onChange={handleInputChange}
                   className="mt-1 w-full rounded border px-3 py-2"
-                  placeholder="Ej: 25"
+                  placeholder={text.adminForm.pricePlaceholder}
                 />
               </div>
               <button
                 type="submit"
                 className="w-full sm:w-auto px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
               >
-                Crear actividad
+                {text.adminForm.submit}
               </button>
             </form>
           </section>
