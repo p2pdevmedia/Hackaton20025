@@ -1,7 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-// Simple ERC20 token with minting for testing purposes
+/**
+ * @title TestToken
+ * @notice Lightweight ERC20-like token used in tests to emulate a USDT stablecoin.
+ * @dev External interface:
+ * - `mint(address,uint256)` to issue tokens for test accounts.
+ * - Standard ERC20 methods `transfer`, `approve` and `transferFrom` for allowance flows.
+ * - Public getters `name`, `symbol`, `decimals`, `totalSupply`, `balanceOf` and `allowance`.
+ */
 contract TestToken {
     string public name;
     string public symbol;
