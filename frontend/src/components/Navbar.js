@@ -2,12 +2,13 @@ import React from 'react';
 
 function Navbar({ account, connect, disconnect }) {
   return (
-    <nav className="bg-white shadow">
-      <div className="max-w-4xl mx-auto px-4 py-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+    <nav className="bg-white/90 backdrop-blur shadow">
+      <div className="max-w-5xl mx-auto px-4 py-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-blue-600">Actividades Web3</h1>
+          <h1 className="text-2xl font-semibold text-blue-600">Edge City · Patagonia Residency</h1>
           <p className="text-sm text-gray-600">
-            Descubrí experiencias y registrate pagando con USDT.
+            Una experiencia inmersiva en la naturaleza con registro y cobros asegurados por contrato
+            electrónico.
           </p>
         </div>
         {account ? (

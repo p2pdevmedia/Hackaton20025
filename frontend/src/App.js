@@ -17,6 +17,65 @@ const ERC20_ABI = [
   'function balanceOf(address owner) view returns (uint256)'
 ];
 
+const residencyActivities = [
+  {
+    id: 'mountain-expedition',
+    title: 'Salida de montaña al corazón de la cordillera',
+    summary:
+      'Ascenso guiado entre bosques nativos, miradores ocultos y relatos locales para sentir la energía del Parque Nacional Lanín.',
+    highlights: [
+      'Guía habilitado de Edge City y equipo de trekking incluido',
+      'Registro fotográfico y checkpoints sincronizados con el contrato electrónico',
+      'Cierre con breathwork frente al volcán Lanín'
+    ],
+    image:
+      'https://images.unsplash.com/photo-1549887534-1541e9326642?auto=format&fit=crop&w=1200&q=80',
+    guide: 'Coordinada por Iván Moritz Karl y la comunidad residente'
+  },
+  {
+    id: 'lake-kayak',
+    title: 'Travesía en kayak por el lago Lolog',
+    summary:
+      'Remada suave entre bahías transparentes, aprendiendo lectura del clima patagónico y navegando en silencio al atardecer.',
+    highlights: [
+      'Kayaks dobles, chalecos y briefing de seguridad incluidos',
+      'Check-in en cadena al embarcar y tracking de cupos en vivo',
+      'Brindis con cocina de campamento en la playa de arena volcánica'
+    ],
+    image:
+      'https://images.unsplash.com/photo-1526481280695-3c46973ed107?auto=format&fit=crop&w=1200&q=80',
+    guide: 'Logística junto al club náutico de Lolog y artistas residentes'
+  },
+  {
+    id: 'rock-climbing',
+    title: 'Clínica de escalada en roca y movimientos conscientes',
+    summary:
+      'Sesión progresiva en la escuela de granito local para conectar fuerza, respiración y foco creativo.',
+    highlights: [
+      'Todos los niveles: desde boulder introductorio a vías con cuerda',
+      'Seguimiento de progresos y liberación de responsabilidad digital firmada on-chain',
+      'Círculo de integración sonora al pie de la pared'
+    ],
+    image:
+      'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1200&q=80',
+    guide: 'Mentoreada por guías IFMGA y performers de Edge City'
+  },
+  {
+    id: 'patagonian-asado',
+    title: 'Asado patagónico íntimo en la orilla del lago',
+    summary:
+      'Fuego lento, productos locales y pintura en vivo de Iván Moritz Karl mientras cae la noche sobre Lolog.',
+    highlights: [
+      'Menú de carnes, hongos y vegetales de productores aliados',
+      'Registro audiovisual conectado al contrato para actualizar memorabilia digital',
+      'Jam session con residentes y comunidad invitada'
+    ],
+    image:
+      'https://images.unsplash.com/photo-1529694157877-4b9a0c7d3ec6?auto=format&fit=crop&w=1200&q=80',
+    guide: 'Curaduría gastronómica de la cocina Edge City'
+  }
+];
+
 function App() {
   const [account, setAccount] = useState(null);
   const [activities, setActivities] = useState([]);
@@ -279,7 +338,95 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar account={account} connect={connect} disconnect={disconnect} />
-      <main className="max-w-4xl mx-auto px-4 py-8 space-y-8">
+      <header className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
+        <div className="max-w-5xl mx-auto px-4 py-16 grid gap-8 lg:grid-cols-[1.2fr,0.8fr] items-center">
+          <div className="space-y-4">
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/40 px-3 py-1 text-xs uppercase tracking-widest">
+              Nueva edición 2024 · Lago Lolog
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-semibold leading-tight">
+              Residencia Edge City Patagonia: arte vivo, naturaleza y comunidad conectada on-chain.
+            </h2>
+            <p className="text-base text-slate-200">
+              Diseñamos una inmersión de varios días donde exploramos la cordillera, activamos prácticas físicas y culinarias,
+              y documentamos cada momento con contratos inteligentes que resguardan cupos, pagos y memorias.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <a
+                href="https://edgecity.notion.site/EC-Patagonia-Residency-List-updated-regularly-240d45cdfc5980e980f8db7d362c553d"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center justify-center rounded bg-white px-5 py-2 text-sm font-semibold text-slate-900 shadow hover:bg-slate-100"
+              >
+                Ver programa completo
+              </a>
+              <div className="inline-flex items-center gap-2 rounded border border-white/40 px-4 py-2 text-xs sm:text-sm">
+                <span className="h-2 w-2 rounded-full bg-emerald-400" />
+                Datos actualizados en contrato electrónico
+              </div>
+            </div>
+          </div>
+          <div className="rounded-3xl border border-white/20 bg-white/5 p-6 backdrop-blur">
+            <h3 className="text-lg font-medium">Lo que activa la residencia</h3>
+            <ul className="mt-4 space-y-3 text-sm text-slate-200">
+              <li className="flex items-start gap-2">
+                <span className="mt-1 h-2 w-2 rounded-full bg-emerald-400" />
+                Salidas curadas a montaña, agua y roca con guías locales.
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="mt-1 h-2 w-2 rounded-full bg-sky-400" />
+                Cocina de territorio y rituales artísticos con Iván Moritz Karl.
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="mt-1 h-2 w-2 rounded-full bg-amber-400" />
+                Cupos, pagos y entregables asegurados en el contrato Edge City.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <main className="max-w-5xl mx-auto px-4 py-10 space-y-12">
+        <section className="grid gap-6 md:grid-cols-2">
+          {residencyActivities.map(activity => (
+            <article key={activity.id} className="overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-slate-100">
+              <div className="relative h-56 overflow-hidden">
+                <img
+                  src={activity.image}
+                  alt={activity.title}
+                  className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+                  loading="lazy"
+                />
+              </div>
+              <div className="space-y-3 px-6 py-6">
+                <h3 className="text-xl font-semibold text-slate-900">{activity.title}</h3>
+                <p className="text-sm text-slate-600">{activity.summary}</p>
+                <ul className="space-y-2 text-sm text-slate-700">
+                  {activity.highlights.map(highlight => (
+                    <li key={highlight} className="flex items-start gap-2">
+                      <span className="mt-1 h-2 w-2 flex-shrink-0 rounded-full bg-blue-500" />
+                      {highlight}
+                    </li>
+                  ))}
+                </ul>
+                <p className="text-xs uppercase tracking-wide text-slate-500">{activity.guide}</p>
+              </div>
+            </article>
+          ))}
+        </section>
+
+        <section className="rounded-3xl border border-dashed border-blue-200 bg-blue-50/60 p-6 text-sm text-blue-900 shadow-inner">
+          <h2 className="text-lg font-semibold text-blue-900">Contrato Edge City x Patagonia</h2>
+          <p className="mt-2">
+            Cada actividad se sincroniza con este panel en tiempo real. Los datos que ves (cupos, precios, descripciones y
+            fotos) son los que se escriben o actualizan cuando firmás el contrato electrónico desde tu wallet.
+          </p>
+          <p className="mt-3">
+            Al registrar participantes, el smart contract valida el pago en USDT, reserva el cupo y deja registro auditable para
+            la comunidad y los organizadores. Las imágenes se almacenan como referencias IPFS/NFT que podés actualizar en cada
+            edición.
+          </p>
+        </section>
+
         {!isValidContract && (
           <div className="p-4 rounded bg-yellow-100 text-yellow-900">
             Configurá <code>REACT_APP_CONTRACT_ADDRESS</code> para interactuar con el contrato de actividades.
@@ -298,9 +445,9 @@ function App() {
         <section className="space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
             <div>
-              <h2 className="text-xl font-semibold">Actividades disponibles</h2>
+              <h2 className="text-xl font-semibold text-slate-900">Agenda Web3 en vivo</h2>
               <p className="text-sm text-gray-600">
-                Reservá tu lugar antes de que se acaben los cupos. Los pagos se procesan en USDT.
+                Gestioná disponibilidad, precios y registros confirmados directamente en la cadena de bloques.
               </p>
             </div>
             {account && isValidUsdt && (
