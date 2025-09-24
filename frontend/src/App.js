@@ -1,400 +1,463 @@
-import { useState, useEffect } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ethers } from 'ethers';
 
-import PropertyMarketplace from './PropertyMarketplace.json';
-import PropertySlider from './components/PropertySlider';
+import ActivityRegistry from './ActivityRegistry.json';
 import Navbar from './components/Navbar';
-import KYCForm from './components/KYCForm';
-import MyProperties from './components/MyProperties';
 
-// The contract address is provided via an environment variable so that
-// deployments don't accidentally use the placeholder value. When the value is
-// missing or malformed, interactions with the contract are skipped to avoid
-// ethers.js trying to resolve it as an ENS name (which results in the
-// "network does not support ENS" error).
 const contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS || '';
-const isValidAddress = ethers.utils.isAddress(contractAddress);
+const usdtAddress = process.env.REACT_APP_USDT_ADDRESS || '';
 
-const getContract = (providerOrSigner) => {
-  if (!isValidAddress) {
-    console.warn('Contract address is not configured correctly');
-    return null;
-  }
-  return new ethers.Contract(contractAddress, PropertyMarketplace.abi, providerOrSigner);
-};
+const isValidContract = ethers.utils.isAddress(contractAddress);
+const isValidUsdt = ethers.utils.isAddress(usdtAddress);
+
+const ERC20_ABI = [
+  'function allowance(address owner, address spender) view returns (uint256)',
+  'function approve(address spender, uint256 amount) returns (bool)',
+  'function decimals() view returns (uint8)',
+  'function balanceOf(address owner) view returns (uint256)'
+];
 
 function App() {
   const [account, setAccount] = useState(null);
-  const [properties, setProperties] = useState([]);
-  const [titulo, setTitulo] = useState('');
-  const [descripcion, setDescripcion] = useState('');
-  const [city, setCity] = useState('');
-  const [postalCode, setPostalCode] = useState('');
-  const [precioUSDT, setPrecioUSDT] = useState('');
-  const [seniaUSDT, setSeniaUSDT] = useState('');
-  const [fotoSlider, setFotoSlider] = useState('');
-  const [fotosMini, setFotosMini] = useState('');
-  const [fotoAvatar, setFotoAvatar] = useState('');
-  const [url, setUrl] = useState('');
-  const [page, setPage] = useState(() =>
-    window.location.pathname.slice(1) || 'home'
+  const [activities, setActivities] = useState([]);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [usdtDecimals, setUsdtDecimals] = useState(6);
+  const [usdtBalance, setUsdtBalance] = useState('0');
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    description: '',
+    date: '',
+    maxParticipants: '',
+    price: ''
+  });
+  const [statusMessage, setStatusMessage] = useState('');
+
+  const hasProvider = useMemo(() => typeof window !== 'undefined' && window.ethereum, []);
+
+  const getProvider = useCallback(() => {
+    if (!hasProvider) {
+      return null;
+    }
+    return new ethers.providers.Web3Provider(window.ethereum);
+  }, [hasProvider]);
+
+  const fetchUsdtDecimals = useCallback(
+    async provider => {
+      if (!isValidUsdt) {
+        setUsdtDecimals(6);
+        return 6;
+      }
+      try {
+        const usdt = new ethers.Contract(usdtAddress, ERC20_ABI, provider);
+        const decimals = await usdt.decimals();
+        setUsdtDecimals(decimals);
+        return decimals;
+      } catch (err) {
+        console.error('Error fetching USDT decimals', err);
+        setUsdtDecimals(6);
+        return 6;
+      }
+    },
+    []
   );
-  const [searchCity, setSearchCity] = useState('');
-  const [searchPostal, setSearchPostal] = useState('');
-  const [searchName, setSearchName] = useState('');
 
-  useEffect(() => {
-    const handlePop = () => {
-      setPage(window.location.pathname.slice(1) || 'home');
-    };
-    window.addEventListener('popstate', handlePop);
-    return () => window.removeEventListener('popstate', handlePop);
-  }, []);
+  const fetchActivities = useCallback(async () => {
+    if (!isValidContract) return;
+    const provider = getProvider();
+    if (!provider) return;
 
-  const navigate = newPage => {
-    setPage(newPage);
-    const path = newPage === 'home' ? '/' : `/${newPage}`;
-    window.history.pushState(null, '', path);
-  };
+    setLoading(true);
+    try {
+      const contract = new ethers.Contract(contractAddress, ActivityRegistry.abi, provider);
+      const [admin, rawActivities] = await Promise.all([
+        contract.admin(),
+        contract.getActivities()
+      ]);
 
-  const connect = async () => {
-    if (!window.ethereum) {
-      alert('Please install MetaMask');
+      const decimals = await fetchUsdtDecimals(provider);
+
+      const formatted = await Promise.all(
+        rawActivities.map(async activity => {
+          const id = activity.id.toNumber();
+          let registered = false;
+          if (account) {
+            try {
+              registered = await contract.isRegistered(id, account);
+            } catch (err) {
+              console.warn('Error fetching registration status', err);
+            }
+          }
+          return {
+            id,
+            name: activity.name,
+            description: activity.description,
+            date: activity.date.toNumber(),
+            maxParticipants: activity.maxParticipants.toNumber(),
+            registeredCount: activity.registeredCount.toNumber(),
+            priceRaw: activity.priceUSDT,
+            price: ethers.utils.formatUnits(activity.priceUSDT, decimals),
+            organizer: activity.organizer,
+            active: activity.active,
+            isRegistered: registered
+          };
+        })
+      );
+
+      setActivities(formatted);
+      if (account) {
+        setIsAdmin(admin.toLowerCase() === account.toLowerCase());
+      } else {
+        setIsAdmin(false);
+      }
+    } catch (error) {
+      console.error('Error fetching activities', error);
+    } finally {
+      setLoading(false);
+    }
+  }, [account, fetchUsdtDecimals, getProvider]);
+
+  const fetchUsdtBalance = useCallback(async () => {
+    if (!account || !isValidUsdt) {
+      setUsdtBalance('0');
       return;
     }
-    const [acc] = await window.ethereum.request({ method: 'eth_requestAccounts' });
-    setAccount(acc);
+    const provider = getProvider();
+    if (!provider) return;
+    try {
+      const token = new ethers.Contract(usdtAddress, ERC20_ABI, provider);
+      const balance = await token.balanceOf(account);
+      setUsdtBalance(ethers.utils.formatUnits(balance, usdtDecimals));
+    } catch (err) {
+      console.error('Error fetching USDT balance', err);
+      setUsdtBalance('0');
+    }
+  }, [account, getProvider, usdtDecimals]);
+
+  useEffect(() => {
+    fetchActivities();
+  }, [fetchActivities]);
+
+  useEffect(() => {
+    fetchUsdtBalance();
+  }, [fetchUsdtBalance]);
+
+  useEffect(() => {
+    if (!hasProvider) return;
+    const handleAccountsChanged = accounts => {
+      if (!accounts.length) {
+        setAccount(null);
+        setIsAdmin(false);
+      } else {
+        setAccount(ethers.utils.getAddress(accounts[0]));
+      }
+    };
+    window.ethereum.on('accountsChanged', handleAccountsChanged);
+    return () => {
+      window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
+    };
+  }, [hasProvider]);
+
+  const connect = async () => {
+    if (!hasProvider) {
+      alert('Instalá MetaMask para continuar');
+      return;
+    }
+    try {
+      const provider = getProvider();
+      const accounts = await provider.send('eth_requestAccounts', []);
+      if (accounts.length) {
+        const normalized = ethers.utils.getAddress(accounts[0]);
+        setAccount(normalized);
+      }
+    } catch (error) {
+      console.error('Wallet connection failed', error);
+    }
   };
 
   const disconnect = () => {
     setAccount(null);
+    setIsAdmin(false);
+    setUsdtBalance('0');
   };
 
-  const fetchProperties = async () => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const contract = getContract(provider);
-    if (!contract) return;
-    const count = await contract.propertyCount();
-    const props = [];
-    for (let i = 1; i <= count; i++) {
-      const p = await contract.properties(i);
-      props.push({
-        id: p.id.toNumber(),
-        titulo: p.titulo,
-        descripcion: p.descripcion,
-        city: p.city,
-        postalCode: p.postalCode,
-        precioWei: p.precioUSDT,
-        seniaWei: p.seniaUSDT,
-        precio: ethers.utils.formatEther(p.precioUSDT),
-        senia: ethers.utils.formatEther(p.seniaUSDT),
-        foto: p.fotoSlider,
-        forRent: p.forRent,
-        date: '',
-        code: ''
-      });
-    }
-    setProperties(props);
+  const handleInputChange = event => {
+    const { name, value } = event.target;
+    setFormData(previous => ({ ...previous, [name]: value }));
   };
 
-  useEffect(() => {
-    if (account && isValidAddress) {
-      fetchProperties();
-    }
-  }, [account, isValidAddress]);
+  const resetForm = () => {
+    setFormData({
+      name: '',
+      description: '',
+      date: '',
+      maxParticipants: '',
+      price: ''
+    });
+  };
 
-  const listProperty = async () => {
-    if (
-      !titulo ||
-      !descripcion ||
-      !city ||
-      !postalCode ||
-      !precioUSDT ||
-      !fotoSlider ||
-      !fotosMini ||
-      !fotoAvatar ||
-      !url ||
-      !isValidAddress
-    )
+  const createActivity = async event => {
+    event.preventDefault();
+    setStatusMessage('');
+
+    if (!isValidContract) {
+      setStatusMessage('Configura la dirección del contrato para crear actividades.');
       return;
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner();
-    const contract = getContract(signer);
-    if (!contract) return;
-    const tx = await contract.listProperty(
-      titulo,
-      descripcion,
-      city,
-      postalCode,
-      ethers.utils.parseEther(precioUSDT),
-      ethers.utils.parseEther(seniaUSDT || '0'),
-      fotoSlider,
-      fotosMini,
-      fotoAvatar,
-      url,
-      false,
-      true
-    );
-    await tx.wait();
-    setTitulo('');
-    setDescripcion('');
-    setCity('');
-    setPostalCode('');
-    setPrecioUSDT('');
-    setSeniaUSDT('');
-    setFotoSlider('');
-    setFotosMini('');
-    setFotoAvatar('');
-    setUrl('');
-  };
-
-  const handleDateChange = (id, value) => {
-    setProperties(props =>
-      props.map(p => (p.id === id ? { ...p, date: value } : p))
-    );
-  };
-
-  const reserve = async id => {
-    const prop = properties.find(p => p.id === id);
-    if (!prop || !prop.date || !isValidAddress) return;
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner();
-    const contract = getContract(signer);
-    if (!contract) return;
-    const timestamp = Math.floor(new Date(prop.date).setHours(0, 0, 0, 0) / 1000);
-    const tx = await contract.reserveDate(id, timestamp, { value: prop.seniaWei });
-    await tx.wait();
-  };
-
-  const payRent = async id => {
-    const prop = properties.find(p => p.id === id);
-    if (!prop || !prop.date || !isValidAddress) return;
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner();
-    const contract = getContract(signer);
-    if (!contract) return;
-    const timestamp = Math.floor(new Date(prop.date).setHours(0, 0, 0, 0) / 1000);
-    const value = prop.precioWei.sub(prop.seniaWei);
-    const tx = await contract.payRent(id, timestamp, { value });
-    const receipt = await tx.wait();
-    const event = receipt.events?.find(e => e.event === 'AccessCodeGenerated');
-    const code = event && event.args ? event.args.code : '';
-    setProperties(props =>
-      props.map(p => (p.id === id ? { ...p, code: code } : p))
-    );
-  };
-
-  const sliderProps = [
-    {
-      id: 1,
-      title: 'Modern Apartment',
-      image: 'https://via.placeholder.com/800x400?text=Property+1',
-      price: '100 ETH',
-    },
-    {
-      id: 2,
-      title: 'Cozy House',
-      image: 'https://via.placeholder.com/800x400?text=Property+2',
-      price: '80 ETH',
-    },
-    {
-      id: 3,
-      title: 'Beach Villa',
-      image: 'https://via.placeholder.com/800x400?text=Property+3',
-      price: '200 ETH',
-    },
-  ];
-
-  const filtered = properties.filter(
-    p =>
-      (!searchCity || p.city.toLowerCase().includes(searchCity.toLowerCase())) &&
-      (!searchPostal || p.postalCode.includes(searchPostal)) &&
-      (!searchName || p.titulo.toLowerCase().includes(searchName.toLowerCase()))
-  );
-
-  const renderProtectedContent = (content, { wrap = true } = {}) => {
-    if (!isValidAddress) {
-      const message = (
-        <p className="text-sm text-red-600">
-          Configura la variable de entorno <code>REACT_APP_CONTRACT_ADDRESS</code> con la dirección del
-          contrato desplegado para poder interactuar con la aplicación.
-        </p>
-      );
-      return wrap ? (
-        <div className="max-w-4xl mx-auto bg-white p-4 rounded shadow mb-8">{message}</div>
-      ) : (
-        message
-      );
     }
     if (!account) {
-      const message = (
-        <p className="text-sm text-gray-700">
-          Conecta tu wallet para acceder a esta sección.
-        </p>
-      );
-      return wrap ? (
-        <div className="max-w-4xl mx-auto bg-white p-4 rounded shadow mb-8">{message}</div>
-      ) : (
-        message
-      );
+      setStatusMessage('Conectá tu wallet para crear actividades.');
+      return;
     }
-    return content;
+
+    const provider = getProvider();
+    if (!provider) return;
+
+    try {
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(contractAddress, ActivityRegistry.abi, signer);
+
+      const timestamp = Math.floor(new Date(formData.date).getTime() / 1000);
+      const maxParticipants = parseInt(formData.maxParticipants, 10);
+      const price = formData.price ? ethers.utils.parseUnits(formData.price, usdtDecimals) : ethers.constants.Zero;
+
+      const tx = await contract.createActivity(
+        formData.name.trim(),
+        formData.description.trim(),
+        timestamp,
+        maxParticipants,
+        price
+      );
+      setStatusMessage('Creando actividad...');
+      await tx.wait();
+      setStatusMessage('Actividad creada con éxito.');
+      resetForm();
+      await fetchActivities();
+    } catch (error) {
+      console.error('Error creating activity', error);
+      setStatusMessage('No se pudo crear la actividad. Revisá la consola para más información.');
+    }
+  };
+
+  const register = async activity => {
+    setStatusMessage('');
+    if (!account) {
+      setStatusMessage('Conectá tu wallet para registrarte.');
+      return;
+    }
+    if (!activity.active) {
+      setStatusMessage('Esta actividad no está disponible.');
+      return;
+    }
+    const provider = getProvider();
+    if (!provider) return;
+
+    try {
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(contractAddress, ActivityRegistry.abi, signer);
+
+      if (activity.priceRaw.gt(0) && isValidUsdt) {
+        const token = new ethers.Contract(usdtAddress, ERC20_ABI, signer);
+        const allowance = await token.allowance(account, contractAddress);
+        if (allowance.lt(activity.priceRaw)) {
+          const approveTx = await token.approve(contractAddress, activity.priceRaw);
+          setStatusMessage('Aprobando USDT...');
+          await approveTx.wait();
+        }
+      }
+
+      const tx = await contract.registerForActivity(activity.id);
+      setStatusMessage('Confirmando registro...');
+      await tx.wait();
+      setStatusMessage('¡Registro completado!');
+      await Promise.all([fetchActivities(), fetchUsdtBalance()]);
+    } catch (error) {
+      console.error('Error registering', error);
+      setStatusMessage('No se pudo completar el registro. Revisá la consola para más detalles.');
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <Navbar account={account} connect={connect} disconnect={disconnect} navigate={navigate} />
+    <div className="min-h-screen bg-gray-50">
+      <Navbar account={account} connect={connect} disconnect={disconnect} />
+      <main className="max-w-4xl mx-auto px-4 py-8 space-y-8">
+        {!isValidContract && (
+          <div className="p-4 rounded bg-yellow-100 text-yellow-900">
+            Configurá <code>REACT_APP_CONTRACT_ADDRESS</code> para interactuar con el contrato de actividades.
+          </div>
+        )}
+        {!isValidUsdt && (
+          <div className="p-4 rounded bg-yellow-100 text-yellow-900">
+            Configurá <code>REACT_APP_USDT_ADDRESS</code> para apuntar al token USDT que se utilizará para los pagos.
+          </div>
+        )}
 
-      {page === 'kyc' &&
-        renderProtectedContent(<KYCForm account={account} contractAddress={contractAddress} />)}
+        {statusMessage && (
+          <div className="p-4 rounded bg-blue-100 text-blue-900">{statusMessage}</div>
+        )}
 
-      {page === 'myProperties' &&
-        renderProtectedContent(<MyProperties account={account} contractAddress={contractAddress} />)}
-
-      {page === 'create' && (
-        <div className="max-w-4xl mx-auto bg-white p-4 rounded shadow mb-8">
-          {renderProtectedContent(
-            <div className="flex flex-col gap-4">
-              <input
-                className="border p-2 rounded"
-                placeholder="Titulo"
-                value={titulo}
-                onChange={e => setTitulo(e.target.value)}
-              />
-              <input
-                className="border p-2 rounded"
-                placeholder="Descripcion"
-                value={descripcion}
-                onChange={e => setDescripcion(e.target.value)}
-              />
-              <input
-                className="border p-2 rounded"
-                placeholder="Ciudad"
-                value={city}
-                onChange={e => setCity(e.target.value)}
-              />
-              <input
-                className="border p-2 rounded"
-                placeholder="Codigo Postal"
-                value={postalCode}
-                onChange={e => setPostalCode(e.target.value)}
-              />
-              <input
-                className="border p-2 rounded"
-                placeholder="Precio en ETH"
-                value={precioUSDT}
-                onChange={e => setPrecioUSDT(e.target.value)}
-              />
-              <input
-                className="border p-2 rounded"
-                placeholder="Seña en ETH"
-                value={seniaUSDT}
-                onChange={e => setSeniaUSDT(e.target.value)}
-              />
-              <input
-                className="border p-2 rounded"
-                placeholder="Foto Slider URI"
-                value={fotoSlider}
-                onChange={e => setFotoSlider(e.target.value)}
-              />
-              <input
-                className="border p-2 rounded"
-                placeholder="Fotos Mini URI"
-                value={fotosMini}
-                onChange={e => setFotosMini(e.target.value)}
-              />
-              <input
-                className="border p-2 rounded"
-                placeholder="Foto Avatar URI"
-                value={fotoAvatar}
-                onChange={e => setFotoAvatar(e.target.value)}
-              />
-              <input
-                className="border p-2 rounded"
-                placeholder="URL"
-                value={url}
-                onChange={e => setUrl(e.target.value)}
-              />
-              <button
-                onClick={listProperty}
-                className="self-start px-4 py-2 bg-green-600 text-white rounded"
-              >
-                List Property for Rent
-              </button>
-            </div>,
-            { wrap: false }
-          )}
-        </div>
-      )}
-
-      {page === 'home' && (
-        <>
-          <section className="max-w-4xl mx-auto p-4">
-            <h2 className="text-2xl font-semibold mb-4">Featured Rentals</h2>
-            <PropertySlider properties={sliderProps} />
-          </section>
-
-          <section className="max-w-4xl mx-auto p-4">
-            <h2 className="text-2xl font-semibold mb-4">Available Rentals</h2>
-            <div className="flex flex-col md:flex-row gap-2 mb-4">
-              <input
-                className="border p-2 rounded"
-                placeholder="Ciudad"
-                value={searchCity}
-                onChange={e => setSearchCity(e.target.value)}
-              />
-              <input
-                className="border p-2 rounded"
-                placeholder="Codigo Postal"
-                value={searchPostal}
-                onChange={e => setSearchPostal(e.target.value)}
-              />
-              <input
-                className="border p-2 rounded"
-                placeholder="Nombre"
-                value={searchName}
-                onChange={e => setSearchName(e.target.value)}
-              />
+        <section className="space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+            <div>
+              <h2 className="text-xl font-semibold">Actividades disponibles</h2>
+              <p className="text-sm text-gray-600">
+                Reservá tu lugar antes de que se acaben los cupos. Los pagos se procesan en USDT.
+              </p>
             </div>
-            {filtered.map(p => (
-              <div key={p.id} className="bg-white p-4 rounded shadow mb-4">
-                <img src={p.foto} alt={p.titulo} className="w-full h-48 object-cover mb-2" />
-                <h3 className="text-xl font-semibold">{p.titulo}</h3>
-                <p className="text-sm mb-2">{p.descripcion}</p>
-                <p className="text-sm">{p.city} - {p.postalCode}</p>
-                <p className="text-sm">Precio: {p.precio} ETH</p>
-                {p.forRent && (
-                  <div className="mt-2 flex flex-col gap-2">
-                    <input
-                      type="date"
-                      value={p.date}
-                      onChange={e => handleDateChange(p.id, e.target.value)}
-                      className="border p-2 rounded"
-                    />
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => reserve(p.id)}
-                        className="px-4 py-2 bg-blue-600 text-white rounded"
-                      >
-                        Reservar ({p.senia} ETH)
-                      </button>
-                      <button
-                        onClick={() => payRent(p.id)}
-                        className="px-4 py-2 bg-green-600 text-white rounded"
-                      >
-                        Pagar Renta
-                      </button>
-                    </div>
-                    {p.code && (
-                      <p className="text-sm">Codigo de acceso: {p.code}</p>
-                    )}
-                  </div>
-                )}
+            {account && isValidUsdt && (
+              <div className="text-sm text-gray-700">
+                Balance USDT: <span className="font-semibold">{usdtBalance}</span>
               </div>
-            ))}
+            )}
+          </div>
+
+          {loading ? (
+            <div className="text-center text-gray-500">Cargando actividades...</div>
+          ) : activities.length === 0 ? (
+            <div className="rounded border border-dashed border-gray-300 p-6 text-center text-gray-500">
+              Aún no hay actividades creadas.
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {activities.map(activity => {
+                const remaining = activity.maxParticipants - activity.registeredCount;
+                const dateString = new Date(activity.date * 1000).toLocaleString();
+                const canRegister =
+                  account &&
+                  !activity.isRegistered &&
+                  remaining > 0 &&
+                  activity.active &&
+                  activity.date * 1000 > Date.now();
+
+                return (
+                  <div key={activity.id} className="rounded border bg-white p-5 shadow-sm">
+                    <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                      <div>
+                        <h3 className="text-lg font-semibold text-blue-600">{activity.name}</h3>
+                        <p className="text-gray-700 whitespace-pre-line">{activity.description}</p>
+                        <div className="mt-2 text-sm text-gray-600 space-y-1">
+                          <p>
+                            <span className="font-medium">Fecha:</span> {dateString}
+                          </p>
+                          <p>
+                            <span className="font-medium">Cupos:</span> {activity.registeredCount}/{activity.maxParticipants}
+                          </p>
+                          <p>
+                            <span className="font-medium">Precio:</span> {activity.price} USDT
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex flex-col gap-2 items-stretch min-w-[200px]">
+                        {activity.isRegistered ? (
+                          <span className="rounded bg-green-100 text-green-700 px-3 py-2 text-center">
+                            Ya estás registrado/a
+                          </span>
+                        ) : (
+                          <button
+                            onClick={() => register(activity)}
+                            disabled={!canRegister || !isValidContract}
+                            className={`px-4 py-2 rounded text-white transition-colors ${
+                              canRegister && isValidContract
+                                ? 'bg-blue-600 hover:bg-blue-700'
+                                : 'bg-gray-300 cursor-not-allowed'
+                            }`}
+                          >
+                            {remaining > 0 ? 'Registrarme' : 'Sin cupos disponibles'}
+                          </button>
+                        )}
+                        {!activity.active && (
+                          <span className="rounded bg-gray-200 text-gray-600 px-3 py-2 text-center">
+                            Actividad inactiva
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </section>
+
+        {isAdmin && (
+          <section className="rounded bg-white p-6 shadow space-y-4">
+            <div>
+              <h2 className="text-xl font-semibold">Crear nueva actividad</h2>
+              <p className="text-sm text-gray-600">
+                Definí la experiencia, fecha y cupos disponibles. El precio se expresará en USDT.
+              </p>
+            </div>
+            <form className="space-y-4" onSubmit={createActivity}>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Nombre</label>
+                <input
+                  required
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  className="mt-1 w-full rounded border px-3 py-2"
+                  placeholder="Nombre de la actividad"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Descripción</label>
+                <textarea
+                  required
+                  name="description"
+                  value={formData.description}
+                  onChange={handleInputChange}
+                  className="mt-1 w-full rounded border px-3 py-2"
+                  rows={4}
+                  placeholder="Contanos de qué trata la experiencia"
+                />
+              </div>
+              <div className="grid gap-4 sm:grid-cols-3">
+                <div className="sm:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700">Fecha y horario</label>
+                  <input
+                    required
+                    type="datetime-local"
+                    name="date"
+                    value={formData.date}
+                    onChange={handleInputChange}
+                    className="mt-1 w-full rounded border px-3 py-2"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Cupos máximos</label>
+                  <input
+                    required
+                    type="number"
+                    min="1"
+                    name="maxParticipants"
+                    value={formData.maxParticipants}
+                    onChange={handleInputChange}
+                    className="mt-1 w-full rounded border px-3 py-2"
+                  />
+                </div>
+              </div>
+              <div className="sm:w-1/2">
+                <label className="block text-sm font-medium text-gray-700">Precio en USDT</label>
+                <input
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  name="price"
+                  value={formData.price}
+                  onChange={handleInputChange}
+                  className="mt-1 w-full rounded border px-3 py-2"
+                  placeholder="Ej: 25"
+                />
+              </div>
+              <button
+                type="submit"
+                className="w-full sm:w-auto px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
+              >
+                Crear actividad
+              </button>
+            </form>
           </section>
-        </>
-      )}
+        )}
+      </main>
     </div>
   );
 }
