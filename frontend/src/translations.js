@@ -9,7 +9,7 @@ export const translations = {
       disconnect: 'Disconnect'
     },
     hero: {
-      badge: 'New edition 2024 · Lolog Lake',
+      badge: 'NEW EDITION 2025 · SAN MARTIN DE LOS ANDES',
       title: 'Edge City Patagonia Residency: live art, nature, and community linked on-chain.',
       description:
         'We design a multi-day immersion to explore the Andes, activate physical and culinary practices, and document every moment with smart contracts that safeguard spots, payments, and memories.',
@@ -125,7 +125,7 @@ export const translations = {
       disconnect: 'Desconectar'
     },
     hero: {
-      badge: 'Nueva edición 2024 · Lago Lolog',
+      badge: 'Nueva edición 2025 · San Martín de los Andes',
       title: 'Residencia Edge City Patagonia: arte vivo, naturaleza y comunidad conectada on-chain.',
       description:
         'Diseñamos una inmersión de varios días para explorar la cordillera, activar prácticas físicas y culinarias, y documentar cada momento con contratos inteligentes que resguardan cupos, pagos y memorias.',
@@ -241,7 +241,7 @@ export const translations = {
       disconnect: 'Déconnecter'
     },
     hero: {
-      badge: 'Nouvelle édition 2024 · Lac Lolog',
+      badge: 'Nouvelle édition 2025 · San Martín de los Andes',
       title: 'Résidence Edge City Patagonie : art vivant, nature et communauté reliés on-chain.',
       description:
         'Nous concevons une immersion de plusieurs jours pour explorer la cordillère, activer des pratiques physiques et culinaires, et documenter chaque moment avec des smart contracts qui protègent places, paiements et souvenirs.',
@@ -325,7 +325,7 @@ export const translations = {
       disconnect: 'Trennen'
     },
     hero: {
-      badge: 'Neue Ausgabe 2024 · Lago Lolog',
+      badge: 'Neue Ausgabe 2025 · San Martín de los Andes',
       title: 'Edge City Patagonien-Residenz: lebendige Kunst, Natur und Gemeinschaft on-chain vernetzt.',
       description:
         'Wir gestalten eine mehrtägige Immersion, um die Anden zu erkunden, körperliche und kulinarische Praktiken zu aktivieren und jeden Moment mit Smart Contracts zu dokumentieren, die Plätze, Zahlungen und Erinnerungen schützen.',
@@ -409,7 +409,7 @@ export const translations = {
       disconnect: '断开连接'
     },
     hero: {
-      badge: '2024 年全新一季 · 洛洛湖',
+      badge: '2025 年全新一季 · 圣马丁德洛斯安第斯',
       title: 'Edge City 巴塔哥尼亚驻地：在链上连接的现场艺术、自然与社区。',
       description:
         '我们策划为期多日的沉浸体验，探索安第斯山脉，开启身体与美食实践，并通过智能合约记录每一个守护席位、支付与记忆的瞬间。',
@@ -493,7 +493,7 @@ export const translations = {
       disconnect: 'Отключить'
     },
     hero: {
-      badge: 'Новое издание 2024 · озеро Лолог',
+      badge: 'Новое издание 2025 · Сан-Мартин-де-лос-Андес',
       title: 'Резиденция Edge City в Патагонии: живое искусство, природа и сообщество, соединённые on-chain.',
       description:
         'Мы создаём многодневное погружение, чтобы исследовать Анды, развивать телесные и кулинарные практики и фиксировать каждый момент с помощью смарт-контрактов, которые защищают места, платежи и воспоминания.',
