@@ -33,13 +33,14 @@ contract ActivityRegistry {
         bool active;
     }
 
-    event ActivityCreated(uint256 indexed id, string name, uint64 date, uint32 maxParticipants, uint256 priceUSDT);
     event ActivityStatusChanged(uint256 indexed id, bool active);
     event ActivityRegistered(uint256 indexed id, address indexed participant, uint32 registeredCount);
 
     uint256 public activityCount;
     address public admin;
     IERC20 public immutable stablecoin;
+
+    uint256 public constant TOTAL_ACTIVITIES = 4;
 
     mapping(uint256 => Activity) public activities;
     mapping(uint256 => mapping(address => bool)) public isRegistered;
@@ -54,39 +55,18 @@ contract ActivityRegistry {
         require(stablecoinAddress != address(0), "Stablecoin required");
         admin = msg.sender;
         stablecoin = IERC20(stablecoinAddress);
+        _initializeActivities();
     }
 
     function setAdmin(address newAdmin) external onlyAdmin {
         require(newAdmin != address(0), "Invalid admin");
         admin = newAdmin;
-    }
-
-    function createActivity(
-        string calldata name,
-        string calldata description,
-        uint64 date,
-        uint32 maxParticipants,
-        uint256 priceUSDT
-    ) external onlyAdmin {
-        require(bytes(name).length > 0, "Name required");
-        require(bytes(description).length > 0, "Description required");
-        require(date > block.timestamp, "Date must be future");
-        require(maxParticipants > 0, "Max participants required");
-
-        activityCount += 1;
-        activities[activityCount] = Activity({
-            id: activityCount,
-            name: name,
-            description: description,
-            date: date,
-            maxParticipants: maxParticipants,
-            registeredCount: 0,
-            priceUSDT: priceUSDT,
-            organizer: msg.sender,
-            active: true
-        });
-
-        emit ActivityCreated(activityCount, name, date, maxParticipants, priceUSDT);
+        for (uint256 i = 1; i <= activityCount; i++) {
+            Activity storage activity = activities[i];
+            if (activity.id != 0) {
+                activity.organizer = newAdmin;
+            }
+        }
     }
 
     function setActivityStatus(uint256 id, bool active) external onlyAdmin {
@@ -127,5 +107,38 @@ contract ActivityRegistry {
 
     function getParticipants(uint256 id) external view returns (address[] memory) {
         return participants[id];
+    }
+
+    function _initializeActivities() private {
+        activityCount = TOTAL_ACTIVITIES;
+
+        _storeActivity(1, "Mountain expedition", "Summit preparation trek across the Andean skyline.", 2000000000, 24, 150 * 1e6);
+
+        _storeActivity(2, "Kayak journey across Lake", "Dawn-to-dusk paddling clinics on the glacial lake.", 2000865600, 18, 120 * 1e6);
+
+        _storeActivity(3, "Rock-climbing clinic", "Granite multi-pitch progression with local guides.", 2001734400, 2, 200 * 1e6);
+
+        _storeActivity(4, "Patagonian asado", "Traditional fire-cooked feast with regional flavors.", 2002598400, 40, 80 * 1e6);
+    }
+
+    function _storeActivity(
+        uint256 id,
+        string memory name,
+        string memory description,
+        uint64 date,
+        uint32 maxParticipants,
+        uint256 priceUSDT
+    ) private {
+        activities[id] = Activity({
+            id: id,
+            name: name,
+            description: description,
+            date: date,
+            maxParticipants: maxParticipants,
+            registeredCount: 0,
+            priceUSDT: priceUSDT,
+            organizer: admin,
+            active: true
+        });
     }
 }

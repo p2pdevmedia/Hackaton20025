@@ -22,20 +22,11 @@ const ERC20_ABI = [
 function App() {
   const [account, setAccount] = useState(null);
   const [activities, setActivities] = useState([]);
-  const [isAdmin, setIsAdmin] = useState(false);
   const [usdtDecimals, setUsdtDecimals] = useState(6);
   const [usdtBalance, setUsdtBalance] = useState('0');
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    date: '',
-    maxParticipants: '',
-    price: ''
-  });
   const [statusKey, setStatusKey] = useState(null);
   const [language, setLanguage] = useState('en');
-  const [selectedActivityId, setSelectedActivityId] = useState(null);
 
   const text = useMemo(() => translations[language] || translations.en, [language]);
   const languageOptions = useMemo(
@@ -90,13 +81,7 @@ function App() {
       }
     ];
   }, [text.calendar.events]);
-  const statusMessage = statusKey ? text.status[statusKey] : '';
-  const selectedActivity = useMemo(() => {
-    if (selectedActivityId === null) {
-      return null;
-    }
-    return activities.find(activity => activity.id === selectedActivityId) || null;
-  }, [activities, selectedActivityId]);
+  const statusMessage = statusKey ? text.status[statusKey] || '' : '';
 
   const hasProvider = useMemo(() => typeof window !== 'undefined' && window.ethereum, []);
 
@@ -135,11 +120,7 @@ function App() {
     setLoading(true);
     try {
       const contract = new ethers.Contract(contractAddress, ActivityRegistry.abi, provider);
-      const [admin, rawActivities] = await Promise.all([
-        contract.admin(),
-        contract.getActivities()
-      ]);
-
+      const rawActivities = await contract.getActivities();
       const decimals = await fetchUsdtDecimals(provider);
 
       const formatted = await Promise.all(
@@ -170,11 +151,6 @@ function App() {
       );
 
       setActivities(formatted);
-      if (account) {
-        setIsAdmin(admin.toLowerCase() === account.toLowerCase());
-      } else {
-        setIsAdmin(false);
-      }
     } catch (error) {
       console.error('Error fetching activities', error);
     } finally {
@@ -215,7 +191,7 @@ function App() {
         return;
       }
       if (activity.isRegistered) {
-        setStatusKey('registrationComplete');
+        setStatusKey('alreadyRegistered');
         return;
       }
       const remainingSpots = activity.maxParticipants - activity.registeredCount;
@@ -270,7 +246,6 @@ function App() {
     const handleAccountsChanged = accounts => {
       if (!accounts.length) {
         setAccount(null);
-        setIsAdmin(false);
       } else {
         setAccount(ethers.utils.getAddress(accounts[0]));
       }
@@ -300,84 +275,8 @@ function App() {
 
   const disconnect = () => {
     setAccount(null);
-    setIsAdmin(false);
     setUsdtBalance('0');
-    setSelectedActivityId(null);
-  };
-
-  const handleInputChange = event => {
-    const { name, value } = event.target;
-    setFormData(previous => ({ ...previous, [name]: value }));
-  };
-
-  const resetForm = () => {
-    setFormData({
-      name: '',
-      description: '',
-      date: '',
-      maxParticipants: '',
-      price: ''
-    });
-  };
-
-  const openActivity = useCallback(
-    activity => {
-      if (!activity) {
-        return;
-      }
-      setSelectedActivityId(activity.id);
-      if (typeof window !== 'undefined') {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-      register(activity);
-    },
-    [register]
-  );
-
-  const closeActivity = useCallback(() => {
-    setSelectedActivityId(null);
-  }, []);
-
-  const createActivity = async event => {
-    event.preventDefault();
     setStatusKey(null);
-
-    if (!isValidContract) {
-      setStatusKey('contractMissing');
-      return;
-    }
-    if (!account) {
-      setStatusKey('connectWalletToCreate');
-      return;
-    }
-
-    const provider = getProvider();
-    if (!provider) return;
-
-    try {
-      const signer = provider.getSigner();
-      const contract = new ethers.Contract(contractAddress, ActivityRegistry.abi, signer);
-
-      const timestamp = Math.floor(new Date(formData.date).getTime() / 1000);
-      const maxParticipants = parseInt(formData.maxParticipants, 10);
-      const price = formData.price ? ethers.utils.parseUnits(formData.price, usdtDecimals) : ethers.constants.Zero;
-
-      const tx = await contract.createActivity(
-        formData.name.trim(),
-        formData.description.trim(),
-        timestamp,
-        maxParticipants,
-        price
-      );
-      setStatusKey('creatingActivity');
-      await tx.wait();
-      setStatusKey('activityCreated');
-      resetForm();
-      await fetchActivities();
-    } catch (error) {
-      console.error('Error creating activity', error);
-      setStatusKey('activityCreationFailed');
-    }
   };
 
   return (
@@ -487,7 +386,7 @@ function App() {
         )}
 
         <section className="space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h2 className="text-xl font-semibold text-slate-900">{text.agenda.heading}</h2>
               <p className="text-sm text-gray-600">{text.agenda.description}</p>
@@ -499,161 +398,102 @@ function App() {
             )}
           </div>
 
-          {selectedActivityId !== null ? (
-            selectedActivity ? (
-              (() => {
-                const remaining = selectedActivity.maxParticipants - selectedActivity.registeredCount;
-                const dateString = new Date(selectedActivity.date * 1000).toLocaleString(locale, {
-                  dateStyle: 'medium',
-                  timeStyle: 'short'
-                });
-                const canRegister =
-                  account &&
-                  !selectedActivity.isRegistered &&
-                  remaining > 0 &&
-                  selectedActivity.active &&
-                  selectedActivity.date * 1000 > Date.now();
-
-                return (
-                  <div className="space-y-4">
-                    <button
-                      onClick={closeActivity}
-                      className="inline-flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700"
-                    >
-                      ← {text.agenda.detailBackButton}
-                    </button>
-                    <div className="rounded border bg-white p-6 shadow space-y-4">
-                      <div className="space-y-2">
-                        <p className="text-xs uppercase tracking-wide text-blue-600">{text.agenda.detailHeading}</p>
-                        <h3 className="text-2xl font-semibold text-slate-900">{selectedActivity.name}</h3>
-                        <p className="text-sm text-gray-600 whitespace-pre-line">{selectedActivity.description}</p>
-                      </div>
-                      <dl className="grid gap-4 sm:grid-cols-3 text-sm text-gray-700">
-                        <div>
-                          <dt className="font-medium text-gray-900">{text.agenda.dateLabel}</dt>
-                          <dd>{dateString}</dd>
-                        </div>
-                        <div>
-                          <dt className="font-medium text-gray-900">{text.agenda.spotsLabel}</dt>
-                          <dd>
-                            {selectedActivity.registeredCount}/{selectedActivity.maxParticipants}
-                          </dd>
-                        </div>
-                        <div>
-                          <dt className="font-medium text-gray-900">{text.agenda.priceLabel}</dt>
-                          <dd>{selectedActivity.price} USDT</dd>
-                        </div>
-                      </dl>
-                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                        {selectedActivity.isRegistered ? (
-                          <span className="rounded bg-green-100 text-green-700 px-3 py-2 text-center">
-                            {text.agenda.registeredBadge}
-                          </span>
-                        ) : (
-                          <button
-                            onClick={() => register(selectedActivity)}
-                            disabled={!canRegister || !isValidContract}
-                            className={`px-4 py-2 rounded text-white transition-colors ${
-                              canRegister && isValidContract
-                                ? 'bg-blue-600 hover:bg-blue-700'
-                                : 'bg-gray-300 cursor-not-allowed'
-                            }`}
-                          >
-                            {text.agenda.subscribeButton}
-                          </button>
-                        )}
-                        <div className="flex flex-wrap gap-2">
-                          {!selectedActivity.active && (
-                            <span className="rounded bg-gray-200 text-gray-600 px-3 py-2 text-center">
-                              {text.agenda.inactiveBadge}
-                            </span>
-                          )}
-                          {remaining <= 0 && (
-                            <span className="rounded bg-amber-100 text-amber-700 px-3 py-2 text-center">
-                              {text.agenda.noSpotsButton}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })()
-            ) : (
-              <div className="space-y-4">
-                <button
-                  onClick={closeActivity}
-                  className="inline-flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700"
-                >
-                  ← {text.agenda.detailBackButton}
-                </button>
-                <div className="rounded border border-dashed border-gray-300 p-6 text-center text-gray-500">
-                  {text.agenda.activityNotFound}
-                </div>
+          <div className="space-y-4">
+            {loading ? (
+              <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-6 text-center text-slate-500">
+                {text.agenda.loading}
               </div>
-            )
-          ) : loading ? (
-            <div className="text-center text-gray-500">{text.agenda.loading}</div>
-          ) : activities.length === 0 ? (
-            <div className="rounded border border-dashed border-gray-300 p-6 text-center text-gray-500">
-              {text.agenda.empty}
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {activities.map(activity => {
+            ) : activities.length === 0 ? (
+              <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-6 text-center text-slate-500">
+                {text.agenda.empty}
+              </div>
+            ) : (
+              activities.map(activity => {
                 const remaining = activity.maxParticipants - activity.registeredCount;
+                const registrationClosed = activity.date * 1000 <= Date.now();
+                const canRegister = activity.active && !registrationClosed && remaining > 0 && !activity.isRegistered;
                 const dateString = new Date(activity.date * 1000).toLocaleString(locale, {
                   dateStyle: 'medium',
                   timeStyle: 'short'
                 });
+                const priceLabel = activity.priceRaw.isZero() ? text.agenda.freeLabel : `${activity.price} USDT`;
+                const spotsDetail =
+                  remaining > 0 ? `${remaining} ${text.agenda.remainingLabel}` : text.agenda.noSpotsBadge;
+
+                let buttonLabel = text.agenda.registerButton;
+                if (activity.isRegistered) {
+                  buttonLabel = text.agenda.registeredBadge;
+                } else if (!activity.active) {
+                  buttonLabel = text.agenda.inactiveBadge;
+                } else if (remaining <= 0) {
+                  buttonLabel = text.agenda.noSpotsBadge;
+                } else if (registrationClosed) {
+                  buttonLabel = text.agenda.closedLabel;
+                }
 
                 return (
-                  <div key={activity.id} className="rounded border bg-white p-5 shadow-sm">
-                    <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-                      <div className="space-y-2">
-                        <h3 className="text-lg font-semibold text-slate-900">{activity.name}</h3>
-                        <p className="text-sm text-gray-600 whitespace-pre-line">{activity.description}</p>
-                        <div className="text-sm text-gray-500 space-y-1">
-                          <p>
-                            <span className="font-medium">{text.agenda.dateLabel}:</span> {dateString}
-                          </p>
-                          <p>
-                            <span className="font-medium">{text.agenda.spotsLabel}:</span> {activity.registeredCount}/{activity.maxParticipants}
-                          </p>
-                          <p>
-                            <span className="font-medium">{text.agenda.priceLabel}:</span> {activity.price} USDT
-                          </p>
+                  <article
+                    key={activity.id}
+                    className="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm md:flex-row md:items-start md:justify-between"
+                  >
+                    <div className="space-y-3">
+                      <h3 className="text-lg font-semibold text-slate-900">{activity.name}</h3>
+                      <p className="text-sm text-slate-600 whitespace-pre-line">{activity.description}</p>
+                      <dl className="grid gap-4 text-sm text-slate-600 sm:grid-cols-3">
+                        <div>
+                          <dt className="font-semibold text-slate-800">{text.agenda.dateLabel}</dt>
+                          <dd>{dateString}</dd>
                         </div>
-                      </div>
-                      <div className="flex flex-col gap-2 items-stretch min-w-[200px]">
+                        <div>
+                          <dt className="font-semibold text-slate-800">{text.agenda.spotsLabel}</dt>
+                          <dd>{`${activity.registeredCount}/${activity.maxParticipants}`} · {spotsDetail}</dd>
+                        </div>
+                        <div>
+                          <dt className="font-semibold text-slate-800">{text.agenda.priceLabel}</dt>
+                          <dd>{priceLabel}</dd>
+                        </div>
+                      </dl>
+                    </div>
+                    <div className="flex flex-col items-stretch gap-2 sm:min-w-[220px]">
+                      <div className="flex flex-wrap gap-2">
                         {activity.isRegistered && (
-                          <span className="rounded bg-green-100 text-green-700 px-3 py-2 text-center">
+                          <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700">
                             {text.agenda.registeredBadge}
                           </span>
                         )}
                         {!activity.active && (
-                          <span className="rounded bg-gray-200 text-gray-600 px-3 py-2 text-center">
+                          <span className="rounded-full bg-slate-200 px-3 py-1 text-xs font-semibold text-slate-600">
                             {text.agenda.inactiveBadge}
                           </span>
                         )}
                         {remaining <= 0 && (
-                          <span className="rounded bg-amber-100 text-amber-700 px-3 py-2 text-center">
-                            {text.agenda.noSpotsButton}
+                          <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700">
+                            {text.agenda.noSpotsBadge}
                           </span>
                         )}
-                        <button
-                          onClick={() => openActivity(activity)}
-                          className="px-4 py-2 rounded border border-blue-600 text-blue-600 transition-colors hover:bg-blue-50"
-                        >
-                          {text.agenda.detailsButton}
-                        </button>
+                        {registrationClosed && remaining > 0 && (
+                          <span className="rounded-full bg-slate-200 px-3 py-1 text-xs font-semibold text-slate-600">
+                            {text.agenda.closedLabel}
+                          </span>
+                        )}
                       </div>
+                      <button
+                        onClick={() => register(activity)}
+                        disabled={!canRegister}
+                        className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
+                          canRegister
+                            ? 'bg-blue-600 text-white hover:bg-blue-700'
+                            : 'cursor-not-allowed bg-slate-200 text-slate-500'
+                        }`}
+                      >
+                        {buttonLabel}
+                      </button>
                     </div>
-                  </div>
+                  </article>
                 );
-              })}
-            </div>
-          )}
+              })
+            )}
+          </div>
         </section>
 
         <ActivityCalendar
@@ -662,84 +502,6 @@ function App() {
           locale={locale}
           text={text.calendar}
         />
-
-        {isAdmin && (
-          <section className="rounded bg-white p-6 shadow space-y-4">
-            <div>
-              <h2 className="text-xl font-semibold">{text.adminForm.heading}</h2>
-              <p className="text-sm text-gray-600">{text.adminForm.description}</p>
-            </div>
-            <form className="space-y-4" onSubmit={createActivity}>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">{text.adminForm.nameLabel}</label>
-                <input
-                  required
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  className="mt-1 w-full rounded border px-3 py-2"
-                  placeholder={text.adminForm.namePlaceholder}
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">{text.adminForm.descriptionLabel}</label>
-                <textarea
-                  required
-                  name="description"
-                  value={formData.description}
-                  onChange={handleInputChange}
-                  className="mt-1 w-full rounded border px-3 py-2"
-                  rows={4}
-                  placeholder={text.adminForm.descriptionPlaceholder}
-                />
-              </div>
-              <div className="grid gap-4 sm:grid-cols-3">
-                <div className="sm:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700">{text.adminForm.dateLabel}</label>
-                  <input
-                    required
-                    type="datetime-local"
-                    name="date"
-                    value={formData.date}
-                    onChange={handleInputChange}
-                    className="mt-1 w-full rounded border px-3 py-2"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">{text.adminForm.maxParticipantsLabel}</label>
-                  <input
-                    required
-                    type="number"
-                    min="1"
-                    name="maxParticipants"
-                    value={formData.maxParticipants}
-                    onChange={handleInputChange}
-                    className="mt-1 w-full rounded border px-3 py-2"
-                  />
-                </div>
-              </div>
-              <div className="sm:w-1/2">
-                <label className="block text-sm font-medium text-gray-700">{text.adminForm.priceLabel}</label>
-                <input
-                  type="number"
-                  min="0"
-                  step="0.01"
-                  name="price"
-                  value={formData.price}
-                  onChange={handleInputChange}
-                  className="mt-1 w-full rounded border px-3 py-2"
-                  placeholder={text.adminForm.pricePlaceholder}
-                />
-              </div>
-              <button
-                type="submit"
-                className="w-full sm:w-auto px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
-              >
-                {text.adminForm.submit}
-              </button>
-            </form>
-          </section>
-        )}
       </main>
     </div>
   );
