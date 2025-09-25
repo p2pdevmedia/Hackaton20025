@@ -84,10 +84,10 @@ export const translations = {
       metaMask: 'Install MetaMask to continue.'
     },
     agenda: {
-      heading: 'Live Web3 schedule',
-      description: 'Manage availability, pricing, and confirmed registrations directly on-chain.',
+      heading: 'Residency activities',
+      description: 'Explore the four curated experiences confirmed for this edition.',
       loading: 'Loading activities...',
-      empty: 'There are no activities yet.',
+      empty: 'Activities are temporarily unavailable.',
       detailsButton: 'View details',
       detailBackButton: 'Back to activities',
       detailHeading: 'Activity information',
@@ -200,10 +200,10 @@ export const translations = {
       metaMask: 'Instalá MetaMask para continuar.'
     },
     agenda: {
-      heading: 'Agenda Web3 en vivo',
-      description: 'Gestioná disponibilidad, precios y registros confirmados directamente en la cadena de bloques.',
+      heading: 'Actividades de la residencia',
+      description: 'Conocé las cuatro experiencias curadas confirmadas para esta edición.',
       loading: 'Cargando actividades...',
-      empty: 'Aún no hay actividades creadas.',
+      empty: 'Las actividades no están disponibles por el momento.',
       detailsButton: 'Ver detalles',
       detailBackButton: 'Volver a las actividades',
       detailHeading: 'Información de la actividad',
@@ -284,10 +284,10 @@ export const translations = {
       metaMask: 'Installez MetaMask pour continuer.'
     },
     agenda: {
-      heading: 'Agenda Web3 en direct',
-      description: 'Gérez disponibilités, tarifs et inscriptions confirmées directement sur la blockchain.',
+      heading: 'Activités de la résidence',
+      description: 'Découvrez les quatre expériences sélectionnées pour cette édition.',
       loading: 'Chargement des activités…',
-      empty: 'Aucune activité pour le moment.',
+      empty: 'Activités momentanément indisponibles.',
       detailsButton: 'Voir les détails',
       detailBackButton: 'Retour aux activités',
       detailHeading: "Informations sur l'activité",
@@ -368,10 +368,10 @@ export const translations = {
       metaMask: 'Installiere MetaMask, um fortzufahren.'
     },
     agenda: {
-      heading: 'Live-Web3-Zeitplan',
-      description: 'Verwalte Verfügbarkeit, Preise und bestätigte Anmeldungen direkt on-chain.',
+      heading: 'Residency-Aktivitäten',
+      description: 'Erkunde die vier kuratierten Erlebnisse dieser Ausgabe.',
       loading: 'Aktivitäten werden geladen...',
-      empty: 'Es gibt noch keine Aktivitäten.',
+      empty: 'Aktivitäten sind vorübergehend nicht verfügbar.',
       detailsButton: 'Details ansehen',
       detailBackButton: 'Zurück zu den Aktivitäten',
       detailHeading: 'Aktivitätsinformationen',
@@ -452,10 +452,10 @@ export const translations = {
       metaMask: '请安装 MetaMask 以继续。'
     },
     agenda: {
-      heading: '实时 Web3 日程',
-      description: '直接在链上管理可用名额、价格与已确认的报名。',
+      heading: '驻地活动',
+      description: '浏览本届确认的四项精选体验。',
       loading: '正在加载活动…',
-      empty: '目前还没有活动。',
+      empty: '活动暂时不可用。',
       detailsButton: '查看详情',
       detailBackButton: '返回活动列表',
       detailHeading: '活动信息',
@@ -536,10 +536,10 @@ export const translations = {
       metaMask: 'Установите MetaMask, чтобы продолжить.'
     },
     agenda: {
-      heading: 'Живой график Web3',
-      description: 'Управляйте доступностью, ценами и подтверждёнными регистрациями напрямую в блокчейне.',
+      heading: 'Активности резиденции',
+      description: 'Изучите четыре кураторских события этой программы.',
       loading: 'Загрузка активностей…',
-      empty: 'Активностей пока нет.',
+      empty: 'Активности временно недоступны.',
       detailsButton: 'Подробнее',
       detailBackButton: 'Назад к активностям',
       detailHeading: 'Информация об активности',

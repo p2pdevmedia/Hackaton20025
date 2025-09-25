@@ -12,6 +12,43 @@ const usdtAddress = process.env.REACT_APP_USDT_ADDRESS || '';
 const isValidContract = ethers.utils.isAddress(contractAddress);
 const isValidUsdt = ethers.utils.isAddress(usdtAddress);
 
+const FIXED_ACTIVITY_IDS = [1, 2, 3, 4];
+
+const FIXED_ACTIVITY_NAMES = {
+  1: {
+    en: 'Mountain expedition',
+    es: 'Expedición de montaña',
+    fr: 'Expédition en montagne',
+    de: 'Bergexpedition',
+    zh: '山地探险',
+    ru: 'Горная экспедиция'
+  },
+  2: {
+    en: 'Kayak journey across Lake',
+    es: 'Travesía en kayak por el lago',
+    fr: 'Traversée en kayak du lac',
+    de: 'Kajaktour über den See',
+    zh: '湖上皮划艇之旅',
+    ru: 'Путешествие на каяках по озеру'
+  },
+  3: {
+    en: 'Rock-climbing clinic',
+    es: 'Clínica de escalada en roca',
+    fr: "Clinique d’escalade sur roche",
+    de: 'Kletterklinik',
+    zh: '岩壁攀登工作坊',
+    ru: 'Клиника скалолазания'
+  },
+  4: {
+    en: 'Patagonian asado',
+    es: 'Asado patagónico',
+    fr: 'Asado patagonique',
+    de: 'Patagonisches Asado',
+    zh: '巴塔哥尼亚烤肉',
+    ru: 'Патагонское асадо'
+  }
+};
+
 const ERC20_ABI = [
   'function allowance(address owner, address spender) view returns (uint256)',
   'function approve(address spender, uint256 amount) returns (bool)',
@@ -22,17 +59,9 @@ const ERC20_ABI = [
 function App() {
   const [account, setAccount] = useState(null);
   const [activities, setActivities] = useState([]);
-  const [isAdmin, setIsAdmin] = useState(false);
   const [usdtDecimals, setUsdtDecimals] = useState(6);
   const [usdtBalance, setUsdtBalance] = useState('0');
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    date: '',
-    maxParticipants: '',
-    price: ''
-  });
   const [statusKey, setStatusKey] = useState(null);
   const [language, setLanguage] = useState('en');
   const [selectedActivityId, setSelectedActivityId] = useState(null);
@@ -91,12 +120,23 @@ function App() {
     ];
   }, [text.calendar.events]);
   const statusMessage = statusKey ? text.status[statusKey] : '';
+  const displayActivities = useMemo(() => {
+    return activities
+      .filter(activity => FIXED_ACTIVITY_IDS.includes(activity.id))
+      .map(activity => {
+        const localizedName = FIXED_ACTIVITY_NAMES[activity.id]?.[language] || FIXED_ACTIVITY_NAMES[activity.id]?.en;
+        return {
+          ...activity,
+          name: localizedName || activity.name
+        };
+      });
+  }, [activities, language]);
   const selectedActivity = useMemo(() => {
     if (selectedActivityId === null) {
       return null;
     }
-    return activities.find(activity => activity.id === selectedActivityId) || null;
-  }, [activities, selectedActivityId]);
+    return displayActivities.find(activity => activity.id === selectedActivityId) || null;
+  }, [displayActivities, selectedActivityId]);
 
   const hasProvider = useMemo(() => typeof window !== 'undefined' && window.ethereum, []);
 
@@ -135,10 +175,7 @@ function App() {
     setLoading(true);
     try {
       const contract = new ethers.Contract(contractAddress, ActivityRegistry.abi, provider);
-      const [admin, rawActivities] = await Promise.all([
-        contract.admin(),
-        contract.getActivities()
-      ]);
+      const rawActivities = await contract.getActivities();
 
       const decimals = await fetchUsdtDecimals(provider);
 
@@ -169,12 +206,8 @@ function App() {
         })
       );
 
-      setActivities(formatted);
-      if (account) {
-        setIsAdmin(admin.toLowerCase() === account.toLowerCase());
-      } else {
-        setIsAdmin(false);
-      }
+      const filtered = formatted.filter(activity => FIXED_ACTIVITY_IDS.includes(activity.id));
+      setActivities(filtered);
     } catch (error) {
       console.error('Error fetching activities', error);
     } finally {
@@ -270,7 +303,6 @@ function App() {
     const handleAccountsChanged = accounts => {
       if (!accounts.length) {
         setAccount(null);
-        setIsAdmin(false);
       } else {
         setAccount(ethers.utils.getAddress(accounts[0]));
       }
@@ -300,24 +332,8 @@ function App() {
 
   const disconnect = () => {
     setAccount(null);
-    setIsAdmin(false);
     setUsdtBalance('0');
     setSelectedActivityId(null);
-  };
-
-  const handleInputChange = event => {
-    const { name, value } = event.target;
-    setFormData(previous => ({ ...previous, [name]: value }));
-  };
-
-  const resetForm = () => {
-    setFormData({
-      name: '',
-      description: '',
-      date: '',
-      maxParticipants: '',
-      price: ''
-    });
   };
 
   const openActivity = useCallback(
@@ -337,48 +353,6 @@ function App() {
   const closeActivity = useCallback(() => {
     setSelectedActivityId(null);
   }, []);
-
-  const createActivity = async event => {
-    event.preventDefault();
-    setStatusKey(null);
-
-    if (!isValidContract) {
-      setStatusKey('contractMissing');
-      return;
-    }
-    if (!account) {
-      setStatusKey('connectWalletToCreate');
-      return;
-    }
-
-    const provider = getProvider();
-    if (!provider) return;
-
-    try {
-      const signer = provider.getSigner();
-      const contract = new ethers.Contract(contractAddress, ActivityRegistry.abi, signer);
-
-      const timestamp = Math.floor(new Date(formData.date).getTime() / 1000);
-      const maxParticipants = parseInt(formData.maxParticipants, 10);
-      const price = formData.price ? ethers.utils.parseUnits(formData.price, usdtDecimals) : ethers.constants.Zero;
-
-      const tx = await contract.createActivity(
-        formData.name.trim(),
-        formData.description.trim(),
-        timestamp,
-        maxParticipants,
-        price
-      );
-      setStatusKey('creatingActivity');
-      await tx.wait();
-      setStatusKey('activityCreated');
-      resetForm();
-      await fetchActivities();
-    } catch (error) {
-      console.error('Error creating activity', error);
-      setStatusKey('activityCreationFailed');
-    }
-  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -463,12 +437,6 @@ function App() {
               </div>
             </article>
           ))}
-        </section>
-
-        <section className="rounded-3xl border border-dashed border-blue-200 bg-blue-50/60 p-6 text-sm text-blue-900 shadow-inner">
-          <h2 className="text-lg font-semibold text-blue-900">{text.contract.heading}</h2>
-          <p className="mt-2">{text.contract.paragraph1}</p>
-          <p className="mt-3">{text.contract.paragraph2}</p>
         </section>
 
         {!isValidContract && (
@@ -594,13 +562,13 @@ function App() {
             )
           ) : loading ? (
             <div className="text-center text-gray-500">{text.agenda.loading}</div>
-          ) : activities.length === 0 ? (
+          ) : displayActivities.length === 0 ? (
             <div className="rounded border border-dashed border-gray-300 p-6 text-center text-gray-500">
               {text.agenda.empty}
             </div>
           ) : (
             <div className="space-y-4">
-              {activities.map(activity => {
+              {displayActivities.map(activity => {
                 const remaining = activity.maxParticipants - activity.registeredCount;
                 const dateString = new Date(activity.date * 1000).toLocaleString(locale, {
                   dateStyle: 'medium',
@@ -663,83 +631,6 @@ function App() {
           text={text.calendar}
         />
 
-        {isAdmin && (
-          <section className="rounded bg-white p-6 shadow space-y-4">
-            <div>
-              <h2 className="text-xl font-semibold">{text.adminForm.heading}</h2>
-              <p className="text-sm text-gray-600">{text.adminForm.description}</p>
-            </div>
-            <form className="space-y-4" onSubmit={createActivity}>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">{text.adminForm.nameLabel}</label>
-                <input
-                  required
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  className="mt-1 w-full rounded border px-3 py-2"
-                  placeholder={text.adminForm.namePlaceholder}
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">{text.adminForm.descriptionLabel}</label>
-                <textarea
-                  required
-                  name="description"
-                  value={formData.description}
-                  onChange={handleInputChange}
-                  className="mt-1 w-full rounded border px-3 py-2"
-                  rows={4}
-                  placeholder={text.adminForm.descriptionPlaceholder}
-                />
-              </div>
-              <div className="grid gap-4 sm:grid-cols-3">
-                <div className="sm:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700">{text.adminForm.dateLabel}</label>
-                  <input
-                    required
-                    type="datetime-local"
-                    name="date"
-                    value={formData.date}
-                    onChange={handleInputChange}
-                    className="mt-1 w-full rounded border px-3 py-2"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">{text.adminForm.maxParticipantsLabel}</label>
-                  <input
-                    required
-                    type="number"
-                    min="1"
-                    name="maxParticipants"
-                    value={formData.maxParticipants}
-                    onChange={handleInputChange}
-                    className="mt-1 w-full rounded border px-3 py-2"
-                  />
-                </div>
-              </div>
-              <div className="sm:w-1/2">
-                <label className="block text-sm font-medium text-gray-700">{text.adminForm.priceLabel}</label>
-                <input
-                  type="number"
-                  min="0"
-                  step="0.01"
-                  name="price"
-                  value={formData.price}
-                  onChange={handleInputChange}
-                  className="mt-1 w-full rounded border px-3 py-2"
-                  placeholder={text.adminForm.pricePlaceholder}
-                />
-              </div>
-              <button
-                type="submit"
-                className="w-full sm:w-auto px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
-              >
-                {text.adminForm.submit}
-              </button>
-            </form>
-          </section>
-        )}
       </main>
     </div>
   );
