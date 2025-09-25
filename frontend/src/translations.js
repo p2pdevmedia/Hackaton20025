@@ -581,7 +581,7 @@ export const localeMap = {
 export const residencyActivities = [
   {
     id: 'mountain-expedition',
-    image: 'https://images.unsplash.com/photo-1549887534-1541e9326642?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://ipfs.io/ipfs/bafybeienxvgvzj4a4qhozas5cd5hgnkk2dkkylnv4q6tiypqz6qqxswwru',
     translations: {
       en: {
         title: 'Mountain expedition to the heart of the Andes',
@@ -653,7 +653,7 @@ export const residencyActivities = [
   },
   {
     id: 'lake-kayak',
-    image: 'https://images.unsplash.com/photo-1526481280695-3c46973ed107?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://ipfs.io/ipfs/bafkreia6mqussojkw3tcngfj6iyow2gjszuxsjereznjomefa2iajg7x4q',
     translations: {
       en: {
         title: 'Kayak journey across Lake Lolog',
@@ -725,7 +725,7 @@ export const residencyActivities = [
   },
   {
     id: 'rock-climbing',
-    image: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://ipfs.io/ipfs/bafkreiazmgq5d4xq72ggid33nkh4fozsn6ek6feaf3oqes3mczybyjyqca',
     translations: {
       en: {
         title: 'Rock-climbing clinic and mindful movement',
@@ -797,8 +797,7 @@ export const residencyActivities = [
   },
   {
     id: 'patagonian-asado',
-    image:
-      'data:image/jpeg;base64,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',
+    image: 'https://ipfs.io/ipfs/bafybeic23gavkexic2nmmccmknbff4ngwhzhzqxcic7qdzbysc7rzeyzo4',
     translations: {
       en: {
         title: 'Intimate Patagonian asado on the lakeshore',
