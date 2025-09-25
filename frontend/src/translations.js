@@ -3,14 +3,14 @@ export const translations = {
     languageName: 'English',
     languageSelectorLabel: 'Language',
     navbar: {
-      title: 'Edge City · Patagonia Residency',
+      title: 'Patagonia Residency Activities',
       subtitle: 'An immersive nature experience with registration and payments secured on-chain.',
       connect: 'Connect wallet',
       disconnect: 'Disconnect'
     },
     hero: {
       badge: 'NEW EDITION 2025 · SAN MARTIN DE LOS ANDES',
-      title: 'Edge City Patagonia Residency: live art, nature, and community linked on-chain.',
+      title: 'Patagonia Residency: live art, nature, and community linked on-chain.',
       description:
         'We design a multi-day immersion to explore the Andes, activate physical and culinary practices, and document every moment with smart contracts that safeguard spots, payments, and memories.',
       primaryLink: 'View full program',
@@ -21,7 +21,7 @@ export const translations = {
       items: [
         'Curated outings to mountains, water, and rock with local guides.',
         'Territory cuisine and artistic rituals with Iván Moritz Karl.',
-        'Spots, payments, and deliverables secured by the Edge City contract.'
+        'Spots, payments, and deliverables secured by the residency contract.'
       ]
     },
     calendar: {
@@ -57,11 +57,9 @@ export const translations = {
       }
     },
     contract: {
-      heading: 'Edge City x Patagonia smart contract',
-      paragraph1:
-        'Each activity syncs with this dashboard in real time. The data you see (spots, prices, descriptions, and photos) is exactly what gets written or updated when you sign the electronic contract from your wallet.',
-      paragraph2:
-        'When participants register, the smart contract validates the USDT payment, reserves the spot, and leaves an auditable trail for the community and organizers. Images are stored as IPFS/NFT references that you can update for every edition.'
+      heading: 'Patagonia residency smart contract',
+      paragraph1: 'Choose your experience and confirm the transaction from your wallet to secure a spot.',
+      paragraph2: 'Registrations are recorded on-chain in USDT, keeping availability and participation transparent for everyone.'
     },
     warnings: {
       contract: 'Set <code>REACT_APP_CONTRACT_ADDRESS</code> to interact with the activity contract.',
@@ -81,10 +79,10 @@ export const translations = {
       metaMask: 'Install MetaMask to continue.'
     },
     agenda: {
-      heading: 'Live Web3 schedule',
-      description: 'Manage availability, pricing, and confirmed registrations directly on-chain.',
+      heading: 'Activity schedule',
+      description: 'Review availability and confirm your registration directly on-chain.',
       loading: 'Loading activities...',
-      empty: 'There are no activities yet.',
+      empty: 'Activities will appear here when available.',
       balanceLabel: 'USDT balance',
       dateLabel: 'Date',
       spotsLabel: 'Spots',
@@ -102,14 +100,14 @@ export const translations = {
     languageName: 'Español',
     languageSelectorLabel: 'Idioma',
     navbar: {
-      title: 'Edge City · Residencia Patagonia',
+      title: 'Residencia Patagonia · Actividades',
       subtitle: 'Una experiencia inmersiva en la naturaleza con registro y pagos asegurados en la cadena de bloques.',
       connect: 'Conectar wallet',
       disconnect: 'Desconectar'
     },
     hero: {
       badge: 'Nueva edición 2025 · San Martín de los Andes',
-      title: 'Residencia Edge City Patagonia: arte vivo, naturaleza y comunidad conectada on-chain.',
+      title: 'Residencia Patagonia: arte vivo, naturaleza y comunidad conectada on-chain.',
       description:
         'Diseñamos una inmersión de varios días para explorar la cordillera, activar prácticas físicas y culinarias, y documentar cada momento con contratos inteligentes que resguardan cupos, pagos y memorias.',
       primaryLink: 'Ver programa completo',
@@ -120,7 +118,7 @@ export const translations = {
       items: [
         'Salidas curadas a montaña, agua y roca con guías locales.',
         'Cocina de territorio y rituales artísticos con Iván Moritz Karl.',
-        'Cupos, pagos y entregables asegurados en el contrato Edge City.'
+        'Cupos, pagos y entregables asegurados en el contrato de la residencia.'
       ]
     },
     calendar: {
@@ -156,11 +154,9 @@ export const translations = {
       }
     },
     contract: {
-      heading: 'Contrato Edge City x Patagonia',
-      paragraph1:
-        'Cada actividad se sincroniza con este panel en tiempo real. Los datos que ves (cupos, precios, descripciones y fotos) son los que se escriben o actualizan cuando firmás el contrato electrónico desde tu wallet.',
-      paragraph2:
-        'Al registrar participantes, el smart contract valida el pago en USDT, reserva el cupo y deja registro auditable para la comunidad y los organizadores. Las imágenes se almacenan como referencias IPFS/NFT que podés actualizar en cada edición.'
+      heading: 'Contrato inteligente de la residencia Patagonia',
+      paragraph1: 'Elegí la experiencia y confirmá la transacción desde tu wallet para asegurar tu lugar.',
+      paragraph2: 'Las inscripciones quedan registradas on-chain en USDT, manteniendo transparente la disponibilidad para toda la comunidad.'
     },
     warnings: {
       contract: 'Configurá <code>REACT_APP_CONTRACT_ADDRESS</code> para interactuar con el contrato de actividades.',
@@ -180,10 +176,10 @@ export const translations = {
       metaMask: 'Instalá MetaMask para continuar.'
     },
     agenda: {
-      heading: 'Agenda Web3 en vivo',
-      description: 'Gestioná disponibilidad, precios y registros confirmados directamente en la cadena de bloques.',
+      heading: 'Agenda de actividades',
+      description: 'Revisá disponibilidad y confirmá tu inscripción directamente en la cadena de bloques.',
       loading: 'Cargando actividades...',
-      empty: 'Aún no hay actividades creadas.',
+      empty: 'Las actividades aparecerán aquí cuando estén disponibles.',
       balanceLabel: 'Balance USDT',
       dateLabel: 'Fecha',
       spotsLabel: 'Cupos',
@@ -201,14 +197,14 @@ export const translations = {
     languageName: 'Français',
     languageSelectorLabel: 'Langue',
     navbar: {
-      title: 'Edge City · Résidence Patagonie',
+      title: 'Résidence Patagonie · Activités',
       subtitle: 'Une expérience immersive dans la nature avec inscriptions et paiements sécurisés sur la blockchain.',
       connect: 'Connecter le wallet',
       disconnect: 'Déconnecter'
     },
     hero: {
       badge: 'Nouvelle édition 2025 · San Martín de los Andes',
-      title: 'Résidence Edge City Patagonie : art vivant, nature et communauté reliés on-chain.',
+      title: 'Résidence Patagonie : art vivant, nature et communauté reliés on-chain.',
       description:
         'Nous concevons une immersion de plusieurs jours pour explorer la cordillère, activer des pratiques physiques et culinaires, et documenter chaque moment avec des smart contracts qui protègent places, paiements et souvenirs.',
       primaryLink: 'Voir le programme complet',
@@ -219,15 +215,13 @@ export const translations = {
       items: [
         'Sorties curatoriales en montagne, sur l’eau et la roche avec des guides locaux.',
         'Cuisine du territoire et rituels artistiques avec Iván Moritz Karl.',
-        'Places, paiements et livrables sécurisés par le contrat Edge City.'
+        'Places, paiements et livrables sécurisés par le contrat de résidence.'
       ]
     },
     contract: {
-      heading: 'Contrat Edge City x Patagonie',
-      paragraph1:
-        'Chaque activité se synchronise avec ce tableau de bord en temps réel. Les données que vous voyez (places, prix, descriptions et photos) sont exactement celles qui sont écrites ou mises à jour lorsque vous signez le contrat électronique depuis votre wallet.',
-      paragraph2:
-        'Lors des inscriptions, le smart contract valide le paiement en USDT, réserve la place et laisse une trace vérifiable pour la communauté et les organisateurs. Les images sont stockées comme références IPFS/NFT que vous pouvez mettre à jour à chaque édition.'
+      heading: 'Contrat intelligent de la résidence Patagonie',
+      paragraph1: 'Choisissez votre expérience et confirmez la transaction depuis votre wallet pour garantir votre place.',
+      paragraph2: 'Les inscriptions sont enregistrées on-chain en USDT, assurant une disponibilité transparente pour toute la communauté.'
     },
     warnings: {
       contract: 'Configurez <code>REACT_APP_CONTRACT_ADDRESS</code> pour interagir avec le contrat d’activités.',
@@ -247,10 +241,10 @@ export const translations = {
       metaMask: 'Installez MetaMask pour continuer.'
     },
     agenda: {
-      heading: 'Agenda Web3 en direct',
-      description: 'Gérez disponibilités, tarifs et inscriptions confirmées directement sur la blockchain.',
+      heading: 'Agenda des activités',
+      description: 'Consultez les disponibilités et confirmez votre inscription directement sur la blockchain.',
       loading: 'Chargement des activités…',
-      empty: 'Aucune activité pour le moment.',
+      empty: 'Les activités apparaîtront ici lorsqu’elles seront disponibles.',
       balanceLabel: 'Solde USDT',
       dateLabel: 'Date',
       spotsLabel: 'Places',
@@ -268,14 +262,14 @@ export const translations = {
     languageName: 'Deutsch',
     languageSelectorLabel: 'Sprache',
     navbar: {
-      title: 'Edge City · Patagonien-Residenz',
+      title: 'Patagonien-Residenz · Aktivitäten',
       subtitle: 'Eine immersive Naturerfahrung mit Anmeldungen und Zahlungen, die on-chain abgesichert sind.',
       connect: 'Wallet verbinden',
       disconnect: 'Trennen'
     },
     hero: {
       badge: 'Neue Ausgabe 2025 · San Martín de los Andes',
-      title: 'Edge City Patagonien-Residenz: lebendige Kunst, Natur und Gemeinschaft on-chain vernetzt.',
+      title: 'Patagonien-Residenz: lebendige Kunst, Natur und Gemeinschaft on-chain vernetzt.',
       description:
         'Wir gestalten eine mehrtägige Immersion, um die Anden zu erkunden, körperliche und kulinarische Praktiken zu aktivieren und jeden Moment mit Smart Contracts zu dokumentieren, die Plätze, Zahlungen und Erinnerungen schützen.',
       primaryLink: 'Gesamtes Programm ansehen',
@@ -286,15 +280,13 @@ export const translations = {
       items: [
         'Kuratiere Ausflüge zu Bergen, Wasser und Fels mit lokalen Guides.',
         'Regionale Küche und künstlerische Rituale mit Iván Moritz Karl.',
-        'Plätze, Zahlungen und Deliverables, gesichert durch den Edge City-Vertrag.'
+        'Plätze, Zahlungen und Deliverables, gesichert durch den Residenzvertrag.'
       ]
     },
     contract: {
-      heading: 'Edge City x Patagonien Smart Contract',
-      paragraph1:
-        'Jede Aktivität synchronisiert sich in Echtzeit mit diesem Dashboard. Die angezeigten Daten (Plätze, Preise, Beschreibungen und Fotos) sind genau das, was geschrieben oder aktualisiert wird, wenn du den elektronischen Vertrag mit deinem Wallet unterzeichnest.',
-      paragraph2:
-        'Bei der Anmeldung prüft der Smart Contract die USDT-Zahlung, reserviert den Platz und hinterlässt eine nachprüfbare Spur für Community und Organisator:innen. Bilder werden als IPFS/NFT-Referenzen gespeichert, die du in jeder Ausgabe aktualisieren kannst.'
+      heading: 'Smart Contract der Patagonien-Residenz',
+      paragraph1: 'Wähle deine Erfahrung und bestätige die Transaktion mit deinem Wallet, um dir einen Platz zu sichern.',
+      paragraph2: 'Anmeldungen werden on-chain in USDT gespeichert und machen Verfügbarkeit und Teilnahme für alle transparent.'
     },
     warnings: {
       contract: 'Setze <code>REACT_APP_CONTRACT_ADDRESS</code>, um mit dem Aktivitätsvertrag zu interagieren.',
@@ -314,10 +306,10 @@ export const translations = {
       metaMask: 'Installiere MetaMask, um fortzufahren.'
     },
     agenda: {
-      heading: 'Live-Web3-Zeitplan',
-      description: 'Verwalte Verfügbarkeit, Preise und bestätigte Anmeldungen direkt on-chain.',
+      heading: 'Aktivitätenplan',
+      description: 'Prüfe die Verfügbarkeit und bestätige deine Anmeldung direkt on-chain.',
       loading: 'Aktivitäten werden geladen...',
-      empty: 'Es gibt noch keine Aktivitäten.',
+      empty: 'Aktivitäten erscheinen hier, sobald sie verfügbar sind.',
       balanceLabel: 'USDT-Guthaben',
       dateLabel: 'Datum',
       spotsLabel: 'Plätze',
@@ -335,14 +327,14 @@ export const translations = {
     languageName: '中文',
     languageSelectorLabel: '语言',
     navbar: {
-      title: 'Edge City · 巴塔哥尼亚驻地',
+      title: '巴塔哥尼亚驻地活动',
       subtitle: '沉浸式自然体验，报名和付款全部通过区块链保障。',
       connect: '连接钱包',
       disconnect: '断开连接'
     },
     hero: {
       badge: '2025 年全新一季 · 圣马丁德洛斯安第斯',
-      title: 'Edge City 巴塔哥尼亚驻地：在链上连接的现场艺术、自然与社区。',
+      title: '巴塔哥尼亚驻地：在链上连接的现场艺术、自然与社区。',
       description:
         '我们策划为期多日的沉浸体验，探索安第斯山脉，开启身体与美食实践，并通过智能合约记录每一个守护席位、支付与记忆的瞬间。',
       primaryLink: '查看完整日程',
@@ -353,15 +345,13 @@ export const translations = {
       items: [
         '与本地向导一起前往山地、湖水与岩壁的精选行程。',
         '与 Iván Moritz Karl 共同呈现的地域料理与艺术仪式。',
-        '由 Edge City 合约保障的席位、付款与成果。'
+        '由驻地合约保障的席位、付款与成果。'
       ]
     },
     contract: {
-      heading: 'Edge City x 巴塔哥尼亚智能合约',
-      paragraph1:
-        '每项活动都会实时同步到此面板。你所看到的席位、价格、描述与照片，正是你在钱包中签署电子合同时写入或更新的数据。',
-      paragraph2:
-        '参与者报名时，智能合约会验证 USDT 付款、保留席位，并为社区与组织者留下可追溯的记录。图像以 IPFS/NFT 形式存储，可在每一届活动时更新。'
+      heading: '巴塔哥尼亚驻地智能合约',
+      paragraph1: '选择想参加的体验，并通过钱包确认交易来锁定名额。',
+      paragraph2: '所有报名都会以 USDT 记录在链上，让每个人都能透明掌握可用名额与参与情况。'
     },
     warnings: {
       contract: '请设置 <code>REACT_APP_CONTRACT_ADDRESS</code> 以便与活动合约交互。',
@@ -381,10 +371,10 @@ export const translations = {
       metaMask: '请安装 MetaMask 以继续。'
     },
     agenda: {
-      heading: '实时 Web3 日程',
-      description: '直接在链上管理可用名额、价格与已确认的报名。',
+      heading: '活动日程',
+      description: '查看可用名额，并直接在链上确认你的报名。',
       loading: '正在加载活动…',
-      empty: '目前还没有活动。',
+      empty: '活动上线后将在此显示。',
       balanceLabel: 'USDT 余额',
       dateLabel: '日期',
       spotsLabel: '名额',
@@ -402,14 +392,14 @@ export const translations = {
     languageName: 'Русский',
     languageSelectorLabel: 'Язык',
     navbar: {
-      title: 'Edge City · Резиденция в Патагонии',
+      title: 'Резиденция в Патагонии · Активности',
       subtitle: 'Иммерсивный опыт в природе с регистрациями и платежами, защищёнными блокчейном.',
       connect: 'Подключить кошелёк',
       disconnect: 'Отключить'
     },
     hero: {
       badge: 'Новое издание 2025 · Сан-Мартин-де-лос-Андес',
-      title: 'Резиденция Edge City в Патагонии: живое искусство, природа и сообщество, соединённые on-chain.',
+      title: 'Резиденция в Патагонии: живое искусство, природа и сообщество, соединённые on-chain.',
       description:
         'Мы создаём многодневное погружение, чтобы исследовать Анды, развивать телесные и кулинарные практики и фиксировать каждый момент с помощью смарт-контрактов, которые защищают места, платежи и воспоминания.',
       primaryLink: 'Посмотреть программу полностью',
@@ -420,15 +410,13 @@ export const translations = {
       items: [
         'Кураторские выезды в горы, к воде и скалам с местными гидами.',
         'Кухня региона и художественные ритуалы с Иваном Морицем Карлом.',
-        'Места, платежи и результаты под защитой контракта Edge City.'
+        'Места, платежи и результаты под защитой контракта резиденции.'
       ]
     },
     contract: {
-      heading: 'Смарт-контракт Edge City x Патагония',
-      paragraph1:
-        'Каждая активность синхронизируется с этой панелью в реальном времени. Данные, которые вы видите (места, цены, описания и фото), именно те, что записываются или обновляются при подписании электронного контракта через ваш кошелёк.',
-      paragraph2:
-        'При регистрации участников смарт-контракт проверяет оплату в USDT, резервирует место и оставляет проверяемый след для сообщества и организаторов. Изображения хранятся как ссылки IPFS/NFT, которые можно обновлять для каждого выпуска.'
+      heading: 'Смарт-контракт резиденции в Патагонии',
+      paragraph1: 'Выберите опыт и подтвердите транзакцию через кошелёк, чтобы закрепить место.',
+      paragraph2: 'Регистрации фиксируются on-chain в USDT, обеспечивая прозрачность доступности и участия для всех.'
     },
     warnings: {
       contract: 'Укажите <code>REACT_APP_CONTRACT_ADDRESS</code>, чтобы взаимодействовать с контрактом активностей.',
@@ -448,10 +436,10 @@ export const translations = {
       metaMask: 'Установите MetaMask, чтобы продолжить.'
     },
     agenda: {
-      heading: 'Живой график Web3',
-      description: 'Управляйте доступностью, ценами и подтверждёнными регистрациями напрямую в блокчейне.',
+      heading: 'Расписание активностей',
+      description: 'Проверяйте доступность и подтверждайте регистрацию напрямую в блокчейне.',
       loading: 'Загрузка активностей…',
-      empty: 'Активностей пока нет.',
+      empty: 'Здесь появятся активности, как только они станут доступны.',
       balanceLabel: 'Баланс USDT',
       dateLabel: 'Дата',
       spotsLabel: 'Места',
@@ -486,7 +474,7 @@ export const residencyActivities = [
         summary:
           'A guided ascent through native forests, hidden viewpoints, and local stories to feel the energy of Lanín National Park.',
         highlights: [
-          'Certified Edge City guide and trekking gear included.',
+          'Certified mountain guide and trekking gear included.',
           'Photo log and checkpoints synced with the smart contract.',
           'Closing breathwork facing the Lanín volcano.'
         ],
@@ -497,7 +485,7 @@ export const residencyActivities = [
         summary:
           'Ascenso guiado entre bosques nativos, miradores ocultos y relatos locales para sentir la energía del Parque Nacional Lanín.',
         highlights: [
-          'Guía habilitado de Edge City y equipo de trekking incluido.',
+          'Guía habilitado y equipo de trekking incluido.',
           'Registro fotográfico y checkpoints sincronizados con el contrato electrónico.',
           'Cierre con breathwork frente al volcán Lanín.'
         ],
@@ -508,7 +496,7 @@ export const residencyActivities = [
         summary:
           'Ascension guidée à travers forêts natives, belvédères cachés et récits locaux pour ressentir l’énergie du parc national Lanín.',
         highlights: [
-          'Guide Edge City certifié et équipement de trekking inclus.',
+          'Guide certifié et équipement de trekking inclus.',
           'Journal photo et checkpoints synchronisés avec le smart contract.',
           'Séance de breathwork face au volcan Lanín.'
         ],
@@ -519,7 +507,7 @@ export const residencyActivities = [
         summary:
           'Geführter Aufstieg durch heimische Wälder, versteckte Aussichtspunkte und lokale Geschichten, um die Energie des Lanín-Nationalparks zu spüren.',
         highlights: [
-          'Zertifizierter Edge City-Guide und Trekkingausrüstung inklusive.',
+          'Zertifizierter Bergführer und Trekkingausrüstung inklusive.',
           'Fotoprotokoll und Checkpoints, die mit dem Smart Contract synchronisiert sind.',
           'Abschluss mit Breathwork vor dem Vulkan Lanín.'
         ],
@@ -530,7 +518,7 @@ export const residencyActivities = [
         summary:
           '在向导带领下穿越原始森林、隐秘观景点与在地故事，感受拉宁国家公园的能量。',
         highlights: [
-          'Edge City 认证向导与登山装备全程提供。',
+          '认证向导与登山装备全程提供。',
           '与智能合约同步的影像记录与打卡点。',
           '在拉宁火山前的呼吸练习收尾。'
         ],
@@ -541,7 +529,7 @@ export const residencyActivities = [
         summary:
           'Сопровождаемый подъём через родные леса, скрытые смотровые площадки и местные истории, чтобы почувствовать энергию национального парка Ланин.',
         highlights: [
-          'Сертифицированный гид Edge City и включённое снаряжение для треккинга.',
+          'Сертифицированный горный гид и включённое снаряжение для треккинга.',
           'Фотопротокол и чекпоинты, синхронизированные со смарт-контрактом.',
           'Завершение дыхательной практикой перед вулканом Ланин.'
         ],
@@ -634,7 +622,7 @@ export const residencyActivities = [
           'Progress tracking and digital waiver recorded on-chain.',
           'Integration circle with sound at the base of the wall.'
         ],
-        guide: 'Mentored by IFMGA guides and Edge City performers.'
+        guide: 'Mentored by IFMGA guides and resident facilitators.'
       },
       es: {
         title: 'Clínica de escalada en roca y movimientos conscientes',
@@ -645,7 +633,7 @@ export const residencyActivities = [
           'Seguimiento de progresos y liberación de responsabilidad digital firmada on-chain.',
           'Círculo de integración sonora al pie de la pared.'
         ],
-        guide: 'Mentoreada por guías IFMGA y performers de Edge City.'
+        guide: 'Mentoreada por guías IFMGA y facilitadores de la residencia.'
       },
       fr: {
         title: 'Clinique d’escalade sur roche et mouvement conscient',
@@ -656,7 +644,7 @@ export const residencyActivities = [
           'Suivi des progrès et décharge de responsabilité numérique signée on-chain.',
           'Cercle d’intégration sonore au pied de la paroi.'
         ],
-        guide: 'Encadrée par des guides IFMGA et des performers Edge City.'
+        guide: 'Encadrée par des guides IFMGA et des facilitateur·rices de la résidence.'
       },
       de: {
         title: 'Kletterklinik und achtsame Bewegung',
@@ -667,7 +655,7 @@ export const residencyActivities = [
           'Fortschrittsverfolgung und digitale Haftungsfreistellung on-chain.',
           'Integrationskreis mit Klang am Fuß der Wand.'
         ],
-        guide: 'Begleitet von IFMGA-Guides und Edge City-Performer:innen.'
+        guide: 'Begleitet von IFMGA-Guides und Facilitator:innen der Residenz.'
       },
       zh: {
         title: '岩壁攀登诊所与身心觉察',
@@ -678,7 +666,7 @@ export const residencyActivities = [
           '进度追踪与数字责任豁免表链上签署。',
           '在岩壁下以声音圈完成整合。'
         ],
-        guide: '由 IFMGA 向导与 Edge City 表演者带领。'
+        guide: '由 IFMGA 向导与驻地引导师共同带领。'
       },
       ru: {
         title: 'Клиника скалолазания и осознанного движения',
@@ -689,7 +677,7 @@ export const residencyActivities = [
           'Отслеживание прогресса и цифровой отказ от ответственности, подписанный on-chain.',
           'Интеграционный звуковой круг у подножия скалы.'
         ],
-        guide: 'Наставники — гиды IFMGA и исполнители Edge City.'
+        guide: 'Наставники — гиды IFMGA и фасилитаторы резиденции.'
       }
     }
   },
@@ -706,7 +694,7 @@ export const residencyActivities = [
           'Audio-visual capture linked to the contract to update digital memorabilia.',
           'Jam session with residents and invited community.'
         ],
-        guide: 'Curated by the Edge City culinary team.'
+        guide: 'Curated by the residency culinary team.'
       },
       es: {
         title: 'Asado patagónico íntimo en la orilla del lago',
@@ -717,7 +705,7 @@ export const residencyActivities = [
           'Registro audiovisual conectado al contrato para actualizar memorabilia digital.',
           'Jam session con residentes y comunidad invitada.'
         ],
-        guide: 'Curaduría gastronómica de la cocina Edge City.'
+        guide: 'Curaduría gastronómica del equipo de la residencia.'
       },
       fr: {
         title: 'Asado patagonique intimiste au bord du lac',
@@ -728,7 +716,7 @@ export const residencyActivities = [
           'Enregistrement audiovisuel relié au contrat pour mettre à jour les souvenirs numériques.',
           'Jam session avec les résidents et la communauté invitée.'
         ],
-        guide: 'Curaté par l’équipe culinaire d’Edge City.'
+        guide: 'Curaté par l’équipe culinaire de la résidence.'
       },
       de: {
         title: 'Intimes patagonisches Asado am Seeufer',
@@ -739,7 +727,7 @@ export const residencyActivities = [
           'Audiovisuelles Recording, das mit dem Vertrag verknüpft ist, um digitale Erinnerungen zu aktualisieren.',
           'Jam-Session mit Residents und eingeladener Community.'
         ],
-        guide: 'Kuratiert vom Edge City-Küchenteam.'
+        guide: 'Kuratiert vom kulinarischen Team der Residenz.'
       },
       zh: {
         title: '湖畔的私密巴塔哥尼亚烤肉',
@@ -750,7 +738,7 @@ export const residencyActivities = [
           '与合约联动的影音记录，更新数字纪念品。',
           '驻地成员与社区嘉宾的即兴演出。'
         ],
-        guide: '由 Edge City 烹饪团队策展。'
+        guide: '由驻地烹饪团队策展。'
       },
       ru: {
         title: 'Камерное патагонское асадо на берегу озера',
@@ -761,7 +749,7 @@ export const residencyActivities = [
           'Аудиовизуальная запись, связанная с контрактом для обновления цифровых сувениров.',
           'Джем-сейшн с резидентами и приглашённым сообществом.'
         ],
-        guide: 'Кураторская работа кулинарной команды Edge City.'
+        guide: 'Кураторская работа кулинарной команды резиденции.'
       }
     }
   }
