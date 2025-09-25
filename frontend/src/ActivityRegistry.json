@@ -2,7 +2,11 @@
   "abi": [
     {
       "inputs": [
-        { "internalType": "address", "name": "stablecoinAddress", "type": "address" }
+        {
+          "internalType": "address",
+          "name": "stablecoinAddress",
+          "type": "address"
+        }
       ],
       "stateMutability": "nonpayable",
       "type": "constructor"
@@ -10,21 +14,24 @@
     {
       "anonymous": false,
       "inputs": [
-        { "indexed": true, "internalType": "uint256", "name": "id", "type": "uint256" },
-        { "indexed": false, "internalType": "string", "name": "name", "type": "string" },
-        { "indexed": false, "internalType": "uint64", "name": "date", "type": "uint64" },
-        { "indexed": false, "internalType": "uint32", "name": "maxParticipants", "type": "uint32" },
-        { "indexed": false, "internalType": "uint256", "name": "priceUSDT", "type": "uint256" }
-      ],
-      "name": "ActivityCreated",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        { "indexed": true, "internalType": "uint256", "name": "id", "type": "uint256" },
-        { "indexed": true, "internalType": "address", "name": "participant", "type": "address" },
-        { "indexed": false, "internalType": "uint32", "name": "registeredCount", "type": "uint32" }
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "id",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "participant",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint32",
+          "name": "registeredCount",
+          "type": "uint32"
+        }
       ],
       "name": "ActivityRegistered",
       "type": "event"
@@ -32,36 +39,103 @@
     {
       "anonymous": false,
       "inputs": [
-        { "indexed": true, "internalType": "uint256", "name": "id", "type": "uint256" },
-        { "indexed": false, "internalType": "bool", "name": "active", "type": "bool" }
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "id",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "active",
+          "type": "bool"
+        }
       ],
       "name": "ActivityStatusChanged",
       "type": "event"
     },
     {
       "inputs": [],
-      "name": "activityCount",
+      "name": "TOTAL_ACTIVITIES",
       "outputs": [
-        { "internalType": "uint256", "name": "", "type": "uint256" }
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
       ],
       "stateMutability": "view",
       "type": "function"
     },
     {
       "inputs": [
-        { "internalType": "uint256", "name": "", "type": "uint256" }
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
       ],
       "name": "activities",
       "outputs": [
-        { "internalType": "uint256", "name": "id", "type": "uint256" },
-        { "internalType": "string", "name": "name", "type": "string" },
-        { "internalType": "string", "name": "description", "type": "string" },
-        { "internalType": "uint64", "name": "date", "type": "uint64" },
-        { "internalType": "uint32", "name": "maxParticipants", "type": "uint32" },
-        { "internalType": "uint32", "name": "registeredCount", "type": "uint32" },
-        { "internalType": "uint256", "name": "priceUSDT", "type": "uint256" },
-        { "internalType": "address", "name": "organizer", "type": "address" },
-        { "internalType": "bool", "name": "active", "type": "bool" }
+        {
+          "internalType": "uint256",
+          "name": "id",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "internalType": "uint64",
+          "name": "date",
+          "type": "uint64"
+        },
+        {
+          "internalType": "uint32",
+          "name": "maxParticipants",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint32",
+          "name": "registeredCount",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint256",
+          "name": "priceUSDT",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "organizer",
+          "type": "address"
+        },
+        {
+          "internalType": "bool",
+          "name": "active",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "activityCount",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
       ],
       "stateMutability": "view",
       "type": "function"
@@ -70,18 +144,11 @@
       "inputs": [],
       "name": "admin",
       "outputs": [
-        { "internalType": "address", "name": "", "type": "address" }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        { "internalType": "uint256", "name": "id", "type": "uint256" }
-      ],
-      "name": "getParticipants",
-      "outputs": [
-        { "internalType": "address[]", "name": "", "type": "address[]" }
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
       ],
       "stateMutability": "view",
       "type": "function"
@@ -92,18 +159,54 @@
       "outputs": [
         {
           "components": [
-            { "internalType": "uint256", "name": "id", "type": "uint256" },
-            { "internalType": "string", "name": "name", "type": "string" },
-            { "internalType": "string", "name": "description", "type": "string" },
-            { "internalType": "uint64", "name": "date", "type": "uint64" },
-            { "internalType": "uint32", "name": "maxParticipants", "type": "uint32" },
-            { "internalType": "uint32", "name": "registeredCount", "type": "uint32" },
-            { "internalType": "uint256", "name": "priceUSDT", "type": "uint256" },
-            { "internalType": "address", "name": "organizer", "type": "address" },
-            { "internalType": "bool", "name": "active", "type": "bool" }
+            {
+              "internalType": "uint256",
+              "name": "id",
+              "type": "uint256"
+            },
+            {
+              "internalType": "string",
+              "name": "name",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "description",
+              "type": "string"
+            },
+            {
+              "internalType": "uint64",
+              "name": "date",
+              "type": "uint64"
+            },
+            {
+              "internalType": "uint32",
+              "name": "maxParticipants",
+              "type": "uint32"
+            },
+            {
+              "internalType": "uint32",
+              "name": "registeredCount",
+              "type": "uint32"
+            },
+            {
+              "internalType": "uint256",
+              "name": "priceUSDT",
+              "type": "uint256"
+            },
+            {
+              "internalType": "address",
+              "name": "organizer",
+              "type": "address"
+            },
+            {
+              "internalType": "bool",
+              "name": "active",
+              "type": "bool"
+            }
           ],
           "internalType": "struct ActivityRegistry.Activity[]",
-          "name": "",
+          "name": "list",
           "type": "tuple[]"
         }
       ],
@@ -112,32 +215,54 @@
     },
     {
       "inputs": [
-        { "internalType": "uint256", "name": "id", "type": "uint256" },
-        { "internalType": "address", "name": "user", "type": "address" }
+        {
+          "internalType": "uint256",
+          "name": "id",
+          "type": "uint256"
+        }
       ],
-      "name": "isRegistered",
+      "name": "getParticipants",
       "outputs": [
-        { "internalType": "bool", "name": "", "type": "bool" }
+        {
+          "internalType": "address[]",
+          "name": "",
+          "type": "address[]"
+        }
       ],
       "stateMutability": "view",
       "type": "function"
     },
     {
       "inputs": [
-        { "internalType": "string", "name": "name", "type": "string" },
-        { "internalType": "string", "name": "description", "type": "string" },
-        { "internalType": "uint64", "name": "date", "type": "uint64" },
-        { "internalType": "uint32", "name": "maxParticipants", "type": "uint32" },
-        { "internalType": "uint256", "name": "priceUSDT", "type": "uint256" }
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
       ],
-      "name": "createActivity",
-      "outputs": [],
-      "stateMutability": "nonpayable",
+      "name": "isRegistered",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
       "type": "function"
     },
     {
       "inputs": [
-        { "internalType": "uint256", "name": "id", "type": "uint256" }
+        {
+          "internalType": "uint256",
+          "name": "id",
+          "type": "uint256"
+        }
       ],
       "name": "registerForActivity",
       "outputs": [],
@@ -146,19 +271,31 @@
     },
     {
       "inputs": [
-        { "internalType": "address", "name": "newAdmin", "type": "address" }
+        {
+          "internalType": "uint256",
+          "name": "id",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bool",
+          "name": "active",
+          "type": "bool"
+        }
       ],
-      "name": "setAdmin",
+      "name": "setActivityStatus",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
     },
     {
       "inputs": [
-        { "internalType": "uint256", "name": "id", "type": "uint256" },
-        { "internalType": "bool", "name": "active", "type": "bool" }
+        {
+          "internalType": "address",
+          "name": "newAdmin",
+          "type": "address"
+        }
       ],
-      "name": "setActivityStatus",
+      "name": "setAdmin",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -167,7 +304,11 @@
       "inputs": [],
       "name": "stablecoin",
       "outputs": [
-        { "internalType": "address", "name": "", "type": "address" }
+        {
+          "internalType": "contract IERC20",
+          "name": "",
+          "type": "address"
+        }
       ],
       "stateMutability": "view",
       "type": "function"

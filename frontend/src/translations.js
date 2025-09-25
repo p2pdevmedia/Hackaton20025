@@ -68,17 +68,14 @@ export const translations = {
       usdt: 'Set <code>REACT_APP_USDT_ADDRESS</code> to point at the USDT token used for payments.'
     },
     status: {
-      contractMissing: 'Configure the contract address to create activities.',
-      connectWalletToCreate: 'Connect your wallet to create activities.',
-      creatingActivity: 'Creating activity...',
-      activityCreated: 'Activity created successfully.',
-      activityCreationFailed: 'Could not create the activity. Check the console for more information.',
+      contractMissing: 'Configure the contract address to register.',
       connectWalletToRegister: 'Connect your wallet to register.',
       activityUnavailable: 'This activity is not available.',
       approvingUsdt: 'Approving USDT...',
       confirmingRegistration: 'Confirming registration...',
       registrationComplete: 'Registration completed!',
-      registrationFailed: 'Could not complete the registration. Check the console for more details.'
+      registrationFailed: 'Could not complete the registration. Check the console for more details.',
+      alreadyRegistered: 'You are already registered for this activity.'
     },
     alerts: {
       metaMask: 'Install MetaMask to continue.'
@@ -88,32 +85,18 @@ export const translations = {
       description: 'Manage availability, pricing, and confirmed registrations directly on-chain.',
       loading: 'Loading activities...',
       empty: 'There are no activities yet.',
-      detailsButton: 'View details',
-      detailBackButton: 'Back to activities',
-      detailHeading: 'Activity information',
-      activityNotFound: 'We could not load that activity. Please return to the agenda.',
       balanceLabel: 'USDT balance',
       dateLabel: 'Date',
       spotsLabel: 'Spots',
       priceLabel: 'Price',
       registeredBadge: 'You are registered',
-      subscribeButton: 'Subscribe with MetaMask',
-      noSpotsButton: 'No spots available',
-      inactiveBadge: 'Inactive activity'
+      registerButton: 'Register',
+      noSpotsBadge: 'No spots available',
+      inactiveBadge: 'Inactive activity',
+      freeLabel: 'Free',
+      remainingLabel: 'spots left',
+      closedLabel: 'Registration closed'
     },
-    adminForm: {
-      heading: 'Create new activity',
-      description: 'Define the experience, schedule, and available spots. The price will be expressed in USDT.',
-      nameLabel: 'Name',
-      namePlaceholder: 'Activity name',
-      descriptionLabel: 'Description',
-      descriptionPlaceholder: 'Tell us about the experience',
-      dateLabel: 'Date and time',
-      maxParticipantsLabel: 'Maximum participants',
-      priceLabel: 'Price in USDT',
-      pricePlaceholder: 'E.g. 25',
-      submit: 'Create activity'
-    }
   },
   es: {
     languageName: 'Español',
@@ -184,17 +167,14 @@ export const translations = {
       usdt: 'Configurá <code>REACT_APP_USDT_ADDRESS</code> para apuntar al token USDT que se utilizará para los pagos.'
     },
     status: {
-      contractMissing: 'Configura la dirección del contrato para crear actividades.',
-      connectWalletToCreate: 'Conectá tu wallet para crear actividades.',
-      creatingActivity: 'Creando actividad...',
-      activityCreated: 'Actividad creada con éxito.',
-      activityCreationFailed: 'No se pudo crear la actividad. Revisá la consola para más información.',
+      contractMissing: 'Configurá la dirección del contrato para registrarte.',
       connectWalletToRegister: 'Conectá tu wallet para registrarte.',
       activityUnavailable: 'Esta actividad no está disponible.',
       approvingUsdt: 'Aprobando USDT...',
       confirmingRegistration: 'Confirmando registro...',
       registrationComplete: '¡Registro completado!',
-      registrationFailed: 'No se pudo completar el registro. Revisá la consola para más detalles.'
+      registrationFailed: 'No se pudo completar el registro. Revisá la consola para más detalles.',
+      alreadyRegistered: 'Ya estás inscripto en esta actividad.'
     },
     alerts: {
       metaMask: 'Instalá MetaMask para continuar.'
@@ -204,31 +184,17 @@ export const translations = {
       description: 'Gestioná disponibilidad, precios y registros confirmados directamente en la cadena de bloques.',
       loading: 'Cargando actividades...',
       empty: 'Aún no hay actividades creadas.',
-      detailsButton: 'Ver detalles',
-      detailBackButton: 'Volver a las actividades',
-      detailHeading: 'Información de la actividad',
-      activityNotFound: 'No pudimos cargar esa actividad. Volvé a la agenda.',
       balanceLabel: 'Balance USDT',
       dateLabel: 'Fecha',
       spotsLabel: 'Cupos',
       priceLabel: 'Precio',
       registeredBadge: 'Ya estás registrado/a',
-      subscribeButton: 'Suscribirme con MetaMask',
-      noSpotsButton: 'Sin cupos disponibles',
-      inactiveBadge: 'Actividad inactiva'
-    },
-    adminForm: {
-      heading: 'Crear nueva actividad',
-      description: 'Definí la experiencia, fecha y cupos disponibles. El precio se expresará en USDT.',
-      nameLabel: 'Nombre',
-      namePlaceholder: 'Nombre de la actividad',
-      descriptionLabel: 'Descripción',
-      descriptionPlaceholder: 'Contanos de qué trata la experiencia',
-      dateLabel: 'Fecha y horario',
-      maxParticipantsLabel: 'Cupos máximos',
-      priceLabel: 'Precio en USDT',
-      pricePlaceholder: 'Ej: 25',
-      submit: 'Crear actividad'
+      registerButton: 'Inscribirme',
+      noSpotsBadge: 'Sin cupos disponibles',
+      inactiveBadge: 'Actividad inactiva',
+      freeLabel: 'Sin costo',
+      remainingLabel: 'cupos libres',
+      closedLabel: 'Registro cerrado'
     }
   },
   fr: {
@@ -268,17 +234,14 @@ export const translations = {
       usdt: 'Configurez <code>REACT_APP_USDT_ADDRESS</code> pour cibler le jeton USDT utilisé pour les paiements.'
     },
     status: {
-      contractMissing: 'Configurez l’adresse du contrat pour créer des activités.',
-      connectWalletToCreate: 'Connectez votre wallet pour créer des activités.',
-      creatingActivity: 'Création de l’activité…',
-      activityCreated: 'Activité créée avec succès.',
-      activityCreationFailed: 'Impossible de créer l’activité. Consultez la console pour plus d’informations.',
+      contractMissing: 'Configurez l’adresse du contrat pour vous inscrire.',
       connectWalletToRegister: 'Connectez votre wallet pour vous inscrire.',
       activityUnavailable: 'Cette activité n’est pas disponible.',
       approvingUsdt: 'Approbation des USDT…',
       confirmingRegistration: 'Confirmation de l’inscription…',
       registrationComplete: 'Inscription terminée !',
-      registrationFailed: 'Impossible de finaliser l’inscription. Consultez la console pour plus de détails.'
+      registrationFailed: 'Impossible de finaliser l’inscription. Consultez la console pour plus de détails.',
+      alreadyRegistered: 'Vous êtes déjà inscrit·e à cette activité.'
     },
     alerts: {
       metaMask: 'Installez MetaMask pour continuer.'
@@ -288,31 +251,17 @@ export const translations = {
       description: 'Gérez disponibilités, tarifs et inscriptions confirmées directement sur la blockchain.',
       loading: 'Chargement des activités…',
       empty: 'Aucune activité pour le moment.',
-      detailsButton: 'Voir les détails',
-      detailBackButton: 'Retour aux activités',
-      detailHeading: "Informations sur l'activité",
-      activityNotFound: "Impossible de charger cette activité. Retournez à l'agenda.",
       balanceLabel: 'Solde USDT',
       dateLabel: 'Date',
       spotsLabel: 'Places',
       priceLabel: 'Prix',
       registeredBadge: 'Vous êtes inscrit·e',
-      subscribeButton: 'M’inscrire avec MetaMask',
-      noSpotsButton: 'Plus de places disponibles',
-      inactiveBadge: 'Activité inactive'
-    },
-    adminForm: {
-      heading: 'Créer une nouvelle activité',
-      description: 'Définissez l’expérience, la date et les places disponibles. Le prix sera exprimé en USDT.',
-      nameLabel: 'Nom',
-      namePlaceholder: 'Nom de l’activité',
-      descriptionLabel: 'Description',
-      descriptionPlaceholder: 'Décrivez l’expérience',
-      dateLabel: 'Date et horaire',
-      maxParticipantsLabel: 'Participants maximum',
-      priceLabel: 'Prix en USDT',
-      pricePlaceholder: 'Ex : 25',
-      submit: 'Créer l’activité'
+      registerButton: 'M’inscrire',
+      noSpotsBadge: 'Plus de places disponibles',
+      inactiveBadge: 'Activité inactive',
+      freeLabel: 'Gratuit',
+      remainingLabel: 'places restantes',
+      closedLabel: 'Inscriptions clôturées'
     }
   },
   de: {
@@ -352,17 +301,14 @@ export const translations = {
       usdt: 'Setze <code>REACT_APP_USDT_ADDRESS</code>, um auf den für Zahlungen verwendeten USDT-Token zu verweisen.'
     },
     status: {
-      contractMissing: 'Konfiguriere die Vertragsadresse, um Aktivitäten zu erstellen.',
-      connectWalletToCreate: 'Verbinde dein Wallet, um Aktivitäten zu erstellen.',
-      creatingActivity: 'Aktivität wird erstellt...',
-      activityCreated: 'Aktivität erfolgreich erstellt.',
-      activityCreationFailed: 'Aktivität konnte nicht erstellt werden. Sieh für mehr Informationen in die Konsole.',
+      contractMissing: 'Konfiguriere die Vertragsadresse, um dich anzumelden.',
       connectWalletToRegister: 'Verbinde dein Wallet, um dich anzumelden.',
       activityUnavailable: 'Diese Aktivität ist nicht verfügbar.',
       approvingUsdt: 'USDT werden genehmigt...',
       confirmingRegistration: 'Anmeldung wird bestätigt...',
       registrationComplete: 'Anmeldung abgeschlossen!',
-      registrationFailed: 'Anmeldung konnte nicht abgeschlossen werden. Sieh für Details in die Konsole.'
+      registrationFailed: 'Anmeldung konnte nicht abgeschlossen werden. Sieh für Details in die Konsole.',
+      alreadyRegistered: 'Du bist bereits für diese Aktivität angemeldet.'
     },
     alerts: {
       metaMask: 'Installiere MetaMask, um fortzufahren.'
@@ -372,31 +318,17 @@ export const translations = {
       description: 'Verwalte Verfügbarkeit, Preise und bestätigte Anmeldungen direkt on-chain.',
       loading: 'Aktivitäten werden geladen...',
       empty: 'Es gibt noch keine Aktivitäten.',
-      detailsButton: 'Details ansehen',
-      detailBackButton: 'Zurück zu den Aktivitäten',
-      detailHeading: 'Aktivitätsinformationen',
-      activityNotFound: 'Diese Aktivität konnte nicht geladen werden. Kehre zur Übersicht zurück.',
       balanceLabel: 'USDT-Guthaben',
       dateLabel: 'Datum',
       spotsLabel: 'Plätze',
       priceLabel: 'Preis',
       registeredBadge: 'Du bist angemeldet',
-      subscribeButton: 'Mit MetaMask anmelden',
-      noSpotsButton: 'Keine Plätze verfügbar',
-      inactiveBadge: 'Inaktive Aktivität'
-    },
-    adminForm: {
-      heading: 'Neue Aktivität erstellen',
-      description: 'Definiere Erlebnis, Termin und verfügbare Plätze. Der Preis wird in USDT angegeben.',
-      nameLabel: 'Name',
-      namePlaceholder: 'Name der Aktivität',
-      descriptionLabel: 'Beschreibung',
-      descriptionPlaceholder: 'Beschreibe das Erlebnis',
-      dateLabel: 'Datum und Uhrzeit',
-      maxParticipantsLabel: 'Maximale Teilnehmer',
-      priceLabel: 'Preis in USDT',
-      pricePlaceholder: 'Z. B. 25',
-      submit: 'Aktivität erstellen'
+      registerButton: 'Anmelden',
+      noSpotsBadge: 'Keine Plätze verfügbar',
+      inactiveBadge: 'Inaktive Aktivität',
+      freeLabel: 'Kostenlos',
+      remainingLabel: 'Plätze übrig',
+      closedLabel: 'Anmeldung geschlossen'
     }
   },
   zh: {
@@ -436,17 +368,14 @@ export const translations = {
       usdt: '请设置 <code>REACT_APP_USDT_ADDRESS</code> 指向用于支付的 USDT 代币。'
     },
     status: {
-      contractMissing: '请配置合约地址以创建活动。',
-      connectWalletToCreate: '连接钱包以创建活动。',
-      creatingActivity: '正在创建活动…',
-      activityCreated: '活动创建成功。',
-      activityCreationFailed: '无法创建活动。请查看控制台了解更多信息。',
+      contractMissing: '请配置合约地址以完成报名。',
       connectWalletToRegister: '连接钱包以报名。',
       activityUnavailable: '该活动当前不可用。',
       approvingUsdt: '正在授权 USDT…',
       confirmingRegistration: '正在确认报名…',
       registrationComplete: '报名完成！',
-      registrationFailed: '无法完成报名。请查看控制台了解更多详情。'
+      registrationFailed: '无法完成报名。请查看控制台了解更多详情。',
+      alreadyRegistered: '你已报名此活动。'
     },
     alerts: {
       metaMask: '请安装 MetaMask 以继续。'
@@ -456,31 +385,17 @@ export const translations = {
       description: '直接在链上管理可用名额、价格与已确认的报名。',
       loading: '正在加载活动…',
       empty: '目前还没有活动。',
-      detailsButton: '查看详情',
-      detailBackButton: '返回活动列表',
-      detailHeading: '活动信息',
-      activityNotFound: '无法加载该活动，请返回日程列表。',
       balanceLabel: 'USDT 余额',
       dateLabel: '日期',
       spotsLabel: '名额',
       priceLabel: '价格',
       registeredBadge: '你已报名',
-      subscribeButton: '使用 MetaMask 报名',
-      noSpotsButton: '名额已满',
-      inactiveBadge: '活动未开放'
-    },
-    adminForm: {
-      heading: '创建新活动',
-      description: '设定体验内容、时间与可用名额。价格将以 USDT 表示。',
-      nameLabel: '名称',
-      namePlaceholder: '活动名称',
-      descriptionLabel: '描述',
-      descriptionPlaceholder: '介绍这项体验',
-      dateLabel: '日期与时间',
-      maxParticipantsLabel: '最大参与人数',
-      priceLabel: 'USDT 价格',
-      pricePlaceholder: '例如：25',
-      submit: '创建活动'
+      registerButton: '报名',
+      noSpotsBadge: '名额已满',
+      inactiveBadge: '活动未开放',
+      freeLabel: '免费',
+      remainingLabel: '剩余名额',
+      closedLabel: '报名已截止'
     }
   },
   ru: {
@@ -519,19 +434,16 @@ export const translations = {
       contract: 'Укажите <code>REACT_APP_CONTRACT_ADDRESS</code>, чтобы взаимодействовать с контрактом активностей.',
       usdt: 'Укажите <code>REACT_APP_USDT_ADDRESS</code>, чтобы настроить USDT-токен для платежей.'
     },
-    status: {
-      contractMissing: 'Настройте адрес контракта, чтобы создавать активности.',
-      connectWalletToCreate: 'Подключите кошелёк, чтобы создавать активности.',
-      creatingActivity: 'Создание активности…',
-      activityCreated: 'Активность успешно создана.',
-      activityCreationFailed: 'Не удалось создать активность. Подробности смотрите в консоли.',
-      connectWalletToRegister: 'Подключите кошелёк, чтобы зарегистрироваться.',
-      activityUnavailable: 'Эта активность недоступна.',
-      approvingUsdt: 'Идёт подтверждение USDT…',
-      confirmingRegistration: 'Подтверждение регистрации…',
-      registrationComplete: 'Регистрация завершена!',
-      registrationFailed: 'Не удалось завершить регистрацию. Подробности смотрите в консоли.'
-    },
+      status: {
+        contractMissing: 'Укажите адрес контракта, чтобы записаться.',
+        connectWalletToRegister: 'Подключите кошелёк, чтобы зарегистрироваться.',
+        activityUnavailable: 'Эта активность недоступна.',
+        approvingUsdt: 'Идёт подтверждение USDT…',
+        confirmingRegistration: 'Подтверждение регистрации…',
+        registrationComplete: 'Регистрация завершена!',
+        registrationFailed: 'Не удалось завершить регистрацию. Подробности смотрите в консоли.',
+        alreadyRegistered: 'Вы уже записаны на эту активность.'
+      },
     alerts: {
       metaMask: 'Установите MetaMask, чтобы продолжить.'
     },
@@ -540,31 +452,17 @@ export const translations = {
       description: 'Управляйте доступностью, ценами и подтверждёнными регистрациями напрямую в блокчейне.',
       loading: 'Загрузка активностей…',
       empty: 'Активностей пока нет.',
-      detailsButton: 'Подробнее',
-      detailBackButton: 'Назад к активностям',
-      detailHeading: 'Информация об активности',
-      activityNotFound: 'Не удалось загрузить активность. Вернитесь к расписанию.',
       balanceLabel: 'Баланс USDT',
       dateLabel: 'Дата',
       spotsLabel: 'Места',
       priceLabel: 'Цена',
       registeredBadge: 'Вы зарегистрированы',
-      subscribeButton: 'Подписаться через MetaMask',
-      noSpotsButton: 'Нет свободных мест',
-      inactiveBadge: 'Активность неактивна'
-    },
-    adminForm: {
-      heading: 'Создать новую активность',
-      description: 'Определите опыт, дату и количество мест. Цена указывается в USDT.',
-      nameLabel: 'Название',
-      namePlaceholder: 'Название активности',
-      descriptionLabel: 'Описание',
-      descriptionPlaceholder: 'Опишите опыт',
-      dateLabel: 'Дата и время',
-      maxParticipantsLabel: 'Максимум участников',
-      priceLabel: 'Цена в USDT',
-      pricePlaceholder: 'Напр.: 25',
-      submit: 'Создать активность'
+      registerButton: 'Записаться',
+      noSpotsBadge: 'Нет свободных мест',
+      inactiveBadge: 'Активность неактивна',
+      freeLabel: 'Бесплатно',
+      remainingLabel: 'свободных мест',
+      closedLabel: 'Регистрация закрыта'
     }
   }
 };
