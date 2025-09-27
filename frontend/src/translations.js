@@ -521,6 +521,10 @@ export const localeMap = {
 export const residencyActivities = [
   {
     id: 'patagonian-asado',
+    images: [
+      'https://ipfs.io/ipfs/bafybeic23gavkexic2nmmccmknbff4ngwhzhzqxcic7qdzbysc7rzeyzo4',
+      'https://ipfs.io/ipfs/bafybeifqkwx3c6rr7d22sdnmss5j6atmkvsis5ivh42gdwfcy3znssaw5m'
+    ],
     image: 'https://ipfs.io/ipfs/bafybeic23gavkexic2nmmccmknbff4ngwhzhzqxcic7qdzbysc7rzeyzo4',
     translations: {
       en: {
@@ -593,6 +597,7 @@ export const residencyActivities = [
   },
   {
     id: 'mountain-expedition',
+    images: ['https://ipfs.io/ipfs/bafybeienxvgvzj4a4qhozas5cd5hgnkk2dkkylnv4q6tiypqz6qqxswwru'],
     image: 'https://ipfs.io/ipfs/bafybeienxvgvzj4a4qhozas5cd5hgnkk2dkkylnv4q6tiypqz6qqxswwru',
     translations: {
       en: {
@@ -665,6 +670,7 @@ export const residencyActivities = [
   },
   {
     id: 'lake-kayak',
+    images: ['https://ipfs.io/ipfs/bafkreia6mqussojkw3tcngfj6iyow2gjszuxsjereznjomefa2iajg7x4q'],
     image: 'https://ipfs.io/ipfs/bafkreia6mqussojkw3tcngfj6iyow2gjszuxsjereznjomefa2iajg7x4q',
     translations: {
       en: {

@@ -4,6 +4,7 @@ import { ethers } from 'ethers';
 import ActivityRegistry from './ActivityRegistry.json';
 import Navbar from './components/Navbar';
 import ActivityCalendar from './components/ActivityCalendar';
+import ActivityGallery from './components/ActivityGallery';
 import { translations, residencyActivities as residencyCatalog, localeMap } from './translations';
 
 const contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS || '';
@@ -46,7 +47,11 @@ function App() {
     () =>
       residencyCatalog.map(activity => {
         const localized = activity.translations[language] || activity.translations.en;
-        return { ...localized, id: activity.id, image: activity.image };
+        return {
+          ...localized,
+          id: activity.id,
+          images: activity.images && activity.images.length > 0 ? activity.images : [activity.image].filter(Boolean)
+        };
       }),
     [language]
   );
@@ -443,14 +448,7 @@ function App() {
 
             return (
               <article key={activity.id} className="overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-slate-100">
-                <div className="relative h-56 overflow-hidden">
-                  <img
-                    src={activity.image}
-                    alt={activity.title}
-                    className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
-                    loading="lazy"
-                  />
-                </div>
+                <ActivityGallery images={activity.images} alt={activity.title} />
                 <div className="relative overflow-hidden px-6 py-6">
                   {isPatagonianAsado && (
                     <>
