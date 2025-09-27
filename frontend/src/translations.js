@@ -4,24 +4,24 @@ export const translations = {
     languageSelectorLabel: 'Language',
     navbar: {
       title: 'Edge City · Patagonia Experience',
-      subtitle: 'An immersive nature experience with registration and payments secured on-chain.',
+      subtitle: 'An immersive nature experience with every registration confirmed on-chain through a single wallet message.',
       connect: 'Connect wallet',
       disconnect: 'Disconnect'
     },
     hero: {
       badge: 'NEW EDITION 2025 · SAN MARTIN DE LOS ANDES',
-      title: 'Edge City Patagonia Experience: live art, nature, and community linked on-chain.',
+      title: 'Edge City Patagonia Experience: live art, nature, and community with direct wallet confirmations.',
       description:
-        'We design a multi-day immersion to explore the Andes, activate physical and culinary practices, and document every moment with smart contracts that safeguard spots, payments, and memories.',
+        'We design a multi-day immersion to explore the Andes, activate physical and culinary practices, and confirm each spot with a single wallet transaction that delivers your message to the host.',
       primaryLink: 'View full program',
-      dataBadge: 'Live smart-contract data'
+      dataBadge: 'Live on-chain confirmations'
     },
     heroCard: {
       heading: 'What the residency activates',
       items: [
         'Curated outings to mountains, water, and rock with local guides.',
         'Territory cuisine and artistic rituals with Iván Moritz Karl.',
-        'Spots, payments, and deliverables secured by the Edge City contract.'
+        'Registrations confirmed via a shared Edge City wallet message.'
       ]
     },
     calendar: {
@@ -57,52 +57,39 @@ export const translations = {
       }
     },
     warnings: {
-      contract: 'Set <code>REACT_APP_CONTRACT_ADDRESS</code> to interact with the activity contract.',
-      usdt: 'Set <code>REACT_APP_USDT_ADDRESS</code> to point at the USDT token used for payments.'
+      destination: 'Set <code>REACT_APP_DESTINATION_WALLET</code> to receive the registration transactions.'
     },
     status: {
-      contractMissing: 'Configure the contract address to create activities.',
-      connectWalletToCreate: 'Connect your wallet to create activities.',
-      creatingActivity: 'Creating activity...',
-      activityCreated: 'Activity created successfully.',
-      activityCreationFailed: 'Could not create the activity. Check the console for more information.',
-      connectWalletToRegister: 'Connect your wallet to register.',
+      connectWalletToRegister: 'Connect your wallet to send the registration.',
       activityUnavailable: 'This activity is not available.',
-      approvingUsdt: 'Approving USDT...',
-      confirmingRegistration: 'Confirming registration...',
-      registrationComplete: 'Registration completed!',
-      registrationFailed: 'Could not complete the registration. Check the console for more details.'
+      destinationMissing: 'Add the destination wallet to enable on-chain registration messages.',
+      alreadyRegistered: 'You already registered for this activity from this device.',
+      invalidParticipantCount: 'Select how many participants are joining.',
+      notEnoughSpots: 'There are not enough spots remaining for that group size.',
+      requestingSignature: 'Review and sign the transaction in your wallet.',
+      confirmingOnChain: 'Waiting for the transaction to confirm...',
+      registrationComplete: 'Registration message sent successfully!',
+      registrationFailed: 'Could not send the registration. Check the console for more details.'
     },
     alerts: {
       metaMask: 'Install MetaMask to continue.'
     },
     agenda: {
-      loading: 'Loading activities...',
       detailsButton: 'View details',
       detailBackButton: 'Back to activities',
       detailHeading: 'Activity information',
       activityNotFound: 'We could not load that activity. Please return to the agenda.',
-      balanceLabel: 'USDT balance',
       dateLabel: 'Date',
       spotsLabel: 'Spots',
-      priceLabel: 'Price',
+      priceLabel: 'Contribution',
       registeredBadge: 'You are registered',
-      subscribeButton: 'Subscribe with MetaMask',
+      subscribeButton: 'Send registration',
+      processingButton: 'Sending...',
       noSpotsButton: 'No spots available',
-      inactiveBadge: 'Inactive activity'
-    },
-    adminForm: {
-      heading: 'Create new activity',
-      description: 'Define the experience, schedule, and available spots. The price will be expressed in USDT.',
-      nameLabel: 'Name',
-      namePlaceholder: 'Activity name',
-      descriptionLabel: 'Description',
-      descriptionPlaceholder: 'Tell us about the experience',
-      dateLabel: 'Date and time',
-      maxParticipantsLabel: 'Maximum participants',
-      priceLabel: 'Price in USDT',
-      pricePlaceholder: 'E.g. 25',
-      submit: 'Create activity'
+      inactiveBadge: 'Inactive activity',
+      participantCountLabel: 'Participants',
+      participantCountHelper: 'Choose how many seats to reserve.',
+      transactionInfo: 'MetaMask will deliver your message on-chain to {wallet}.'
     }
   },
   es: {
@@ -110,24 +97,24 @@ export const translations = {
     languageSelectorLabel: 'Idioma',
     navbar: {
       title: 'Edge City · Residencia Patagonia',
-      subtitle: 'Una experiencia inmersiva en la naturaleza con registro y pagos asegurados en la cadena de bloques.',
+      subtitle: 'Una experiencia inmersiva en la naturaleza con confirmaciones on-chain enviadas desde tu wallet.',
       connect: 'Conectar wallet',
       disconnect: 'Desconectar'
     },
     hero: {
       badge: 'Nueva edición 2025 · San Martín de los Andes',
-      title: 'Residencia Edge City Patagonia: arte vivo, naturaleza y comunidad conectada on-chain.',
+      title: 'Residencia Edge City Patagonia: arte vivo, naturaleza y comunidad con confirmaciones directas desde la wallet.',
       description:
-        'Diseñamos una inmersión de varios días para explorar la cordillera, activar prácticas físicas y culinarias, y documentar cada momento con contratos inteligentes que resguardan cupos, pagos y memorias.',
+        'Diseñamos una inmersión de varios días para explorar la cordillera, activar prácticas físicas y culinarias, y confirmar tu participación enviando un mensaje en cadena al anfitrión desde tu wallet.',
       primaryLink: 'Ver programa completo',
-      dataBadge: 'Datos en vivo del contrato'
+      dataBadge: 'Confirmaciones on-chain en vivo'
     },
     heroCard: {
       heading: 'Lo que activa la residencia',
       items: [
         'Salidas curadas a montaña, agua y roca con guías locales.',
         'Cocina de territorio y rituales artísticos con Iván Moritz Karl.',
-        'Cupos, pagos y entregables asegurados en el contrato Edge City.'
+        'Registros confirmados con un mensaje en la wallet compartida de Edge City.'
       ]
     },
     calendar: {
@@ -163,52 +150,39 @@ export const translations = {
       }
     },
     warnings: {
-      contract: 'Configurá <code>REACT_APP_CONTRACT_ADDRESS</code> para interactuar con el contrato de actividades.',
-      usdt: 'Configurá <code>REACT_APP_USDT_ADDRESS</code> para apuntar al token USDT que se utilizará para los pagos.'
+      destination: 'Configurá <code>REACT_APP_DESTINATION_WALLET</code> para recibir las transacciones de registro.'
     },
     status: {
-      contractMissing: 'Configura la dirección del contrato para crear actividades.',
-      connectWalletToCreate: 'Conectá tu wallet para crear actividades.',
-      creatingActivity: 'Creando actividad...',
-      activityCreated: 'Actividad creada con éxito.',
-      activityCreationFailed: 'No se pudo crear la actividad. Revisá la consola para más información.',
-      connectWalletToRegister: 'Conectá tu wallet para registrarte.',
+      connectWalletToRegister: 'Conectá tu wallet para enviar el registro.',
       activityUnavailable: 'Esta actividad no está disponible.',
-      approvingUsdt: 'Aprobando USDT...',
-      confirmingRegistration: 'Confirmando registro...',
-      registrationComplete: '¡Registro completado!',
-      registrationFailed: 'No se pudo completar el registro. Revisá la consola para más detalles.'
+      destinationMissing: 'Agregá la wallet de destino para habilitar los mensajes on-chain.',
+      alreadyRegistered: 'Ya registraste esta actividad desde este dispositivo.',
+      invalidParticipantCount: 'Indicá cuántas personas participan.',
+      notEnoughSpots: 'No quedan suficientes cupos para esa cantidad.',
+      requestingSignature: 'Revisá y firmá la transacción en tu wallet.',
+      confirmingOnChain: 'Esperando la confirmación en cadena...',
+      registrationComplete: '¡Mensaje de registro enviado con éxito!',
+      registrationFailed: 'No pudimos enviar el registro. Revisá la consola para más detalles.'
     },
     alerts: {
       metaMask: 'Instalá MetaMask para continuar.'
     },
     agenda: {
-      loading: 'Cargando actividades...',
       detailsButton: 'Ver detalles',
       detailBackButton: 'Volver a las actividades',
       detailHeading: 'Información de la actividad',
       activityNotFound: 'No pudimos cargar esa actividad. Volvé a la agenda.',
-      balanceLabel: 'Balance USDT',
       dateLabel: 'Fecha',
       spotsLabel: 'Cupos',
-      priceLabel: 'Precio',
+      priceLabel: 'Contribución',
       registeredBadge: 'Ya estás registrado/a',
-      subscribeButton: 'Suscribirme con MetaMask',
+      subscribeButton: 'Enviar registro',
+      processingButton: 'Enviando...',
       noSpotsButton: 'Sin cupos disponibles',
-      inactiveBadge: 'Actividad inactiva'
-    },
-    adminForm: {
-      heading: 'Crear nueva actividad',
-      description: 'Definí la experiencia, fecha y cupos disponibles. El precio se expresará en USDT.',
-      nameLabel: 'Nombre',
-      namePlaceholder: 'Nombre de la actividad',
-      descriptionLabel: 'Descripción',
-      descriptionPlaceholder: 'Contanos de qué trata la experiencia',
-      dateLabel: 'Fecha y horario',
-      maxParticipantsLabel: 'Cupos máximos',
-      priceLabel: 'Precio en USDT',
-      pricePlaceholder: 'Ej: 25',
-      submit: 'Crear actividad'
+      inactiveBadge: 'Actividad inactiva',
+      participantCountLabel: 'Participantes',
+      participantCountHelper: 'Elegí cuántos lugares querés reservar.',
+      transactionInfo: 'MetaMask enviará tu mensaje on-chain a {wallet}.'
     }
   },
   fr: {
