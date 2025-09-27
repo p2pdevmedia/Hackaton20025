@@ -56,13 +56,6 @@ export const translations = {
         }
       }
     },
-    contract: {
-      heading: 'Edge City x Patagonia smart contract',
-      paragraph1:
-        'Each activity syncs with this dashboard in real time. The data you see (spots, prices, descriptions, and photos) is exactly what gets written or updated when you sign the electronic contract from your wallet.',
-      paragraph2:
-        'When participants register, the smart contract validates the USDT payment, reserves the spot, and leaves an auditable trail for the community and organizers. Images are stored as IPFS/NFT references that you can update for every edition.'
-    },
     warnings: {
       contract: 'Set <code>REACT_APP_CONTRACT_ADDRESS</code> to interact with the activity contract.',
       usdt: 'Set <code>REACT_APP_USDT_ADDRESS</code> to point at the USDT token used for payments.'
@@ -84,10 +77,7 @@ export const translations = {
       metaMask: 'Install MetaMask to continue.'
     },
     agenda: {
-      heading: 'Live Web3 schedule',
-      description: 'Manage availability, pricing, and confirmed registrations directly on-chain.',
       loading: 'Loading activities...',
-      empty: 'There are no activities yet.',
       detailsButton: 'View details',
       detailBackButton: 'Back to activities',
       detailHeading: 'Activity information',
@@ -172,13 +162,6 @@ export const translations = {
         }
       }
     },
-    contract: {
-      heading: 'Contrato Edge City x Patagonia',
-      paragraph1:
-        'Cada actividad se sincroniza con este panel en tiempo real. Los datos que ves (cupos, precios, descripciones y fotos) son los que se escriben o actualizan cuando firmás el contrato electrónico desde tu wallet.',
-      paragraph2:
-        'Al registrar participantes, el smart contract valida el pago en USDT, reserva el cupo y deja registro auditable para la comunidad y los organizadores. Las imágenes se almacenan como referencias IPFS/NFT que podés actualizar en cada edición.'
-    },
     warnings: {
       contract: 'Configurá <code>REACT_APP_CONTRACT_ADDRESS</code> para interactuar con el contrato de actividades.',
       usdt: 'Configurá <code>REACT_APP_USDT_ADDRESS</code> para apuntar al token USDT que se utilizará para los pagos.'
@@ -200,10 +183,7 @@ export const translations = {
       metaMask: 'Instalá MetaMask para continuar.'
     },
     agenda: {
-      heading: 'Agenda Web3 en vivo',
-      description: 'Gestioná disponibilidad, precios y registros confirmados directamente en la cadena de bloques.',
       loading: 'Cargando actividades...',
-      empty: 'Aún no hay actividades creadas.',
       detailsButton: 'Ver detalles',
       detailBackButton: 'Volver a las actividades',
       detailHeading: 'Información de la actividad',
@@ -256,13 +236,6 @@ export const translations = {
         'Places, paiements et livrables sécurisés par le contrat Edge City.'
       ]
     },
-    contract: {
-      heading: 'Contrat Edge City x Patagonie',
-      paragraph1:
-        'Chaque activité se synchronise avec ce tableau de bord en temps réel. Les données que vous voyez (places, prix, descriptions et photos) sont exactement celles qui sont écrites ou mises à jour lorsque vous signez le contrat électronique depuis votre wallet.',
-      paragraph2:
-        'Lors des inscriptions, le smart contract valide le paiement en USDT, réserve la place et laisse une trace vérifiable pour la communauté et les organisateurs. Les images sont stockées comme références IPFS/NFT que vous pouvez mettre à jour à chaque édition.'
-    },
     warnings: {
       contract: 'Configurez <code>REACT_APP_CONTRACT_ADDRESS</code> pour interagir avec le contrat d’activités.',
       usdt: 'Configurez <code>REACT_APP_USDT_ADDRESS</code> pour cibler le jeton USDT utilisé pour les paiements.'
@@ -284,10 +257,7 @@ export const translations = {
       metaMask: 'Installez MetaMask pour continuer.'
     },
     agenda: {
-      heading: 'Agenda Web3 en direct',
-      description: 'Gérez disponibilités, tarifs et inscriptions confirmées directement sur la blockchain.',
       loading: 'Chargement des activités…',
-      empty: 'Aucune activité pour le moment.',
       detailsButton: 'Voir les détails',
       detailBackButton: 'Retour aux activités',
       detailHeading: "Informations sur l'activité",
@@ -340,13 +310,6 @@ export const translations = {
         'Plätze, Zahlungen und Deliverables, gesichert durch den Edge City-Vertrag.'
       ]
     },
-    contract: {
-      heading: 'Edge City x Patagonien Smart Contract',
-      paragraph1:
-        'Jede Aktivität synchronisiert sich in Echtzeit mit diesem Dashboard. Die angezeigten Daten (Plätze, Preise, Beschreibungen und Fotos) sind genau das, was geschrieben oder aktualisiert wird, wenn du den elektronischen Vertrag mit deinem Wallet unterzeichnest.',
-      paragraph2:
-        'Bei der Anmeldung prüft der Smart Contract die USDT-Zahlung, reserviert den Platz und hinterlässt eine nachprüfbare Spur für Community und Organisator:innen. Bilder werden als IPFS/NFT-Referenzen gespeichert, die du in jeder Ausgabe aktualisieren kannst.'
-    },
     warnings: {
       contract: 'Setze <code>REACT_APP_CONTRACT_ADDRESS</code>, um mit dem Aktivitätsvertrag zu interagieren.',
       usdt: 'Setze <code>REACT_APP_USDT_ADDRESS</code>, um auf den für Zahlungen verwendeten USDT-Token zu verweisen.'
@@ -368,10 +331,7 @@ export const translations = {
       metaMask: 'Installiere MetaMask, um fortzufahren.'
     },
     agenda: {
-      heading: 'Live-Web3-Zeitplan',
-      description: 'Verwalte Verfügbarkeit, Preise und bestätigte Anmeldungen direkt on-chain.',
       loading: 'Aktivitäten werden geladen...',
-      empty: 'Es gibt noch keine Aktivitäten.',
       detailsButton: 'Details ansehen',
       detailBackButton: 'Zurück zu den Aktivitäten',
       detailHeading: 'Aktivitätsinformationen',
@@ -424,13 +384,6 @@ export const translations = {
         '由 Edge City 合约保障的席位、付款与成果。'
       ]
     },
-    contract: {
-      heading: 'Edge City x 巴塔哥尼亚智能合约',
-      paragraph1:
-        '每项活动都会实时同步到此面板。你所看到的席位、价格、描述与照片，正是你在钱包中签署电子合同时写入或更新的数据。',
-      paragraph2:
-        '参与者报名时，智能合约会验证 USDT 付款、保留席位，并为社区与组织者留下可追溯的记录。图像以 IPFS/NFT 形式存储，可在每一届活动时更新。'
-    },
     warnings: {
       contract: '请设置 <code>REACT_APP_CONTRACT_ADDRESS</code> 以便与活动合约交互。',
       usdt: '请设置 <code>REACT_APP_USDT_ADDRESS</code> 指向用于支付的 USDT 代币。'
@@ -452,10 +405,7 @@ export const translations = {
       metaMask: '请安装 MetaMask 以继续。'
     },
     agenda: {
-      heading: '实时 Web3 日程',
-      description: '直接在链上管理可用名额、价格与已确认的报名。',
       loading: '正在加载活动…',
-      empty: '目前还没有活动。',
       detailsButton: '查看详情',
       detailBackButton: '返回活动列表',
       detailHeading: '活动信息',
@@ -508,13 +458,6 @@ export const translations = {
         'Места, платежи и результаты под защитой контракта Edge City.'
       ]
     },
-    contract: {
-      heading: 'Смарт-контракт Edge City x Патагония',
-      paragraph1:
-        'Каждая активность синхронизируется с этой панелью в реальном времени. Данные, которые вы видите (места, цены, описания и фото), именно те, что записываются или обновляются при подписании электронного контракта через ваш кошелёк.',
-      paragraph2:
-        'При регистрации участников смарт-контракт проверяет оплату в USDT, резервирует место и оставляет проверяемый след для сообщества и организаторов. Изображения хранятся как ссылки IPFS/NFT, которые можно обновлять для каждого выпуска.'
-    },
     warnings: {
       contract: 'Укажите <code>REACT_APP_CONTRACT_ADDRESS</code>, чтобы взаимодействовать с контрактом активностей.',
       usdt: 'Укажите <code>REACT_APP_USDT_ADDRESS</code>, чтобы настроить USDT-токен для платежей.'
@@ -536,10 +479,7 @@ export const translations = {
       metaMask: 'Установите MetaMask, чтобы продолжить.'
     },
     agenda: {
-      heading: 'Живой график Web3',
-      description: 'Управляйте доступностью, ценами и подтверждёнными регистрациями напрямую в блокчейне.',
       loading: 'Загрузка активностей…',
-      empty: 'Активностей пока нет.',
       detailsButton: 'Подробнее',
       detailBackButton: 'Назад к активностям',
       detailHeading: 'Информация об активности',

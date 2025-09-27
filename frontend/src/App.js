@@ -465,12 +465,6 @@ function App() {
           ))}
         </section>
 
-        <section className="rounded-3xl border border-dashed border-blue-200 bg-blue-50/60 p-6 text-sm text-blue-900 shadow-inner">
-          <h2 className="text-lg font-semibold text-blue-900">{text.contract.heading}</h2>
-          <p className="mt-2">{text.contract.paragraph1}</p>
-          <p className="mt-3">{text.contract.paragraph2}</p>
-        </section>
-
         {!isValidContract && (
           <div className="p-4 rounded bg-yellow-100 text-yellow-900">
             <span dangerouslySetInnerHTML={{ __html: text.warnings.contract }} />
@@ -487,17 +481,11 @@ function App() {
         )}
 
         <section className="space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-            <div>
-              <h2 className="text-xl font-semibold text-slate-900">{text.agenda.heading}</h2>
-              <p className="text-sm text-gray-600">{text.agenda.description}</p>
+          {account && isValidUsdt && (
+            <div className="flex justify-end text-sm text-gray-700">
+              {text.agenda.balanceLabel}: <span className="font-semibold">{usdtBalance}</span>
             </div>
-            {account && isValidUsdt && (
-              <div className="text-sm text-gray-700">
-                {text.agenda.balanceLabel}: <span className="font-semibold">{usdtBalance}</span>
-              </div>
-            )}
-          </div>
+          )}
 
           {selectedActivityId !== null ? (
             selectedActivity ? (
@@ -594,11 +582,7 @@ function App() {
             )
           ) : loading ? (
             <div className="text-center text-gray-500">{text.agenda.loading}</div>
-          ) : activities.length === 0 ? (
-            <div className="rounded border border-dashed border-gray-300 p-6 text-center text-gray-500">
-              {text.agenda.empty}
-            </div>
-          ) : (
+          ) : activities.length === 0 ? null : (
             <div className="space-y-4">
               {activities.map(activity => {
                 const remaining = activity.maxParticipants - activity.registeredCount;
