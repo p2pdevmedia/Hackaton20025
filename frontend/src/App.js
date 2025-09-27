@@ -4,6 +4,7 @@ import { ethers } from 'ethers';
 import ActivityRegistry from './ActivityRegistry.json';
 import Navbar from './components/Navbar';
 import ActivityCalendar from './components/ActivityCalendar';
+import ActivityCard from './components/ActivityCard';
 import { translations, residencyActivities as residencyCatalog, localeMap } from './translations';
 
 const contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS || '';
@@ -46,7 +47,7 @@ function App() {
     () =>
       residencyCatalog.map(activity => {
         const localized = activity.translations[language] || activity.translations.en;
-        return { ...localized, id: activity.id, image: activity.image };
+        return { ...localized, id: activity.id, images: activity.images || [] };
       }),
     [language]
   );
@@ -439,29 +440,7 @@ function App() {
       <main className="max-w-5xl mx-auto px-4 py-10 space-y-12">
         <section className="grid gap-6 md:grid-cols-2">
           {heroActivities.map(activity => (
-            <article key={activity.id} className="overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-slate-100">
-              <div className="relative h-56 overflow-hidden">
-                <img
-                  src={activity.image}
-                  alt={activity.title}
-                  className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
-                  loading="lazy"
-                />
-              </div>
-              <div className="space-y-3 px-6 py-6">
-                <h3 className="text-xl font-semibold text-slate-900">{activity.title}</h3>
-                <p className="text-sm text-slate-600">{activity.summary}</p>
-                <ul className="space-y-2 text-sm text-slate-700">
-                  {activity.highlights.map(highlight => (
-                    <li key={highlight} className="flex items-start gap-2">
-                      <span className="mt-1 h-2 w-2 flex-shrink-0 rounded-full bg-blue-500" />
-                      {highlight}
-                    </li>
-                  ))}
-                </ul>
-                <p className="text-xs uppercase tracking-wide text-slate-500">{activity.guide}</p>
-              </div>
-            </article>
+            <ActivityCard key={activity.id} activity={activity} />
           ))}
         </section>
 
