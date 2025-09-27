@@ -3,14 +3,14 @@ export const translations = {
     languageName: 'English',
     languageSelectorLabel: 'Language',
     navbar: {
-      title: 'Edge City · Patagonia Residency',
+      title: 'Edge City · Patagonia Experience',
       subtitle: 'An immersive nature experience with registration and payments secured on-chain.',
       connect: 'Connect wallet',
       disconnect: 'Disconnect'
     },
     hero: {
       badge: 'NEW EDITION 2025 · SAN MARTIN DE LOS ANDES',
-      title: 'Edge City Patagonia Residency: live art, nature, and community linked on-chain.',
+      title: 'Edge City Patagonia Experience: live art, nature, and community linked on-chain.',
       description:
         'We design a multi-day immersion to explore the Andes, activate physical and culinary practices, and document every moment with smart contracts that safeguard spots, payments, and memories.',
       primaryLink: 'View full program',
