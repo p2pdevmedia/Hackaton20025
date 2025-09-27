@@ -419,6 +419,39 @@ function App() {
                   isValidDestination &&
                   !isProcessing;
 
+                const disabledReasonKey = canRegister
+                  ? null
+                  : (() => {
+                      if (isProcessing) {
+                        return 'processingRegistration';
+                      }
+                      if (!account) {
+                        return 'connectWalletToRegister';
+                      }
+                      if (!isValidDestination) {
+                        return 'destinationMissing';
+                      }
+                      if (
+                        !selectedActivity.active ||
+                        selectedActivity.date * 1000 <= Date.now() ||
+                        remaining <= 0
+                      ) {
+                        return 'activityUnavailable';
+                      }
+                      if (selectedActivity.isRegistered) {
+                        return 'alreadyRegistered';
+                      }
+                      if (!Number.isInteger(participantCount) || participantCount <= 0) {
+                        return 'invalidParticipantCount';
+                      }
+                      if (participantCount > remaining) {
+                        return 'notEnoughSpots';
+                      }
+                      return null;
+                    })();
+
+                const disabledReason = disabledReasonKey ? text.status[disabledReasonKey] : undefined;
+
                 return (
                   <div className="space-y-4">
                     <button
@@ -470,6 +503,7 @@ function App() {
                           <button
                             onClick={() => register(selectedActivity)}
                             disabled={!canRegister}
+                            title={disabledReason}
                             className={`px-4 py-2 rounded text-white transition-colors ${
                               canRegister ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-300 cursor-not-allowed'
                             }`}

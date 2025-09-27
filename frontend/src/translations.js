@@ -69,7 +69,8 @@ export const translations = {
       requestingSignature: 'Review and sign the transaction in your wallet.',
       confirmingOnChain: 'Waiting for the transaction to confirm...',
       registrationComplete: 'Registration message sent successfully!',
-      registrationFailed: 'Could not send the registration. Check the console for more details.'
+      registrationFailed: 'Could not send the registration. Check the console for more details.',
+      processingRegistration: 'We are processing your registration.'
     },
     alerts: {
       metaMask: 'Install MetaMask to continue.'
@@ -163,7 +164,8 @@ export const translations = {
       requestingSignature: 'Revisá y firmá la transacción en tu wallet.',
       confirmingOnChain: 'Esperando la confirmación en cadena...',
       registrationComplete: '¡Mensaje de registro enviado con éxito!',
-      registrationFailed: 'No pudimos enviar el registro. Revisá la consola para más detalles.'
+      registrationFailed: 'No pudimos enviar el registro. Revisá la consola para más detalles.',
+      processingRegistration: 'Estamos procesando tu registro.'
     },
     alerts: {
       metaMask: 'Instalá MetaMask para continuar.'
@@ -258,7 +260,8 @@ export const translations = {
       approvingUsdt: 'Approbation des USDT…',
       confirmingRegistration: 'Confirmation de l’inscription…',
       registrationComplete: 'Inscription terminée !',
-      registrationFailed: 'Impossible de finaliser l’inscription. Consultez la console pour plus de détails.'
+      registrationFailed: 'Impossible de finaliser l’inscription. Consultez la console pour plus de détails.',
+      processingRegistration: 'Nous traitons votre inscription.'
     },
     alerts: {
       metaMask: 'Installez MetaMask pour continuer.'
@@ -364,7 +367,8 @@ export const translations = {
       approvingUsdt: 'USDT werden genehmigt...',
       confirmingRegistration: 'Anmeldung wird bestätigt...',
       registrationComplete: 'Anmeldung abgeschlossen!',
-      registrationFailed: 'Anmeldung konnte nicht abgeschlossen werden. Sieh für Details in die Konsole.'
+      registrationFailed: 'Anmeldung konnte nicht abgeschlossen werden. Sieh für Details in die Konsole.',
+      processingRegistration: 'Wir verarbeiten deine Anmeldung.'
     },
     alerts: {
       metaMask: 'Installiere MetaMask, um fortzufahren.'
@@ -470,7 +474,8 @@ export const translations = {
       approvingUsdt: '正在授权 USDT…',
       confirmingRegistration: '正在确认报名…',
       registrationComplete: '报名完成！',
-      registrationFailed: '无法完成报名。请查看控制台了解更多详情。'
+      registrationFailed: '无法完成报名。请查看控制台了解更多详情。',
+      processingRegistration: '我们正在处理您的报名。'
     },
     alerts: {
       metaMask: '请安装 MetaMask 以继续。'
@@ -576,7 +581,8 @@ export const translations = {
       approvingUsdt: 'Идёт подтверждение USDT…',
       confirmingRegistration: 'Подтверждение регистрации…',
       registrationComplete: 'Регистрация завершена!',
-      registrationFailed: 'Не удалось завершить регистрацию. Подробности смотрите в консоли.'
+      registrationFailed: 'Не удалось завершить регистрацию. Подробности смотрите в консоли.',
+      processingRegistration: 'Мы обрабатываем вашу регистрацию.'
     },
     alerts: {
       metaMask: 'Установите MetaMask, чтобы продолжить.'
