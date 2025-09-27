@@ -4,10 +4,12 @@
   "private": true,
   "scripts": {
     "compile": "hardhat compile",
-    "test": "hardhat test"
+    "test": "hardhat test",
+    "deploy": "hardhat run --network sepolia scripts/deploy.js"
   },
   "devDependencies": {
     "hardhat": "^2.19.0",
-    "@nomicfoundation/hardhat-toolbox": "^3.0.0"
+    "@nomicfoundation/hardhat-toolbox": "^3.0.0",
+    "dotenv": "^16.4.1"
   }
 }
