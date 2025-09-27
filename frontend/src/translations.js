@@ -236,6 +236,38 @@ export const translations = {
         'Places, paiements et livrables sécurisés par le contrat Edge City.'
       ]
     },
+    calendar: {
+      heading: 'Calendrier des expéditions d’octobre et novembre',
+      description: 'Aperçu des jours réservés aux sessions d’escalade et de kayak pendant la résidence.',
+      legendTitle: 'Activités',
+      legend: {
+        climb: 'Escalade',
+        kayak: 'Kayak'
+      },
+      months: {
+        october: 'Octobre 2024',
+        november: 'Novembre 2024'
+      },
+      location: 'Lac Lolog · Patagonie, Argentine',
+      addToGoogle: 'Ajouter au Google Agenda',
+      events: {
+        octoberClimb: {
+          title: 'Immersion escalade sur granite',
+          shortLabel: 'Escalade',
+          description: 'Progression guidée sur parois de granite du 20 au 23 octobre.'
+        },
+        novemberKayak: {
+          title: 'Traversées en kayak sur le lac Lolog',
+          shortLabel: 'Kayak',
+          description: 'Sorties à l’aube et au crépuscule du 1er au 3 novembre.'
+        },
+        novemberClimb: {
+          title: 'Bloc d’ascensions sur granite',
+          shortLabel: 'Escalade',
+          description: 'Cliniques avancées de fissures et dalles du 10 au 13 novembre.'
+        }
+      }
+    },
     warnings: {
       contract: 'Configurez <code>REACT_APP_CONTRACT_ADDRESS</code> pour interagir avec le contrat d’activités.',
       usdt: 'Configurez <code>REACT_APP_USDT_ADDRESS</code> pour cibler le jeton USDT utilisé pour les paiements.'
@@ -309,6 +341,38 @@ export const translations = {
         'Regionale Küche und künstlerische Rituale mit Iván Moritz Karl.',
         'Plätze, Zahlungen und Deliverables, gesichert durch den Edge City-Vertrag.'
       ]
+    },
+    calendar: {
+      heading: 'Oktober- und November-Expeditionskalender',
+      description: 'Sieh dir die reservierten Tage für Kletter- und Kayaksessions während der Residenz an.',
+      legendTitle: 'Aktivitäten',
+      legend: {
+        climb: 'Klettern',
+        kayak: 'Kayak'
+      },
+      months: {
+        october: 'Oktober 2024',
+        november: 'November 2024'
+      },
+      location: 'Lago Lolog · Patagonien, Argentinien',
+      addToGoogle: 'Zu Google Kalender hinzufügen',
+      events: {
+        octoberClimb: {
+          title: 'Kletter-Immersion auf Granit',
+          shortLabel: 'Klettern',
+          description: 'Geführte Mehrseillängen vom 20. bis 23. Oktober.'
+        },
+        novemberKayak: {
+          title: 'Kayaküberquerungen auf dem Lolog-See',
+          shortLabel: 'Kayak',
+          description: 'Paddeln bei Sonnenaufgang und -untergang vom 1. bis 3. November.'
+        },
+        novemberClimb: {
+          title: 'Gipfelklettern auf Granit',
+          shortLabel: 'Klettern',
+          description: 'Fortgeschrittene Riss- und Plattenclinics vom 10. bis 13. November.'
+        }
+      }
     },
     warnings: {
       contract: 'Setze <code>REACT_APP_CONTRACT_ADDRESS</code>, um mit dem Aktivitätsvertrag zu interagieren.',
@@ -384,6 +448,38 @@ export const translations = {
         '由 Edge City 合约保障的席位、付款与成果。'
       ]
     },
+    calendar: {
+      heading: '十月与十一月探险日历',
+      description: '预览驻地期间为攀登与皮划艇课程保留的具体日期。',
+      legendTitle: '活动',
+      legend: {
+        climb: '攀登',
+        kayak: '皮划艇'
+      },
+      months: {
+        october: '2024 年 10 月',
+        november: '2024 年 11 月'
+      },
+      location: '洛洛格湖 · 阿根廷巴塔哥尼亚',
+      addToGoogle: '添加到 Google 日历',
+      events: {
+        octoberClimb: {
+          title: '花岗岩攀登沉浸营',
+          shortLabel: '攀登',
+          description: '10 月 20 日至 23 日的指导式多段攀登。'
+        },
+        novemberKayak: {
+          title: '洛洛格湖皮划艇穿越',
+          shortLabel: '皮划艇',
+          description: '11 月 1 日至 3 日的日出与日落划行。'
+        },
+        novemberClimb: {
+          title: '花岗岩山峰攀登营',
+          shortLabel: '攀登',
+          description: '11 月 10 日至 13 日的高阶裂缝与板岩课程。'
+        }
+      }
+    },
     warnings: {
       contract: '请设置 <code>REACT_APP_CONTRACT_ADDRESS</code> 以便与活动合约交互。',
       usdt: '请设置 <code>REACT_APP_USDT_ADDRESS</code> 指向用于支付的 USDT 代币。'
@@ -457,6 +553,38 @@ export const translations = {
         'Кухня региона и художественные ритуалы с Иваном Морицем Карлом.',
         'Места, платежи и результаты под защитой контракта Edge City.'
       ]
+    },
+    calendar: {
+      heading: 'Календарь экспедиций на октябрь и ноябрь',
+      description: 'Посмотрите точные дни, выделенные под скалолазание и каякинг во время резиденции.',
+      legendTitle: 'Активности',
+      legend: {
+        climb: 'Скалолазание',
+        kayak: 'Каяк'
+      },
+      months: {
+        october: 'Октябрь 2024',
+        november: 'Ноябрь 2024'
+      },
+      location: 'Озеро Лолог · Патагония, Аргентина',
+      addToGoogle: 'Добавить в Google Календарь',
+      events: {
+        octoberClimb: {
+          title: 'Иммерсия в скалолазание',
+          shortLabel: 'Скалолазание',
+          description: 'Пошаговое восхождение по гранитным маршрутам с 20 по 23 октября.'
+        },
+        novemberKayak: {
+          title: 'Переходы на каяках по озеру Лолог',
+          shortLabel: 'Каяк',
+          description: 'Заплывы на рассвете и закате с 1 по 3 ноября.'
+        },
+        novemberClimb: {
+          title: 'Кампания по вершинам на граните',
+          shortLabel: 'Скалолазание',
+          description: 'Продвинутые занятия по трещинам и плитам с 10 по 13 ноября.'
+        }
+      }
     },
     warnings: {
       contract: 'Укажите <code>REACT_APP_CONTRACT_ADDRESS</code>, чтобы взаимодействовать с контрактом активностей.',
