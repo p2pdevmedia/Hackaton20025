@@ -481,17 +481,11 @@ function App() {
         )}
 
         <section className="space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-            <div>
-              <h2 className="text-xl font-semibold text-slate-900">{text.agenda.heading}</h2>
-              <p className="text-sm text-gray-600">{text.agenda.description}</p>
+          {account && isValidUsdt && (
+            <div className="flex justify-end text-sm text-gray-700">
+              {text.agenda.balanceLabel}: <span className="font-semibold">{usdtBalance}</span>
             </div>
-            {account && isValidUsdt && (
-              <div className="text-sm text-gray-700">
-                {text.agenda.balanceLabel}: <span className="font-semibold">{usdtBalance}</span>
-              </div>
-            )}
-          </div>
+          )}
 
           {selectedActivityId !== null ? (
             selectedActivity ? (
@@ -588,11 +582,7 @@ function App() {
             )
           ) : loading ? (
             <div className="text-center text-gray-500">{text.agenda.loading}</div>
-          ) : activities.length === 0 ? (
-            <div className="rounded border border-dashed border-gray-300 p-6 text-center text-gray-500">
-              {text.agenda.empty}
-            </div>
-          ) : (
+          ) : activities.length === 0 ? null : (
             <div className="space-y-4">
               {activities.map(activity => {
                 const remaining = activity.maxParticipants - activity.registeredCount;
