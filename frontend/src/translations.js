@@ -12,7 +12,7 @@ export const translations = {
       badge: 'NEW EDITION 2025 · SAN MARTIN DE LOS ANDES',
       title: 'Edge City Patagonia Experience: live art, nature, and community linked on-chain.',
       description:
-        'We design a multi-day immersion to explore the Andes, activate physical and culinary practices, and document every moment with smart contracts that safeguard spots, payments, and memories.',
+        'We craft single-day, six-hour immersions across the Andes with transport, meals, and every detail included, documenting each moment with smart contracts that safeguard spots, payments, and memories.',
       primaryLink: 'View full program',
       dataBadge: 'Live smart-contract data'
     },
@@ -118,7 +118,7 @@ export const translations = {
       badge: 'Nueva edición 2025 · San Martín de los Andes',
       title: 'Residencia Edge City Patagonia: arte vivo, naturaleza y comunidad conectada on-chain.',
       description:
-        'Diseñamos una inmersión de varios días para explorar la cordillera, activar prácticas físicas y culinarias, y documentar cada momento con contratos inteligentes que resguardan cupos, pagos y memorias.',
+        'Diseñamos inmersiones de un día de seis horas por la cordillera, con transporte, comida y todo incluido, y documentamos cada momento con contratos inteligentes que resguardan cupos, pagos y memorias.',
       primaryLink: 'Ver programa completo',
       dataBadge: 'Datos en vivo del contrato'
     },
@@ -224,7 +224,7 @@ export const translations = {
       badge: 'Nouvelle édition 2025 · San Martín de los Andes',
       title: 'Résidence Edge City Patagonie : art vivant, nature et communauté reliés on-chain.',
       description:
-        'Nous concevons une immersion de plusieurs jours pour explorer la cordillère, activer des pratiques physiques et culinaires, et documenter chaque moment avec des smart contracts qui protègent places, paiements et souvenirs.',
+        'Nous concevons des immersions d’une journée de six heures à travers les Andes, avec transport, repas et tout inclus, et nous documentons chaque moment grâce à des smart contracts qui protègent places, paiements et souvenirs.',
       primaryLink: 'Voir le programme complet',
       dataBadge: 'Données du contrat en direct'
     },
