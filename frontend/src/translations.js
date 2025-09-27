@@ -520,6 +520,78 @@ export const localeMap = {
 
 export const residencyActivities = [
   {
+    id: 'patagonian-asado',
+    image: 'https://ipfs.io/ipfs/bafybeic23gavkexic2nmmccmknbff4ngwhzhzqxcic7qdzbysc7rzeyzo4',
+    translations: {
+      en: {
+        title: 'Intimate Patagonian asado on the lakeshore',
+        summary:
+          'A six-hour outing from San Martín de los Andes: a 45-minute boat ride across Lago Lolog to Iván Moritz Karl’s remote cabin for an exhibition of his finished works, followed by a fire-cooked feast on a secluded beach.',
+        highlights: [
+          'Private boat crossing for up to 20 guests with round-trip transport included.',
+          'Guided visit of Iván Moritz Karl’s exhibited paintings inside his cordillera cabin.',
+          'Patagonian fire-cooked meal (cordero al asador) with local wines and soft drinks included at USD 300 per person.'
+        ],
+        guide: 'Curated by the Edge City culinary team.'
+      },
+      es: {
+        title: 'Asado patagónico íntimo en la orilla del lago',
+        summary:
+          'Salida de seis horas con traslado ida y vuelta desde San Martín de los Andes: navegación de 45 minutos por el lago Lolog hasta la cabaña remota del pintor Iván Moritz Karl, donde visitamos una exhibición de sus obras terminadas antes de un asado a fuego lento en una playa escondida.',
+        highlights: [
+          'Travesía en lancha privada para hasta 20 personas, con transporte incluido.',
+          'Recorrido guiado por la muestra de pinturas de Iván Moritz Karl en su cabaña cordillerana.',
+          'Asado patagónico al fuego (cordero al asador) con vinos y bebidas incluidos por USD 300 por persona.'
+        ],
+        guide: 'Curaduría gastronómica de la cocina Edge City.'
+      },
+      fr: {
+        title: 'Asado patagonique intimiste au bord du lac',
+        summary:
+          'Excursion de six heures depuis San Martín de los Andes : traversée en bateau de 45 minutes du lac Lolog jusqu’à la cabane isolée d’Iván Moritz Karl pour découvrir l’exposition de ses œuvres achevées, puis festin au feu de bois sur une plage secrète.',
+        highlights: [
+          'Traversée en bateau privé (max 20 personnes) avec transport aller-retour inclus.',
+          'Visite guidée de l’exposition des œuvres d’Iván Moritz Karl dans sa cabane de la cordillère.',
+          'Asado patagonique au feu (cordero al asador) avec vins et boissons inclus pour 300 USD par personne.'
+        ],
+        guide: 'Curaté par l’équipe culinaire d’Edge City.'
+      },
+      de: {
+        title: 'Intimes patagonisches Asado am Seeufer',
+        summary:
+          'Sechsstündiger Ausflug ab San Martín de los Andes: 45-minütige Bootsfahrt über den Lago Lolog zur abgelegenen Hütte von Iván Moritz Karl für eine Ausstellung seiner vollendeten Werke, anschließend Feuerküche an einem versteckten Strand.',
+        highlights: [
+          'Private Bootsfahrt für bis zu 20 Gäste mit Hin- und Rücktransport inklusive.',
+          'Geführter Rundgang durch die Ausstellung von Iván Moritz Karls Gemälden in seiner Cordillera-Hütte.',
+          'Patagonisches Feuermahl (Cordero al Asador) mit lokalen Weinen und alkoholfreien Getränken inklusive für 300 USD pro Person.'
+        ],
+        guide: 'Kuratiert vom Edge City-Küchenteam.'
+      },
+      zh: {
+        title: '湖畔的私密巴塔哥尼亚烤肉',
+        summary:
+          '从圣马丁－德洛斯安第斯出发的六小时行程：乘船 45 分钟横渡洛洛湖，造访 Iván Moritz Karl 位于群山中的小屋，欣赏其完成作品展，随后在隐秘沙滩享用火烤盛宴。',
+        highlights: [
+          '私人船只往返，限 20 名来宾，含全程交通。',
+          '在画家的山间小屋内导览其完成画作的展览。',
+          '巴塔哥尼亚火烤盛宴（烤羊 Cordero al Asador），含当地葡萄酒与软饮，每人 300 美元。'
+        ],
+        guide: '由 Edge City 烹饪团队策展。'
+      },
+      ru: {
+        title: 'Камерное патагонское асадо на берегу озера',
+        summary:
+          'Шестичасовая поездка из Сан-Мартин-де-лос-Андес: 45-минутный переход на лодке через озеро Лолог к удалённой хижине Ивана Морица Карла, где проходит выставка его готовых работ, затем пир на открытом огне на уединённом пляже.',
+        highlights: [
+          'Приватная лодочная прогулка для группы до 20 человек с трансфером туда и обратно.',
+          'Экскурсия по выставке картин Ивана Морица Карла в его хижине в Кордильере.',
+          'Патагонское асадо на огне (cordero al asador) с местными винами и безалкогольными напитками включено, стоимость 300 USD с человека.'
+        ],
+        guide: 'Кураторская работа кулинарной команды Edge City.'
+      }
+    }
+  },
+  {
     id: 'mountain-expedition',
     image: 'https://ipfs.io/ipfs/bafybeienxvgvzj4a4qhozas5cd5hgnkk2dkkylnv4q6tiypqz6qqxswwru',
     translations: {
@@ -735,76 +807,4 @@ export const residencyActivities = [
       }
     }
   },
-  {
-    id: 'patagonian-asado',
-    image: 'https://ipfs.io/ipfs/bafybeic23gavkexic2nmmccmknbff4ngwhzhzqxcic7qdzbysc7rzeyzo4',
-    translations: {
-      en: {
-        title: 'Intimate Patagonian asado on the lakeshore',
-        summary:
-          'Slow fire, local produce, and live painting by Iván Moritz Karl as night falls over Lolog.',
-        highlights: [
-          'Menu of meats, mushrooms, and vegetables from partner producers.',
-          'Audio-visual capture linked to the contract to update digital memorabilia.',
-          'Jam session with residents and invited community.'
-        ],
-        guide: 'Curated by the Edge City culinary team.'
-      },
-      es: {
-        title: 'Asado patagónico íntimo en la orilla del lago',
-        summary:
-          'Fuego lento, productos locales y pintura en vivo de Iván Moritz Karl mientras cae la noche sobre Lolog.',
-        highlights: [
-          'Menú de carnes, hongos y vegetales de productores aliados.',
-          'Registro audiovisual conectado al contrato para actualizar memorabilia digital.',
-          'Jam session con residentes y comunidad invitada.'
-        ],
-        guide: 'Curaduría gastronómica de la cocina Edge City.'
-      },
-      fr: {
-        title: 'Asado patagonique intimiste au bord du lac',
-        summary:
-          'Cuisson lente, produits locaux et peinture en direct d’Iván Moritz Karl alors que la nuit tombe sur Lolog.',
-        highlights: [
-          'Menu de viandes, champignons et légumes de producteurs partenaires.',
-          'Enregistrement audiovisuel relié au contrat pour mettre à jour les souvenirs numériques.',
-          'Jam session avec les résidents et la communauté invitée.'
-        ],
-        guide: 'Curaté par l’équipe culinaire d’Edge City.'
-      },
-      de: {
-        title: 'Intimes patagonisches Asado am Seeufer',
-        summary:
-          'Langsames Feuer, lokale Produkte und Live-Malerei von Iván Moritz Karl, während die Nacht über Lolog hereinbricht.',
-        highlights: [
-          'Menü aus Fleisch, Pilzen und Gemüse von Partnerproduzent:innen.',
-          'Audiovisuelles Recording, das mit dem Vertrag verknüpft ist, um digitale Erinnerungen zu aktualisieren.',
-          'Jam-Session mit Residents und eingeladener Community.'
-        ],
-        guide: 'Kuratiert vom Edge City-Küchenteam.'
-      },
-      zh: {
-        title: '湖畔的私密巴塔哥尼亚烤肉',
-        summary:
-          '慢火、在地食材，以及 Iván Moritz Karl 的现场绘画，伴随夜色笼罩洛洛湖。',
-        highlights: [
-          '合作伙伴提供的肉类、蘑菇与蔬菜菜单。',
-          '与合约联动的影音记录，更新数字纪念品。',
-          '驻地成员与社区嘉宾的即兴演出。'
-        ],
-        guide: '由 Edge City 烹饪团队策展。'
-      },
-      ru: {
-        title: 'Камерное патагонское асадо на берегу озера',
-        summary:
-          'Медленный огонь, местные продукты и живопись Ивана Морица Карла под вечерним небом Лолога.',
-        highlights: [
-          'Меню из мяса, грибов и овощей от партнёрских фермеров.',
-          'Аудиовизуальная запись, связанная с контрактом для обновления цифровых сувениров.',
-          'Джем-сейшн с резидентами и приглашённым сообществом.'
-        ],
-        guide: 'Кураторская работа кулинарной команды Edge City.'
-      }
-    }
-  }
 ];
