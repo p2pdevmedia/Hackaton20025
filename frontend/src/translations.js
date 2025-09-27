@@ -105,6 +105,7 @@ export const translations = {
       badge: 'Nueva edición 2025 · San Martín de los Andes',
       title: 'Residencia Edge City Patagonia: arte vivo, naturaleza y comunidad con confirmaciones directas desde la wallet.',
       description:
+
         'Diseñamos una inmersión de varios días para explorar la cordillera, activar prácticas físicas y culinarias, y confirmar tu participación enviando un mensaje en cadena al anfitrión desde tu wallet.',
       primaryLink: 'Ver programa completo',
       dataBadge: 'Confirmaciones on-chain en vivo'
@@ -198,7 +199,7 @@ export const translations = {
       badge: 'Nouvelle édition 2025 · San Martín de los Andes',
       title: 'Résidence Edge City Patagonie : art vivant, nature et communauté reliés on-chain.',
       description:
-        'Nous concevons une immersion de plusieurs jours pour explorer la cordillère, activer des pratiques physiques et culinaires, et documenter chaque moment avec des smart contracts qui protègent places, paiements et souvenirs.',
+        'Nous concevons des immersions d’une journée de six heures à travers les Andes, avec transport, repas et tout inclus, et nous documentons chaque moment grâce à des smart contracts qui protègent places, paiements et souvenirs.',
       primaryLink: 'Voir le programme complet',
       dataBadge: 'Données du contrat en direct'
     },
