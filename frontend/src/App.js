@@ -465,12 +465,6 @@ function App() {
           ))}
         </section>
 
-        <section className="rounded-3xl border border-dashed border-blue-200 bg-blue-50/60 p-6 text-sm text-blue-900 shadow-inner">
-          <h2 className="text-lg font-semibold text-blue-900">{text.contract.heading}</h2>
-          <p className="mt-2">{text.contract.paragraph1}</p>
-          <p className="mt-3">{text.contract.paragraph2}</p>
-        </section>
-
         {!isValidContract && (
           <div className="p-4 rounded bg-yellow-100 text-yellow-900">
             <span dangerouslySetInnerHTML={{ __html: text.warnings.contract }} />
