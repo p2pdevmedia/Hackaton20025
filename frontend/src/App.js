@@ -1,46 +1,70 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ethers } from 'ethers';
 
-import ActivityRegistry from './ActivityRegistry.json';
 import Navbar from './components/Navbar';
 import ActivityCalendar from './components/ActivityCalendar';
 import ActivityGallery from './components/ActivityGallery';
 import { translations, residencyActivities as residencyCatalog, localeMap } from './translations';
 
-const contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS || '';
-const usdtAddress = process.env.REACT_APP_USDT_ADDRESS || '';
+const destinationWallet = process.env.REACT_APP_DESTINATION_WALLET || '';
+const isValidDestination = ethers.utils.isAddress(destinationWallet);
 
-const isValidContract = ethers.utils.isAddress(contractAddress);
-const isValidUsdt = ethers.utils.isAddress(usdtAddress);
-
-const ERC20_ABI = [
-  'function allowance(address owner, address spender) view returns (uint256)',
-  'function approve(address spender, uint256 amount) returns (bool)',
-  'function decimals() view returns (uint8)',
-  'function balanceOf(address owner) view returns (uint256)'
+const DEFAULT_ACTIVITIES = [
+  {
+    id: 1,
+    name: 'Lolog Lakeshore Asado',
+    description:
+      'Sail across Lago Lolog to Iván Moritz Karl’s remote cabin, tour his studio, and share a Patagonian asado on a secluded beach.',
+    date: Math.floor(Date.UTC(2025, 0, 18, 21, 0) / 1000),
+    maxParticipants: 20,
+    registeredCount: 12,
+    price: '0.03 ETH deposit',
+    priceEth: '0.03',
+    active: true
+  },
+  {
+    id: 2,
+    name: 'Granite Climbing Clinic',
+    description:
+      'Guided progression on Patagonian granite with breathing rituals, safety coaching, and media documentation of every pitch.',
+    date: Math.floor(Date.UTC(2025, 1, 14, 14, 0) / 1000),
+    maxParticipants: 12,
+    registeredCount: 7,
+    price: '0.05 ETH deposit',
+    priceEth: '0.05',
+    active: true
+  },
+  {
+    id: 3,
+    name: 'Sunset Kayak Crossing',
+    description:
+      'A gentle paddle across translucent bays, ending with a fireside toast and stories from the residency community.',
+    date: Math.floor(Date.UTC(2025, 1, 17, 22, 30) / 1000),
+    maxParticipants: 16,
+    registeredCount: 4,
+    price: '0 ETH — message only',
+    priceEth: '0',
+    active: true
+  }
 ];
 
 function App() {
   const [account, setAccount] = useState(null);
-  const [activities, setActivities] = useState([]);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [usdtDecimals, setUsdtDecimals] = useState(6);
-  const [usdtBalance, setUsdtBalance] = useState('0');
-  const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    date: '',
-    maxParticipants: '',
-    price: ''
-  });
+  const [activities, setActivities] = useState(() =>
+    DEFAULT_ACTIVITIES.map(activity => ({ ...activity, isRegistered: false }))
+  );
   const [statusKey, setStatusKey] = useState(null);
   const [language, setLanguage] = useState('en');
   const [selectedActivityId, setSelectedActivityId] = useState(null);
+  const [participantCount, setParticipantCount] = useState(1);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const text = useMemo(() => translations[language] || translations.en, [language]);
   const languageOptions = useMemo(
-    () => Object.entries(translations).map(([code, value]) => ({ code, label: value.languageName })),
+    () =>
+      ['en', 'es']
+        .filter(code => translations[code])
+        .map(code => ({ code, label: translations[code].languageName })),
     []
   );
   const heroActivities = useMemo(
@@ -112,170 +136,11 @@ function App() {
     return new ethers.providers.Web3Provider(window.ethereum);
   }, [hasProvider]);
 
-  const fetchUsdtDecimals = useCallback(
-    async provider => {
-      if (!isValidUsdt) {
-        setUsdtDecimals(6);
-        return 6;
-      }
-      try {
-        const usdt = new ethers.Contract(usdtAddress, ERC20_ABI, provider);
-        const decimals = await usdt.decimals();
-        setUsdtDecimals(decimals);
-        return decimals;
-      } catch (err) {
-        console.error('Error fetching USDT decimals', err);
-        setUsdtDecimals(6);
-        return 6;
-      }
-    },
-    []
-  );
-
-  const fetchActivities = useCallback(async () => {
-    if (!isValidContract) return;
-    const provider = getProvider();
-    if (!provider) return;
-
-    setLoading(true);
-    try {
-      const contract = new ethers.Contract(contractAddress, ActivityRegistry.abi, provider);
-      const [admin, rawActivities] = await Promise.all([
-        contract.admin(),
-        contract.getActivities()
-      ]);
-
-      const decimals = await fetchUsdtDecimals(provider);
-
-      const formatted = await Promise.all(
-        rawActivities.map(async activity => {
-          const id = activity.id.toNumber();
-          let registered = false;
-          if (account) {
-            try {
-              registered = await contract.isRegistered(id, account);
-            } catch (err) {
-              console.warn('Error fetching registration status', err);
-            }
-          }
-          return {
-            id,
-            name: activity.name,
-            description: activity.description,
-            date: activity.date.toNumber(),
-            maxParticipants: activity.maxParticipants.toNumber(),
-            registeredCount: activity.registeredCount.toNumber(),
-            priceRaw: activity.priceUSDT,
-            price: ethers.utils.formatUnits(activity.priceUSDT, decimals),
-            organizer: activity.organizer,
-            active: activity.active,
-            isRegistered: registered
-          };
-        })
-      );
-
-      setActivities(formatted);
-      if (account) {
-        setIsAdmin(admin.toLowerCase() === account.toLowerCase());
-      } else {
-        setIsAdmin(false);
-      }
-    } catch (error) {
-      console.error('Error fetching activities', error);
-    } finally {
-      setLoading(false);
-    }
-  }, [account, fetchUsdtDecimals, getProvider]);
-
-  const fetchUsdtBalance = useCallback(async () => {
-    if (!account || !isValidUsdt) {
-      setUsdtBalance('0');
-      return;
-    }
-    const provider = getProvider();
-    if (!provider) return;
-    try {
-      const token = new ethers.Contract(usdtAddress, ERC20_ABI, provider);
-      const balance = await token.balanceOf(account);
-      setUsdtBalance(ethers.utils.formatUnits(balance, usdtDecimals));
-    } catch (err) {
-      console.error('Error fetching USDT balance', err);
-      setUsdtBalance('0');
-    }
-  }, [account, getProvider, isValidUsdt, usdtDecimals]);
-
-  const register = useCallback(
-    async activity => {
-      setStatusKey(null);
-      if (!activity) {
-        setStatusKey('activityUnavailable');
-        return;
-      }
-      if (!account) {
-        setStatusKey('connectWalletToRegister');
-        return;
-      }
-      if (!isValidContract) {
-        setStatusKey('contractMissing');
-        return;
-      }
-      if (activity.isRegistered) {
-        setStatusKey('registrationComplete');
-        return;
-      }
-      const remainingSpots = activity.maxParticipants - activity.registeredCount;
-      if (remainingSpots <= 0 || activity.date * 1000 <= Date.now()) {
-        setStatusKey('activityUnavailable');
-        return;
-      }
-      if (!activity.active) {
-        setStatusKey('activityUnavailable');
-        return;
-      }
-      const provider = getProvider();
-      if (!provider) return;
-
-      try {
-        const signer = provider.getSigner();
-        const contract = new ethers.Contract(contractAddress, ActivityRegistry.abi, signer);
-
-        if (activity.priceRaw.gt(0) && isValidUsdt) {
-          const token = new ethers.Contract(usdtAddress, ERC20_ABI, signer);
-          const allowance = await token.allowance(account, contractAddress);
-          if (allowance.lt(activity.priceRaw)) {
-            const approveTx = await token.approve(contractAddress, activity.priceRaw);
-            setStatusKey('approvingUsdt');
-            await approveTx.wait();
-          }
-        }
-
-        const tx = await contract.registerForActivity(activity.id);
-        setStatusKey('confirmingRegistration');
-        await tx.wait();
-        setStatusKey('registrationComplete');
-        await Promise.all([fetchActivities(), fetchUsdtBalance()]);
-      } catch (error) {
-        console.error('Error registering', error);
-        setStatusKey('registrationFailed');
-      }
-    },
-    [account, fetchActivities, fetchUsdtBalance, getProvider, isValidContract, isValidUsdt]
-  );
-
-  useEffect(() => {
-    fetchActivities();
-  }, [fetchActivities]);
-
-  useEffect(() => {
-    fetchUsdtBalance();
-  }, [fetchUsdtBalance]);
-
   useEffect(() => {
     if (!hasProvider) return;
     const handleAccountsChanged = accounts => {
       if (!accounts.length) {
         setAccount(null);
-        setIsAdmin(false);
       } else {
         setAccount(ethers.utils.getAddress(accounts[0]));
       }
@@ -285,7 +150,6 @@ function App() {
       window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
     };
   }, [hasProvider]);
-
   const connect = async () => {
     if (!hasProvider) {
       alert(text.alerts.metaMask);
@@ -305,86 +169,118 @@ function App() {
 
   const disconnect = () => {
     setAccount(null);
-    setIsAdmin(false);
-    setUsdtBalance('0');
     setSelectedActivityId(null);
+    setParticipantCount(1);
   };
 
-  const handleInputChange = event => {
-    const { name, value } = event.target;
-    setFormData(previous => ({ ...previous, [name]: value }));
-  };
-
-  const resetForm = () => {
-    setFormData({
-      name: '',
-      description: '',
-      date: '',
-      maxParticipants: '',
-      price: ''
-    });
-  };
-
-  const openActivity = useCallback(
-    activity => {
-      if (!activity) {
-        return;
-      }
-      setSelectedActivityId(activity.id);
-      if (typeof window !== 'undefined') {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-      register(activity);
-    },
-    [register]
-  );
+  const openActivity = useCallback(activity => {
+    if (!activity) {
+      return;
+    }
+    setSelectedActivityId(activity.id);
+    setParticipantCount(1);
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, []);
 
   const closeActivity = useCallback(() => {
     setSelectedActivityId(null);
+    setParticipantCount(1);
   }, []);
 
-  const createActivity = async event => {
-    event.preventDefault();
-    setStatusKey(null);
+  const register = useCallback(
+    async activity => {
+      setStatusKey(null);
+      if (!activity) {
+        setStatusKey('activityUnavailable');
+        return;
+      }
+      if (!account) {
+        setStatusKey('connectWalletToRegister');
+        return;
+      }
+      if (!isValidDestination) {
+        setStatusKey('destinationMissing');
+        return;
+      }
+      const remaining = activity.maxParticipants - activity.registeredCount;
+      if (remaining <= 0 || activity.date * 1000 <= Date.now() || !activity.active) {
+        setStatusKey('activityUnavailable');
+        return;
+      }
+      if (activity.isRegistered) {
+        setStatusKey('alreadyRegistered');
+        return;
+      }
+      if (!Number.isInteger(participantCount) || participantCount <= 0) {
+        setStatusKey('invalidParticipantCount');
+        return;
+      }
+      if (participantCount > remaining) {
+        setStatusKey('notEnoughSpots');
+        return;
+      }
 
-    if (!isValidContract) {
-      setStatusKey('contractMissing');
+      const provider = getProvider();
+      if (!provider) {
+        alert(text.alerts.metaMask);
+        return;
+      }
+
+      try {
+        setIsProcessing(true);
+        const signer = provider.getSigner();
+        const value = activity.priceEth ? ethers.utils.parseEther(activity.priceEth) : ethers.constants.Zero;
+        const message = `Activity: ${activity.name}\nParticipants: ${participantCount}\nWallet: ${account}`;
+
+        setStatusKey('requestingSignature');
+        const tx = await signer.sendTransaction({
+          to: destinationWallet,
+          value,
+          data: ethers.utils.toUtf8Bytes(message)
+        });
+
+        setStatusKey('confirmingOnChain');
+        await tx.wait();
+
+        setActivities(previous =>
+          previous.map(item =>
+            item.id === activity.id
+              ? {
+                  ...item,
+                  registeredCount: Math.min(item.registeredCount + participantCount, item.maxParticipants),
+                  isRegistered: true
+                }
+              : item
+          )
+        );
+        setStatusKey('registrationComplete');
+      } catch (error) {
+        console.error('Error sending registration transaction', error);
+        setStatusKey('registrationFailed');
+      } finally {
+        setIsProcessing(false);
+      }
+    },
+    [account, destinationWallet, getProvider, isValidDestination, participantCount, text.alerts.metaMask]
+  );
+
+  const shortDestination = useMemo(() => {
+    if (!isValidDestination) {
+      return '';
+    }
+    return `${destinationWallet.slice(0, 6)}...${destinationWallet.slice(-4)}`;
+  }, [destinationWallet, isValidDestination]);
+
+  const handleParticipantChange = event => {
+    const value = Number(event.target.value);
+    if (Number.isNaN(value)) {
+      setParticipantCount(1);
       return;
     }
-    if (!account) {
-      setStatusKey('connectWalletToCreate');
-      return;
-    }
-
-    const provider = getProvider();
-    if (!provider) return;
-
-    try {
-      const signer = provider.getSigner();
-      const contract = new ethers.Contract(contractAddress, ActivityRegistry.abi, signer);
-
-      const timestamp = Math.floor(new Date(formData.date).getTime() / 1000);
-      const maxParticipants = parseInt(formData.maxParticipants, 10);
-      const price = formData.price ? ethers.utils.parseUnits(formData.price, usdtDecimals) : ethers.constants.Zero;
-
-      const tx = await contract.createActivity(
-        formData.name.trim(),
-        formData.description.trim(),
-        timestamp,
-        maxParticipants,
-        price
-      );
-      setStatusKey('creatingActivity');
-      await tx.wait();
-      setStatusKey('activityCreated');
-      resetForm();
-      await fetchActivities();
-    } catch (error) {
-      console.error('Error creating activity', error);
-      setStatusKey('activityCreationFailed');
-    }
+    setParticipantCount(Math.floor(value));
   };
-
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar
@@ -491,14 +387,9 @@ function App() {
           })}
         </section>
 
-        {!isValidContract && (
+        {!isValidDestination && (
           <div className="p-4 rounded bg-yellow-100 text-yellow-900">
-            <span dangerouslySetInnerHTML={{ __html: text.warnings.contract }} />
-          </div>
-        )}
-        {!isValidUsdt && (
-          <div className="p-4 rounded bg-yellow-100 text-yellow-900">
-            <span dangerouslySetInnerHTML={{ __html: text.warnings.usdt }} />
+            <span dangerouslySetInnerHTML={{ __html: text.warnings.destination }} />
           </div>
         )}
 
@@ -507,12 +398,6 @@ function App() {
         )}
 
         <section className="space-y-4">
-          {account && isValidUsdt && (
-            <div className="flex justify-end text-sm text-gray-700">
-              {text.agenda.balanceLabel}: <span className="font-semibold">{usdtBalance}</span>
-            </div>
-          )}
-
           {selectedActivityId !== null ? (
             selectedActivity ? (
               (() => {
@@ -526,7 +411,11 @@ function App() {
                   !selectedActivity.isRegistered &&
                   remaining > 0 &&
                   selectedActivity.active &&
-                  selectedActivity.date * 1000 > Date.now();
+                  selectedActivity.date * 1000 > Date.now() &&
+                  participantCount > 0 &&
+                  participantCount <= remaining &&
+                  isValidDestination &&
+                  !isProcessing;
 
                 return (
                   <div className="space-y-4">
@@ -555,10 +444,22 @@ function App() {
                         </div>
                         <div>
                           <dt className="font-medium text-gray-900">{text.agenda.priceLabel}</dt>
-                          <dd>{selectedActivity.price} USDT</dd>
+                          <dd>{selectedActivity.price}</dd>
                         </div>
                       </dl>
-                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                      <div className="grid gap-4 sm:grid-cols-[1fr,auto] sm:items-end">
+                        <label className="space-y-1">
+                          <span className="text-sm font-medium text-gray-700">{text.agenda.participantCountLabel}</span>
+                          <input
+                            type="number"
+                            min="1"
+                            max={Math.max(1, remaining)}
+                            value={participantCount}
+                            onChange={handleParticipantChange}
+                            className="w-full rounded border px-3 py-2"
+                          />
+                          <span className="block text-xs text-gray-500">{text.agenda.participantCountHelper}</span>
+                        </label>
                         {selectedActivity.isRegistered ? (
                           <span className="rounded bg-green-100 text-green-700 px-3 py-2 text-center">
                             {text.agenda.registeredBadge}
@@ -566,28 +467,31 @@ function App() {
                         ) : (
                           <button
                             onClick={() => register(selectedActivity)}
-                            disabled={!canRegister || !isValidContract}
+                            disabled={!canRegister}
                             className={`px-4 py-2 rounded text-white transition-colors ${
-                              canRegister && isValidContract
-                                ? 'bg-blue-600 hover:bg-blue-700'
-                                : 'bg-gray-300 cursor-not-allowed'
+                              canRegister ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-300 cursor-not-allowed'
                             }`}
                           >
-                            {text.agenda.subscribeButton}
+                            {isProcessing ? text.agenda.processingButton : text.agenda.subscribeButton}
                           </button>
                         )}
-                        <div className="flex flex-wrap gap-2">
-                          {!selectedActivity.active && (
-                            <span className="rounded bg-gray-200 text-gray-600 px-3 py-2 text-center">
-                              {text.agenda.inactiveBadge}
-                            </span>
-                          )}
-                          {remaining <= 0 && (
-                            <span className="rounded bg-amber-100 text-amber-700 px-3 py-2 text-center">
-                              {text.agenda.noSpotsButton}
-                            </span>
-                          )}
-                        </div>
+                      </div>
+                      <div className="flex flex-wrap gap-2 text-xs text-gray-500">
+                        {!selectedActivity.active && (
+                          <span className="rounded bg-gray-200 text-gray-600 px-3 py-2 text-center">
+                            {text.agenda.inactiveBadge}
+                          </span>
+                        )}
+                        {remaining <= 0 && (
+                          <span className="rounded bg-amber-100 text-amber-700 px-3 py-2 text-center">
+                            {text.agenda.noSpotsButton}
+                          </span>
+                        )}
+                        {shortDestination && (
+                          <span className="px-3 py-2 bg-slate-100 text-slate-600 rounded">
+                            {text.agenda.transactionInfo.replace('{wallet}', shortDestination)}
+                          </span>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -606,8 +510,6 @@ function App() {
                 </div>
               </div>
             )
-          ) : loading ? (
-            <div className="text-center text-gray-500">{text.agenda.loading}</div>
           ) : activities.length === 0 ? null : (
             <div className="space-y-4">
               {activities.map(activity => {
@@ -631,7 +533,7 @@ function App() {
                             <span className="font-medium">{text.agenda.spotsLabel}:</span> {activity.registeredCount}/{activity.maxParticipants}
                           </p>
                           <p>
-                            <span className="font-medium">{text.agenda.priceLabel}:</span> {activity.price} USDT
+                            <span className="font-medium">{text.agenda.priceLabel}:</span> {activity.price}
                           </p>
                         </div>
                       </div>
@@ -672,84 +574,6 @@ function App() {
           locale={locale}
           text={text.calendar}
         />
-
-        {isAdmin && (
-          <section className="rounded bg-white p-6 shadow space-y-4">
-            <div>
-              <h2 className="text-xl font-semibold">{text.adminForm.heading}</h2>
-              <p className="text-sm text-gray-600">{text.adminForm.description}</p>
-            </div>
-            <form className="space-y-4" onSubmit={createActivity}>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">{text.adminForm.nameLabel}</label>
-                <input
-                  required
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  className="mt-1 w-full rounded border px-3 py-2"
-                  placeholder={text.adminForm.namePlaceholder}
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">{text.adminForm.descriptionLabel}</label>
-                <textarea
-                  required
-                  name="description"
-                  value={formData.description}
-                  onChange={handleInputChange}
-                  className="mt-1 w-full rounded border px-3 py-2"
-                  rows={4}
-                  placeholder={text.adminForm.descriptionPlaceholder}
-                />
-              </div>
-              <div className="grid gap-4 sm:grid-cols-3">
-                <div className="sm:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700">{text.adminForm.dateLabel}</label>
-                  <input
-                    required
-                    type="datetime-local"
-                    name="date"
-                    value={formData.date}
-                    onChange={handleInputChange}
-                    className="mt-1 w-full rounded border px-3 py-2"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">{text.adminForm.maxParticipantsLabel}</label>
-                  <input
-                    required
-                    type="number"
-                    min="1"
-                    name="maxParticipants"
-                    value={formData.maxParticipants}
-                    onChange={handleInputChange}
-                    className="mt-1 w-full rounded border px-3 py-2"
-                  />
-                </div>
-              </div>
-              <div className="sm:w-1/2">
-                <label className="block text-sm font-medium text-gray-700">{text.adminForm.priceLabel}</label>
-                <input
-                  type="number"
-                  min="0"
-                  step="0.01"
-                  name="price"
-                  value={formData.price}
-                  onChange={handleInputChange}
-                  className="mt-1 w-full rounded border px-3 py-2"
-                  placeholder={text.adminForm.pricePlaceholder}
-                />
-              </div>
-              <button
-                type="submit"
-                className="w-full sm:w-auto px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
-              >
-                {text.adminForm.submit}
-              </button>
-            </form>
-          </section>
-        )}
       </main>
     </div>
   );
