@@ -63,14 +63,18 @@ export const translations = {
       connectWalletToRegister: 'Connect your wallet to send the registration.',
       activityUnavailable: 'This activity is not available.',
       destinationMissing: 'Add the destination wallet to enable on-chain registration messages.',
+      networkUnavailable: 'Select a supported network to continue.',
       alreadyRegistered: 'You already registered for this activity from this device.',
       invalidParticipantCount: 'Select how many participants are joining.',
       notEnoughSpots: 'There are not enough spots remaining for that group size.',
+      networkSwitching: 'Requesting a network change in your wallet...',
+      networkSwitchFailed: 'We could not switch your wallet to the selected network.',
       requestingSignature: 'Review and sign the transaction in your wallet.',
       confirmingOnChain: 'Waiting for the transaction to confirm...',
       registrationComplete: 'Registration message sent successfully!',
       registrationFailed: 'Could not send the registration. Check the console for more details.',
-      processingRegistration: 'We are processing your registration.'
+      processingRegistration: 'We are processing your registration.',
+      tokenTransferFailed: 'The USDT transfer did not complete. Please check your wallet and try again.'
     },
     alerts: {
       metaMask: 'Install MetaMask to continue.'
@@ -90,7 +94,10 @@ export const translations = {
       inactiveBadge: 'Inactive activity',
       participantCountLabel: 'Participants',
       participantCountHelper: 'Choose how many seats to reserve.',
-      transactionInfo: 'MetaMask will deliver your message on-chain to {wallet}.'
+      networkLabel: 'Network',
+      networkHelper: 'Choose the network that will send the USDT deposit.',
+      transactionInfo: 'MetaMask will use the {network} network to deliver your USDT to {wallet}.',
+      transactionInfoMessageOnly: 'MetaMask will send an on-chain message to {wallet} using the {network} network.'
     }
   },
   es: {
@@ -158,14 +165,18 @@ export const translations = {
       connectWalletToRegister: 'Conectá tu wallet para enviar el registro.',
       activityUnavailable: 'Esta actividad no está disponible.',
       destinationMissing: 'Agregá la wallet de destino para habilitar los mensajes on-chain.',
+      networkUnavailable: 'Seleccioná una red compatible para continuar.',
       alreadyRegistered: 'Ya registraste esta actividad desde este dispositivo.',
       invalidParticipantCount: 'Indicá cuántas personas participan.',
       notEnoughSpots: 'No quedan suficientes cupos para esa cantidad.',
+      networkSwitching: 'Solicitando el cambio de red en tu wallet...',
+      networkSwitchFailed: 'No pudimos cambiar tu wallet a la red seleccionada.',
       requestingSignature: 'Revisá y firmá la transacción en tu wallet.',
       confirmingOnChain: 'Esperando la confirmación en cadena...',
       registrationComplete: '¡Mensaje de registro enviado con éxito!',
       registrationFailed: 'No pudimos enviar el registro. Revisá la consola para más detalles.',
-      processingRegistration: 'Estamos procesando tu registro.'
+      processingRegistration: 'Estamos procesando tu registro.',
+      tokenTransferFailed: 'La transferencia de USDT no se completó. Revisá tu wallet e intentá nuevamente.'
     },
     alerts: {
       metaMask: 'Instalá MetaMask para continuar.'
@@ -185,7 +196,10 @@ export const translations = {
       inactiveBadge: 'Actividad inactiva',
       participantCountLabel: 'Participantes',
       participantCountHelper: 'Elegí cuántos lugares querés reservar.',
-      transactionInfo: 'MetaMask enviará tu mensaje on-chain a {wallet}.'
+      networkLabel: 'Red',
+      networkHelper: 'Elegí desde qué red querés enviar el depósito en USDT.',
+      transactionInfo: 'MetaMask utilizará la red {network} para enviar tus USDT a {wallet}.',
+      transactionInfoMessageOnly: 'MetaMask enviará un mensaje on-chain a {wallet} usando la red {network}.'
     }
   },
   fr: {

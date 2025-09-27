@@ -9,6 +9,59 @@ import { translations, residencyActivities as residencyCatalog, localeMap } from
 const destinationWallet = process.env.REACT_APP_DESTINATION_WALLET || '';
 const isValidDestination = ethers.utils.isAddress(destinationWallet);
 
+const ERC20_ABI = [
+  'function transfer(address to, uint256 amount) returns (bool)',
+  'function decimals() view returns (uint8)'
+];
+
+const SUPPORTED_NETWORKS = [
+  {
+    id: 'ethereum',
+    label: 'Ethereum',
+    chainId: 1,
+    chainIdHex: '0x1',
+    tokenAddress: '0xdAC17F958D2ee523a2206206994597C13D831ec7',
+    tokenDecimals: 6,
+    chainParams: {
+      chainId: '0x1',
+      chainName: 'Ethereum Mainnet',
+      nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+      rpcUrls: ['https://rpc.ankr.com/eth'],
+      blockExplorerUrls: ['https://etherscan.io']
+    }
+  },
+  {
+    id: 'polygon',
+    label: 'Polygon',
+    chainId: 137,
+    chainIdHex: '0x89',
+    tokenAddress: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F',
+    tokenDecimals: 6,
+    chainParams: {
+      chainId: '0x89',
+      chainName: 'Polygon Mainnet',
+      nativeCurrency: { name: 'MATIC', symbol: 'MATIC', decimals: 18 },
+      rpcUrls: ['https://polygon-rpc.com'],
+      blockExplorerUrls: ['https://polygonscan.com']
+    }
+  },
+  {
+    id: 'bep20',
+    label: 'BNB Smart Chain',
+    chainId: 56,
+    chainIdHex: '0x38',
+    tokenAddress: '0x55d398326f99059fF775485246999027B3197955',
+    tokenDecimals: 18,
+    chainParams: {
+      chainId: '0x38',
+      chainName: 'BNB Smart Chain',
+      nativeCurrency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
+      rpcUrls: ['https://bsc-dataseed.binance.org/'],
+      blockExplorerUrls: ['https://bscscan.com']
+    }
+  }
+];
+
 const DEFAULT_ACTIVITIES = [
   {
     id: 1,
@@ -18,8 +71,8 @@ const DEFAULT_ACTIVITIES = [
     date: Math.floor(Date.UTC(2025, 0, 18, 21, 0) / 1000),
     maxParticipants: 20,
     registeredCount: 12,
-    price: '0.03 ETH deposit',
-    priceEth: '0.03',
+    price: '50 USDT deposit per person',
+    priceUsdt: '50',
     active: true
   },
   {
@@ -30,8 +83,8 @@ const DEFAULT_ACTIVITIES = [
     date: Math.floor(Date.UTC(2025, 1, 14, 14, 0) / 1000),
     maxParticipants: 12,
     registeredCount: 7,
-    price: '0.05 ETH deposit',
-    priceEth: '0.05',
+    price: '80 USDT deposit per person',
+    priceUsdt: '80',
     active: true
   },
   {
@@ -42,8 +95,8 @@ const DEFAULT_ACTIVITIES = [
     date: Math.floor(Date.UTC(2025, 1, 17, 22, 30) / 1000),
     maxParticipants: 16,
     registeredCount: 4,
-    price: '0 ETH — message only',
-    priceEth: '0',
+    price: 'Message only — no deposit required',
+    priceUsdt: '0',
     active: true
   }
 ];
@@ -58,6 +111,7 @@ function App() {
   const [selectedActivityId, setSelectedActivityId] = useState(null);
   const [participantCount, setParticipantCount] = useState(1);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [selectedNetworkId, setSelectedNetworkId] = useState(SUPPORTED_NETWORKS[0].id);
 
   const text = useMemo(() => translations[language] || translations.en, [language]);
   const languageOptions = useMemo(
@@ -126,6 +180,11 @@ function App() {
     }
     return activities.find(activity => activity.id === selectedActivityId) || null;
   }, [activities, selectedActivityId]);
+
+  const selectedNetwork = useMemo(
+    () => SUPPORTED_NETWORKS.find(network => network.id === selectedNetworkId) || null,
+    [selectedNetworkId]
+  );
 
   const hasProvider = useMemo(() => typeof window !== 'undefined' && window.ethereum, []);
 
@@ -228,23 +287,76 @@ function App() {
         return;
       }
 
+      if (!selectedNetwork) {
+        setStatusKey('networkUnavailable');
+        return;
+      }
+
       try {
         setIsProcessing(true);
+
+        let currentNetwork = await provider.getNetwork();
+        if (currentNetwork.chainId !== selectedNetwork.chainId) {
+          setStatusKey('networkSwitching');
+          try {
+            await provider.send('wallet_switchEthereumChain', [{ chainId: selectedNetwork.chainIdHex }]);
+          } catch (switchError) {
+            if (switchError?.code === 4902 && selectedNetwork.chainParams) {
+              try {
+                await provider.send('wallet_addEthereumChain', [selectedNetwork.chainParams]);
+              } catch (addError) {
+                console.error('Error adding network', addError);
+                setStatusKey('networkSwitchFailed');
+                return;
+              }
+            } else {
+              console.error('Error switching network', switchError);
+              setStatusKey('networkSwitchFailed');
+              return;
+            }
+          }
+          currentNetwork = await provider.getNetwork();
+          if (currentNetwork.chainId !== selectedNetwork.chainId) {
+            setStatusKey('networkSwitchFailed');
+            return;
+          }
+        }
+
         const signer = provider.getSigner();
-        const value = activity.priceEth
-          ? ethers.utils.parseEther(activity.priceEth).mul(participantCount)
-          : ethers.constants.Zero;
-        const message = `Activity: ${activity.name}\nParticipants: ${participantCount}\nWallet: ${account}`;
 
-        setStatusKey('requestingSignature');
-        const tx = await signer.sendTransaction({
-          to: destinationWallet,
-          value,
-          data: ethers.utils.toUtf8Bytes(message)
-        });
+        if (!activity.priceUsdt || activity.priceUsdt === '0') {
+          const message = `Activity: ${activity.name}\nParticipants: ${participantCount}\nWallet: ${account}`;
+          setStatusKey('requestingSignature');
+          const tx = await signer.sendTransaction({
+            to: destinationWallet,
+            value: ethers.constants.Zero,
+            data: ethers.utils.toUtf8Bytes(message)
+          });
+          setStatusKey('confirmingOnChain');
+          await tx.wait();
+        } else {
+          try {
+            const tokenContract = new ethers.Contract(
+              selectedNetwork.tokenAddress,
+              ERC20_ABI,
+              signer
+            );
 
-        setStatusKey('confirmingOnChain');
-        await tx.wait();
+            const decimals = selectedNetwork.tokenDecimals;
+            const baseAmount = ethers.utils.parseUnits(activity.priceUsdt, decimals);
+            const totalAmount = baseAmount.mul(participantCount);
+
+            setStatusKey('requestingSignature');
+            const tx = await tokenContract.transfer(destinationWallet, totalAmount);
+
+            setStatusKey('confirmingOnChain');
+            await tx.wait();
+          } catch (tokenError) {
+            console.error('Error transferring USDT', tokenError);
+            setStatusKey('tokenTransferFailed');
+            return;
+          }
+        }
 
         setActivities(previous =>
           previous.map(item =>
@@ -265,7 +377,15 @@ function App() {
         setIsProcessing(false);
       }
     },
-    [account, destinationWallet, getProvider, isValidDestination, participantCount, text.alerts.metaMask]
+    [
+      account,
+      destinationWallet,
+      getProvider,
+      isValidDestination,
+      participantCount,
+      selectedNetwork,
+      text.alerts.metaMask
+    ]
   );
 
   const shortDestination = useMemo(() => {
@@ -274,6 +394,10 @@ function App() {
     }
     return `${destinationWallet.slice(0, 6)}...${destinationWallet.slice(-4)}`;
   }, [destinationWallet, isValidDestination]);
+
+  const handleNetworkChange = event => {
+    setSelectedNetworkId(event.target.value);
+  };
 
   const handleParticipantChange = event => {
     const value = Number(event.target.value);
@@ -417,7 +541,8 @@ function App() {
                   participantCount > 0 &&
                   participantCount <= remaining &&
                   isValidDestination &&
-                  !isProcessing;
+                  !isProcessing &&
+                  !!selectedNetwork;
 
                 const disabledReasonKey = canRegister
                   ? null
@@ -430,6 +555,9 @@ function App() {
                       }
                       if (!isValidDestination) {
                         return 'destinationMissing';
+                      }
+                      if (!selectedNetwork) {
+                        return 'networkUnavailable';
                       }
                       if (
                         !selectedActivity.active ||
@@ -451,6 +579,10 @@ function App() {
                     })();
 
                 const disabledReason = disabledReasonKey ? text.status[disabledReasonKey] : undefined;
+                const transactionInfoTemplate =
+                  selectedActivity.priceUsdt === '0'
+                    ? text.agenda.transactionInfoMessageOnly
+                    : text.agenda.transactionInfo;
 
                 return (
                   <div className="space-y-4">
@@ -483,18 +615,37 @@ function App() {
                         </div>
                       </dl>
                       <div className="grid gap-4 sm:grid-cols-[1fr,auto] sm:items-end">
-                        <label className="space-y-1">
-                          <span className="text-sm font-medium text-gray-700">{text.agenda.participantCountLabel}</span>
-                          <input
-                            type="number"
-                            min="1"
-                            max={Math.max(1, remaining)}
-                            value={participantCount}
-                            onChange={handleParticipantChange}
-                            className="w-full rounded border px-3 py-2"
-                          />
-                          <span className="block text-xs text-gray-500">{text.agenda.participantCountHelper}</span>
-                        </label>
+                        <div className="space-y-4">
+                          <label className="space-y-1 block">
+                            <span className="text-sm font-medium text-gray-700">{text.agenda.participantCountLabel}</span>
+                            <input
+                              type="number"
+                              min="1"
+                              max={Math.max(1, remaining)}
+                              value={participantCount}
+                              onChange={handleParticipantChange}
+                              className="w-full rounded border px-3 py-2"
+                            />
+                            <span className="block text-xs text-gray-500">{text.agenda.participantCountHelper}</span>
+                          </label>
+                          <label className="space-y-1 block">
+                            <span className="text-sm font-medium text-gray-700">{text.agenda.networkLabel}</span>
+                            <select
+                              value={selectedNetworkId}
+                              onChange={handleNetworkChange}
+                              className="w-full rounded border px-3 py-2 text-sm"
+                            >
+                              {SUPPORTED_NETWORKS.map(network => (
+                                <option key={network.id} value={network.id}>
+                                  {network.label}
+                                </option>
+                              ))}
+                            </select>
+                            <span className="block text-xs text-gray-500">
+                              {text.agenda.networkHelper}
+                            </span>
+                          </label>
+                        </div>
                         {selectedActivity.isRegistered ? (
                           <span className="rounded bg-green-100 text-green-700 px-3 py-2 text-center">
                             {text.agenda.registeredBadge}
@@ -523,9 +674,11 @@ function App() {
                             {text.agenda.noSpotsButton}
                           </span>
                         )}
-                        {shortDestination && (
+                        {shortDestination && transactionInfoTemplate && (
                           <span className="px-3 py-2 bg-slate-100 text-slate-600 rounded">
-                            {text.agenda.transactionInfo.replace('{wallet}', shortDestination)}
+                            {transactionInfoTemplate
+                              .replace('{wallet}', shortDestination)
+                              .replace('{network}', selectedNetwork ? selectedNetwork.label : '')}
                           </span>
                         )}
                       </div>
