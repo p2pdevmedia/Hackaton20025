@@ -231,7 +231,9 @@ function App() {
       try {
         setIsProcessing(true);
         const signer = provider.getSigner();
-        const value = activity.priceEth ? ethers.utils.parseEther(activity.priceEth) : ethers.constants.Zero;
+        const value = activity.priceEth
+          ? ethers.utils.parseEther(activity.priceEth).mul(participantCount)
+          : ethers.constants.Zero;
         const message = `Activity: ${activity.name}\nParticipants: ${participantCount}\nWallet: ${account}`;
 
         setStatusKey('requestingSignature');
