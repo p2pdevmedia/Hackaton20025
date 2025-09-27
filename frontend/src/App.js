@@ -50,7 +50,7 @@ function App() {
         return {
           ...localized,
           id: activity.id,
-          images: activity.images && activity.images.length > 0 ? activity.images : [activity.image].filter(Boolean)
+          images: activity.images ? activity.images.filter(Boolean) : []
         };
       }),
     [language]
