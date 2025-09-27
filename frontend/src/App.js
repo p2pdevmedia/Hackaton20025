@@ -438,31 +438,59 @@ function App() {
       </header>
       <main className="max-w-5xl mx-auto px-4 py-10 space-y-12">
         <section className="grid gap-6 md:grid-cols-2">
-          {heroActivities.map(activity => (
-            <article key={activity.id} className="overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-slate-100">
-              <div className="relative h-56 overflow-hidden">
-                <img
-                  src={activity.image}
-                  alt={activity.title}
-                  className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
-                  loading="lazy"
-                />
-              </div>
-              <div className="space-y-3 px-6 py-6">
-                <h3 className="text-xl font-semibold text-slate-900">{activity.title}</h3>
-                <p className="text-sm text-slate-600">{activity.summary}</p>
-                <ul className="space-y-2 text-sm text-slate-700">
-                  {activity.highlights.map(highlight => (
-                    <li key={highlight} className="flex items-start gap-2">
-                      <span className="mt-1 h-2 w-2 flex-shrink-0 rounded-full bg-blue-500" />
-                      {highlight}
-                    </li>
-                  ))}
-                </ul>
-                <p className="text-xs uppercase tracking-wide text-slate-500">{activity.guide}</p>
-              </div>
-            </article>
-          ))}
+          {heroActivities.map(activity => {
+            const isLakeKayak = activity.id === 'lake-kayak';
+
+            return (
+              <article key={activity.id} className="overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-slate-100">
+                <div className="relative h-56 overflow-hidden">
+                  <img
+                    src={activity.image}
+                    alt={activity.title}
+                    className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="relative overflow-hidden px-6 py-6">
+                  {isLakeKayak && (
+                    <>
+                      <video
+                        className="absolute inset-0 h-full w-full object-cover"
+                        src="https://ipfs.io/ipfs/bafybeiad72atzvbl2sgaafzeii4ysf4m7qme54xoxg3pkpel2cksfmwfym"
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        aria-hidden="true"
+                      />
+                      <div className="pointer-events-none absolute inset-0 bg-slate-900/60" aria-hidden="true" />
+                    </>
+                  )}
+                  <div className="relative space-y-3">
+                    <h3 className={`text-xl font-semibold ${isLakeKayak ? 'text-white' : 'text-slate-900'}`}>
+                      {activity.title}
+                    </h3>
+                    <p className={`text-sm ${isLakeKayak ? 'text-slate-100' : 'text-slate-600'}`}>{activity.summary}</p>
+                    <ul className={`space-y-2 text-sm ${isLakeKayak ? 'text-slate-100' : 'text-slate-700'}`}>
+                      {activity.highlights.map(highlight => (
+                        <li key={highlight} className="flex items-start gap-2">
+                          <span
+                            className={`mt-1 h-2 w-2 flex-shrink-0 rounded-full ${
+                              isLakeKayak ? 'bg-emerald-300' : 'bg-blue-500'
+                            }`}
+                          />
+                          {highlight}
+                        </li>
+                      ))}
+                    </ul>
+                    <p className={`text-xs uppercase tracking-wide ${isLakeKayak ? 'text-slate-200' : 'text-slate-500'}`}>
+                      {activity.guide}
+                    </p>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
         </section>
 
         {!isValidContract && (
