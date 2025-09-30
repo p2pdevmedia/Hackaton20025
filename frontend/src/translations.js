@@ -632,8 +632,8 @@ export const localeMap = {
 export const residencyActivities = [
   {
     id: 'patagonian-asado',
-    priceUSDT: 300,
-    maxParticipants: 20,
+    priceUSDT: 230,
+    maxParticipants: 60,
     images: [
       'https://ipfs.io/ipfs/bafybeic23gavkexic2nmmccmknbff4ngwhzhzqxcic7qdzbysc7rzeyzo4',
       'https://ipfs.io/ipfs/bafybeifqkwx3c6rr7d22sdnmss5j6atmkvsis5ivh42gdwfcy3znssaw5m'
@@ -642,66 +642,66 @@ export const residencyActivities = [
       en: {
         title: 'Intimate Patagonian asado on the lakeshore',
         summary:
-          'A six-hour outing from San Martín de los Andes: a 45-minute boat ride across Lago Lolog to Iván Moritz Karl’s remote cabin for an exhibition of his finished works, followed by a fire-cooked feast on a secluded beach.',
+          'A six-hour outing with round-trip transport from San Martín de los Andes: a 45-minute private crossing of Lake Lácar to Quilaquina for a guided shoreline immersion with local hosts before a fire-cooked feast curated by Edge City on a secluded beach.',
         highlights: [
-          'Private boat crossing for up to 20 guests with round-trip transport included.',
-          'Guided visit of Iván Moritz Karl’s exhibited paintings inside his cordillera cabin.',
-          'Patagonian fire-cooked meal (cordero al asador) with local wines and soft drinks included at USD 300 per person.'
+          'Private boat crossing for up to 60 guests with round-trip transport included.',
+          'Guided shoreline immersion in Quilaquina with local hosts.',
+          'Patagonian fire-cooked meal (cordero al asador) with local wines and soft drinks included at USD 230 per person.'
         ],
         guide: 'Curated by the Edge City culinary team.'
       },
       es: {
         title: 'Asado patagónico íntimo en la orilla del lago',
         summary:
-          'Salida de seis horas con traslado ida y vuelta desde San Martín de los Andes: navegación de 45 minutos por el lago Lolog hasta la cabaña remota del pintor Iván Moritz Karl, donde visitamos una exhibición de sus obras terminadas antes de un asado a fuego lento en una playa escondida.',
+          'Salida de seis horas con traslado ida y vuelta desde San Martín de los Andes: navegación privada de 45 minutos por el lago Lácar hasta Quilaquina para una inmersión guiada en la costa con anfitriones locales antes de un asado a fuego lento curado por Edge City en una playa escondida.',
         highlights: [
-          'Travesía en lancha privada para hasta 20 personas, con transporte incluido.',
-          'Recorrido guiado por la muestra de pinturas de Iván Moritz Karl en su cabaña cordillerana.',
-          'Asado patagónico al fuego (cordero al asador) con vinos y bebidas incluidos por USD 300 por persona.'
+          'Travesía en lancha privada para hasta 60 personas, con transporte incluido.',
+          'Recorrido guiado en Quilaquina con anfitriones locales.',
+          'Asado patagónico al fuego (cordero al asador) con vinos y bebidas incluidos por USD 230 por persona.'
         ],
         guide: 'Curaduría gastronómica de la cocina Edge City.'
       },
       fr: {
         title: 'Asado patagonique intimiste au bord du lac',
         summary:
-          'Excursion de six heures depuis San Martín de los Andes : traversée en bateau de 45 minutes du lac Lolog jusqu’à la cabane isolée d’Iván Moritz Karl pour découvrir l’exposition de ses œuvres achevées, puis festin au feu de bois sur une plage secrète.',
+          'Excursion de six heures avec transport aller-retour depuis San Martín de los Andes : traversée privée de 45 minutes du lac Lácar jusqu’à Quilaquina pour une immersion guidée sur le rivage avec des hôtes locaux, suivie d’un festin au feu de bois curaté par Edge City sur une plage secrète.',
         highlights: [
-          'Traversée en bateau privé (max 20 personnes) avec transport aller-retour inclus.',
-          'Visite guidée de l’exposition des œuvres d’Iván Moritz Karl dans sa cabane de la cordillère.',
-          'Asado patagonique au feu (cordero al asador) avec vins et boissons inclus pour 300 USD par personne.'
+          'Traversée en bateau privé (max 60 personnes) avec transport aller-retour inclus.',
+          'Immersion guidée à Quilaquina avec des hôtes locaux.',
+          'Asado patagonique au feu (cordero al asador) avec vins et boissons inclus pour 230 USD par personne.'
         ],
         guide: 'Curaté par l’équipe culinaire d’Edge City.'
       },
       de: {
         title: 'Intimes patagonisches Asado am Seeufer',
         summary:
-          'Sechsstündiger Ausflug ab San Martín de los Andes: 45-minütige Bootsfahrt über den Lago Lolog zur abgelegenen Hütte von Iván Moritz Karl für eine Ausstellung seiner vollendeten Werke, anschließend Feuerküche an einem versteckten Strand.',
+          'Sechsstündiger Ausflug mit Hin- und Rücktransport ab San Martín de los Andes: 45-minütige Privatüberfahrt über den Lago Lácar nach Quilaquina für eine geführte Ufer-Immersion mit lokalen Gastgeber:innen, bevor ein von Edge City kuratiertes Feuermahl an einem versteckten Strand serviert wird.',
         highlights: [
-          'Private Bootsfahrt für bis zu 20 Gäste mit Hin- und Rücktransport inklusive.',
-          'Geführter Rundgang durch die Ausstellung von Iván Moritz Karls Gemälden in seiner Cordillera-Hütte.',
-          'Patagonisches Feuermahl (Cordero al Asador) mit lokalen Weinen und alkoholfreien Getränken inklusive für 300 USD pro Person.'
+          'Private Bootsfahrt für bis zu 60 Gäste mit Hin- und Rücktransport inklusive.',
+          'Geführte Ufer-Immersion in Quilaquina mit lokalen Gastgeber:innen.',
+          'Patagonisches Feuermahl (Cordero al Asador) mit lokalen Weinen und alkoholfreien Getränken inklusive für 230 USD pro Person.'
         ],
         guide: 'Kuratiert vom Edge City-Küchenteam.'
       },
       zh: {
         title: '湖畔的私密巴塔哥尼亚烤肉',
         summary:
-          '从圣马丁－德洛斯安第斯出发的六小时行程：乘船 45 分钟横渡洛洛湖，造访 Iván Moritz Karl 位于群山中的小屋，欣赏其完成作品展，随后在隐秘沙滩享用火烤盛宴。',
+          '从圣马丁－德洛斯安第斯出发的六小时行程：私人船只 45 分钟横渡拉卡尔湖抵达 Quilaquina，与当地向导一起体验湖岸风貌，随后在隐秘沙滩享用由 Edge City 策划的火烤盛宴。',
         highlights: [
-          '私人船只往返，限 20 名来宾，含全程交通。',
-          '在画家的山间小屋内导览其完成画作的展览。',
-          '巴塔哥尼亚火烤盛宴（烤羊 Cordero al Asador），含当地葡萄酒与软饮，每人 300 美元。'
+          '私人船只往返，限 60 名来宾，含全程交通。',
+          '在 Quilaquina 与当地向导一同进行湖岸导览。',
+          '巴塔哥尼亚火烤盛宴（烤羊 Cordero al Asador），含当地葡萄酒与软饮，每人 230 美元。'
         ],
         guide: '由 Edge City 烹饪团队策展。'
       },
       ru: {
         title: 'Камерное патагонское асадо на берегу озера',
         summary:
-          'Шестичасовая поездка из Сан-Мартин-де-лос-Андес: 45-минутный переход на лодке через озеро Лолог к удалённой хижине Ивана Морица Карла, где проходит выставка его готовых работ, затем пир на открытом огне на уединённом пляже.',
+          'Шестичасовая поездка с трансфером туда и обратно из Сан-Мартин-де-лос-Андес: 45-минутный приватный переход через озеро Лакар в Килакину для погружения в береговую культуру с местными хозяевами, после чего на уединённом пляже подают пир на открытом огне от Edge City.',
         highlights: [
-          'Приватная лодочная прогулка для группы до 20 человек с трансфером туда и обратно.',
-          'Экскурсия по выставке картин Ивана Морица Карла в его хижине в Кордильере.',
-          'Патагонское асадо на огне (cordero al asador) с местными винами и безалкогольными напитками включено, стоимость 300 USD с человека.'
+          'Приватная лодочная прогулка для группы до 60 человек с трансфером туда и обратно.',
+          'Погружение в Килакине с местными гидами.',
+          'Патагонское асадо на огне (cordero al asador) с местными винами и безалкогольными напитками включено, стоимость 230 USD с человека.'
         ],
         guide: 'Кураторская работа кулинарной команды Edge City.'
       }
