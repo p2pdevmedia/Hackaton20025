@@ -74,8 +74,7 @@ export const translations = {
       processingRegistration: 'We are processing your registration.'
     },
     alerts: {
-      metaMask: 'Install MetaMask to continue.',
-      wrongNetwork: 'Switch to the Ethereum network in your wallet to continue.'
+      metaMask: 'Install MetaMask to continue.'
     },
     agenda: {
       detailsButton: 'View details',
@@ -171,8 +170,7 @@ export const translations = {
       processingRegistration: 'Estamos procesando tu registro.'
     },
     alerts: {
-      metaMask: 'Instalá MetaMask para continuar.',
-      wrongNetwork: 'Cambiá tu wallet a la red de Ethereum para continuar.'
+      metaMask: 'Instalá MetaMask para continuar.'
     },
     agenda: {
       detailsButton: 'Ver detalles',
@@ -268,8 +266,7 @@ export const translations = {
       processingRegistration: 'Nous traitons votre inscription.'
     },
     alerts: {
-      metaMask: 'Installez MetaMask pour continuer.',
-      wrongNetwork: 'Basculez votre wallet sur le réseau Ethereum pour continuer.'
+      metaMask: 'Installez MetaMask pour continuer.'
     },
     agenda: {
       loading: 'Chargement des activités…',
@@ -376,8 +373,7 @@ export const translations = {
       processingRegistration: 'Wir verarbeiten deine Anmeldung.'
     },
     alerts: {
-      metaMask: 'Installiere MetaMask, um fortzufahren.',
-      wrongNetwork: 'Wechsle in deiner Wallet zum Ethereum-Netzwerk, um fortzufahren.'
+      metaMask: 'Installiere MetaMask, um fortzufahren.'
     },
     agenda: {
       loading: 'Aktivitäten werden geladen...',
@@ -484,8 +480,7 @@ export const translations = {
       processingRegistration: '我们正在处理您的报名。'
     },
     alerts: {
-      metaMask: '请安装 MetaMask 以继续。',
-      wrongNetwork: '请在钱包中切换到以太坊网络后再继续。'
+      metaMask: '请安装 MetaMask 以继续。'
     },
     agenda: {
       loading: '正在加载活动…',
@@ -592,8 +587,7 @@ export const translations = {
       processingRegistration: 'Мы обрабатываем вашу регистрацию.'
     },
     alerts: {
-      metaMask: 'Установите MetaMask, чтобы продолжить.',
-      wrongNetwork: 'Переключите кошелёк на сеть Ethereum, чтобы продолжить.'
+      metaMask: 'Установите MetaMask, чтобы продолжить.'
     },
     agenda: {
       loading: 'Загрузка активностей…',
