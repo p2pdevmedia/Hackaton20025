@@ -253,6 +253,7 @@ function App() {
                       activity={activity}
                       account={account}
                       getProvider={getProvider}
+                      ensureEthereumNetwork={ensureEthereumNetwork}
                       text={text}
                     />
                   </div>

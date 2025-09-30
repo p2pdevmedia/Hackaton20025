@@ -6,7 +6,13 @@ const USDT_ABI = [
   'function transfer(address to, uint256 value) returns (bool)'
 ];
 
-function ActivityRegistration({ activity, account, getProvider, text }) {
+function ActivityRegistration({
+  activity,
+  account,
+  getProvider,
+  ensureEthereumNetwork,
+  text
+}) {
   const [quantity, setQuantity] = useState(1);
   const [decimals, setDecimals] = useState(6);
   const [isLoadingDecimals, setIsLoadingDecimals] = useState(false);
@@ -62,6 +68,13 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
         return;
       }
 
+      if (ensureEthereumNetwork) {
+        const ready = await ensureEthereumNetwork(provider);
+        if (!ready) {
+          return;
+        }
+      }
+
       setIsLoadingDecimals(true);
       try {
         const contract = new ethers.Contract(usdtAddress, USDT_ABI, provider);
@@ -88,7 +101,13 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
     return () => {
       cancelled = true;
     };
-  }, [account, getProvider, hasPaymentConfig, usdtAddress]);
+  }, [
+    account,
+    ensureEthereumNetwork,
+    getProvider,
+    hasPaymentConfig,
+    usdtAddress
+  ]);
 
   const unitPriceLabel = useMemo(() => {
     if (!activity?.priceUSDT) {
@@ -126,13 +145,25 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
       return;
     }
 
-    const provider = getProvider?.();
-    if (!provider) {
-      setStatusMessage(statusText.destinationMissing || 'Wallet provider unavailable.');
-      return;
-    }
-
     try {
+      const provider = getProvider?.();
+      if (!provider) {
+        setStatusMessage(statusText.destinationMissing || 'Wallet provider unavailable.');
+        return;
+      }
+
+      if (ensureEthereumNetwork) {
+        const ready = await ensureEthereumNetwork(provider);
+        if (!ready) {
+          setStatusMessage(
+            text?.alerts?.wrongNetwork ||
+              statusText.destinationMissing ||
+              'Switch to the Ethereum network in your wallet to continue.'
+          );
+          return;
+        }
+      }
+
       setIsProcessing(true);
       setStatusMessage(statusText.requestingSignature || 'Review the transaction in your wallet.');
 
@@ -166,12 +197,15 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
     account,
     activity,
     decimals,
+    destinationWallet,
+    ensureEthereumNetwork,
     getProvider,
     hasPaymentConfig,
+    missingPaymentConfigMessage,
     quantity,
     statusText,
-    usdtAddress,
-    destinationWallet
+    text,
+    usdtAddress
   ]);
 
   return (
