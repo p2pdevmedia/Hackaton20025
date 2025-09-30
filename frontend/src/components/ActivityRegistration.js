@@ -1,10 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ethers } from 'ethers';
 
-const USDT_ABI = [
-  'function decimals() view returns (uint8)',
-  'function transfer(address to, uint256 value) returns (bool)'
-];
+import USDT_ABI from '../abi/usdt.json';
 
 function ActivityRegistration({ activity, account, getProvider, text }) {
   const [quantity, setQuantity] = useState(1);
