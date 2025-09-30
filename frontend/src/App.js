@@ -7,9 +7,44 @@ import ActivityGallery from './components/ActivityGallery';
 import ActivityRegistration from './components/ActivityRegistration';
 import { translations, residencyActivities as residencyCatalog, localeMap } from './translations';
 
+const NETWORKS = [
+  {
+    id: 'ethereum',
+    label: 'Ethereum',
+    chainId: 1,
+    usdtAddress: '0xdAC17F958D2ee523a2206206994597C13D831ec7',
+    explorerUrl: 'https://etherscan.io/token/0xdac17f958d2ee523a2206206994597c13d831ec7',
+    type: 'evm'
+  },
+  {
+    id: 'avalanche',
+    label: 'Avalanche C-Chain',
+    chainId: 43114,
+    usdtAddress: '0x9702230A8Ea53601f5CD2dc00fDBc13d4Df4A8C7',
+    explorerUrl: 'https://snowtrace.io/token/0x9702230a8ea53601f5cd2dc00fdbc13d4df4a8c7',
+    type: 'evm'
+  },
+  {
+    id: 'kava',
+    label: 'Kava EVM (Cosmos)',
+    chainId: 2222,
+    usdtAddress: '0x919C1c267BC06a7039E03Fcc2eF738525769109c',
+    explorerUrl: 'https://kavascan.com/address/0x919C1c267BC06a7039e03fcc2eF738525769109c',
+    type: 'evm'
+  },
+  {
+    id: 'tron',
+    label: 'Tron (TRC20)',
+    usdtAddress: 'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t',
+    explorerUrl: 'https://tronscan.org/#/token20/TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t',
+    type: 'tron'
+  }
+];
+
 function App() {
   const [account, setAccount] = useState(null);
   const [language, setLanguage] = useState('en');
+  const [selectedNetworkId, setSelectedNetworkId] = useState(NETWORKS[0].id);
 
   const text = useMemo(() => translations[language] || translations.en, [language]);
   const languageOptions = useMemo(
@@ -18,6 +53,10 @@ function App() {
         .filter(code => translations[code])
         .map(code => ({ code, label: translations[code].languageName })),
     []
+  );
+  const selectedNetwork = useMemo(
+    () => NETWORKS.find(network => network.id === selectedNetworkId) || NETWORKS[0],
+    [selectedNetworkId]
   );
   const heroActivities = useMemo(
     () =>
@@ -128,6 +167,10 @@ function App() {
         text={text.navbar}
         languageLabel={text.languageSelectorLabel}
         languageOptions={languageOptions}
+        networkLabel={text.networkSelectorLabel || 'Network'}
+        networkOptions={NETWORKS}
+        selectedNetworkId={selectedNetwork.id}
+        onSelectNetwork={setSelectedNetworkId}
       />
       <header className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
         <div className="max-w-5xl mx-auto px-4 py-16 grid gap-8 lg:grid-cols-[1.2fr,0.8fr] items-center">
@@ -221,6 +264,7 @@ function App() {
                       account={account}
                       getProvider={getProvider}
                       text={text}
+                      selectedNetwork={selectedNetwork}
                     />
                   </div>
                 </div>

@@ -1,6 +1,19 @@
 import React from 'react';
 
-function Navbar({ account, connect, disconnect, language, setLanguage, text, languageLabel, languageOptions }) {
+function Navbar({
+  account,
+  connect,
+  disconnect,
+  language,
+  setLanguage,
+  text,
+  languageLabel,
+  languageOptions,
+  networkLabel,
+  networkOptions,
+  selectedNetworkId,
+  onSelectNetwork
+}) {
   return (
     <nav className="bg-white/90 backdrop-blur shadow">
       <div className="max-w-5xl mx-auto px-4 py-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -9,6 +22,20 @@ function Navbar({ account, connect, disconnect, language, setLanguage, text, lan
           <p className="text-sm text-gray-600">{text.subtitle}</p>
         </div>
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
+          <label className="flex items-center gap-2 text-sm text-gray-600">
+            <span>{networkLabel}</span>
+            <select
+              value={selectedNetworkId}
+              onChange={event => onSelectNetwork?.(event.target.value)}
+              className="rounded border border-gray-300 bg-white px-2 py-1 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              {(networkOptions || []).map(option => (
+                <option key={option.id} value={option.id}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </label>
           <label className="flex items-center gap-2 text-sm text-gray-600">
             <span>{languageLabel}</span>
             <select
