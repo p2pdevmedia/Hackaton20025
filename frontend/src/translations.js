@@ -727,7 +727,7 @@ export const residencyActivities = [
   },
   {
     id: 'mountain-expedition',
-    priceUSDT: 180,
+    priceUSDT: 1,
     maxParticipants: 18,
     images: ['https://ipfs.io/ipfs/bafybeienxvgvzj4a4qhozas5cd5hgnkk2dkkylnv4q6tiypqz6qqxswwru'],
     translations: {
