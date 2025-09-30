@@ -6,30 +6,41 @@ const USDT_ABI = [
   'function transfer(address to, uint256 value) returns (bool)'
 ];
 
-function ActivityRegistration({ activity, account, getProvider, text }) {
+function ActivityRegistration({ activity, account, getProvider, text, selectedNetwork }) {
   const [quantity, setQuantity] = useState(1);
   const [decimals, setDecimals] = useState(6);
   const [isLoadingDecimals, setIsLoadingDecimals] = useState(false);
   const [statusMessage, setStatusMessage] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const usdtAddress = process.env.REACT_APP_USDT_ADDRESS;
+  const usdtAddress = selectedNetwork?.usdtAddress;
   const destinationWallet = process.env.REACT_APP_DESTINATION_WALLET;
 
   const agendaText = text?.agenda || {};
   const statusText = text?.status || {};
   const warningsText = text?.warnings || {};
 
+  const networkLabel = text?.networkSelectorLabel || 'Network';
+  const networkName = selectedNetwork?.label || networkLabel;
+  const networkUnsupportedMessage = useMemo(() => {
+    if (!selectedNetwork) {
+      return (
+        statusText.networkUnsupported || 'Select a network supported by your wallet to continue.'
+      );
+    }
+
+    if (statusText.networkUnsupported) {
+      return statusText.networkUnsupported.replace('{network}', selectedNetwork.label);
+    }
+
+    return `The ${selectedNetwork.label} network requires a compatible wallet connection to send USDT.`;
+  }, [selectedNetwork, statusText.networkUnsupported]);
+
   const hasPaymentConfig = Boolean(usdtAddress && destinationWallet);
 
   const destinationWarning = warningsText.destination;
-  const usdtWarning = warningsText.usdt;
 
   const missingPaymentConfigMessage = useMemo(() => {
-    if (!usdtAddress && usdtWarning) {
-      return usdtWarning;
-    }
-
     if (!destinationWallet && destinationWarning) {
       return destinationWarning;
     }
@@ -39,11 +50,11 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
     }
 
     if (!usdtAddress) {
-      return 'Set the USDT token address environment variable to enable registrations.';
+      return 'Select a network with a configured USDT contract to enable registrations.';
     }
 
-    return destinationWarning || usdtWarning || 'Payment configuration is missing.';
-  }, [destinationWallet, destinationWarning, usdtAddress, usdtWarning]);
+    return destinationWarning || 'Payment configuration is missing.';
+  }, [destinationWallet, destinationWarning, usdtAddress]);
 
   useEffect(() => {
     let cancelled = false;
@@ -55,6 +66,11 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
 
       const provider = getProvider?.();
       if (!provider) {
+        return;
+      }
+
+      if (selectedNetwork?.type && selectedNetwork.type !== 'evm') {
+        setDecimals(6);
         return;
       }
 
@@ -84,7 +100,7 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
     return () => {
       cancelled = true;
     };
-  }, [account, getProvider, hasPaymentConfig, usdtAddress]);
+  }, [account, getProvider, hasPaymentConfig, selectedNetwork?.type, usdtAddress]);
 
   const unitPriceLabel = useMemo(() => {
     if (!activity?.priceUSDT) {
@@ -134,7 +150,22 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
 
       const signer = provider.getSigner();
       const normalizedDestination = ethers.utils.getAddress(destinationWallet);
-      const contract = new ethers.Contract(usdtAddress, USDT_ABI, signer);
+
+      if (selectedNetwork?.type && selectedNetwork.type !== 'evm') {
+        setStatusMessage(networkUnsupportedMessage);
+        return;
+      }
+
+      let normalizedTokenAddress;
+      try {
+        normalizedTokenAddress = ethers.utils.getAddress(usdtAddress);
+      } catch (error) {
+        console.error('Unsupported token address for selected network', error);
+        setStatusMessage(networkUnsupportedMessage);
+        return;
+      }
+
+      const contract = new ethers.Contract(normalizedTokenAddress, USDT_ABI, signer);
 
       const total = (Number(activity.priceUSDT) * quantity).toFixed(2);
       const amount = ethers.utils.parseUnits(total, decimals);
@@ -159,7 +190,8 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
     quantity,
     statusText,
     usdtAddress,
-    warningsText
+    networkUnsupportedMessage,
+    selectedNetwork
   ]);
 
   return (
@@ -202,6 +234,11 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
           )}
           {isLoadingDecimals && (
             <p className="text-xs text-slate-500">Loading token details…</p>
+          )}
+          {selectedNetwork && (
+            <p className="text-xs text-slate-500">
+              {networkLabel}: {networkName}
+            </p>
           )}
         </div>
       </div>

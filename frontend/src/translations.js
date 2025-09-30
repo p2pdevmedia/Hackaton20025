@@ -2,6 +2,7 @@ export const translations = {
   en: {
     languageName: 'English',
     languageSelectorLabel: 'Language',
+    networkSelectorLabel: 'Network',
     navbar: {
       title: 'Edge City · Patagonia Experience',
       subtitle: 'An immersive nature experience with every registration confirmed on-chain through a single wallet message.',
@@ -57,8 +58,7 @@ export const translations = {
       }
     },
     warnings: {
-      destination: 'Set <code>REACT_APP_DESTINATION_WALLET</code> to receive the registration transactions.',
-      usdt: 'Set <code>REACT_APP_USDT_ADDRESS</code> to target the USDT token used for registrations.'
+      destination: 'Set <code>REACT_APP_DESTINATION_WALLET</code> to receive the registration transactions.'
     },
     status: {
       connectWalletToRegister: 'Connect your wallet to send the registration.',
@@ -71,7 +71,8 @@ export const translations = {
       confirmingOnChain: 'Waiting for the transaction to confirm...',
       registrationComplete: 'Registration message sent successfully!',
       registrationFailed: 'Could not send the registration. Check the console for more details.',
-      processingRegistration: 'We are processing your registration.'
+      processingRegistration: 'We are processing your registration.',
+      networkUnsupported: 'The {network} network requires a compatible wallet connection to send USDT.'
     },
     alerts: {
       metaMask: 'Install MetaMask to continue.'
@@ -97,6 +98,7 @@ export const translations = {
   es: {
     languageName: 'Español',
     languageSelectorLabel: 'Idioma',
+    networkSelectorLabel: 'Red',
     navbar: {
       title: 'Edge City · Residencia Patagonia',
       subtitle: 'Una experiencia inmersiva en la naturaleza con confirmaciones on-chain enviadas desde tu wallet.',
@@ -153,8 +155,7 @@ export const translations = {
       }
     },
     warnings: {
-      destination: 'Configurá <code>REACT_APP_DESTINATION_WALLET</code> para recibir las transacciones de registro.',
-      usdt: 'Configurá <code>REACT_APP_USDT_ADDRESS</code> para apuntar al token USDT usado en los registros.'
+      destination: 'Configurá <code>REACT_APP_DESTINATION_WALLET</code> para recibir las transacciones de registro.'
     },
     status: {
       connectWalletToRegister: 'Conectá tu wallet para enviar el registro.',
@@ -167,7 +168,8 @@ export const translations = {
       confirmingOnChain: 'Esperando la confirmación en cadena...',
       registrationComplete: '¡Mensaje de registro enviado con éxito!',
       registrationFailed: 'No pudimos enviar el registro. Revisá la consola para más detalles.',
-      processingRegistration: 'Estamos procesando tu registro.'
+      processingRegistration: 'Estamos procesando tu registro.',
+      networkUnsupported: 'La red {network} requiere una conexión de wallet compatible para enviar USDT.'
     },
     alerts: {
       metaMask: 'Instalá MetaMask para continuar.'
