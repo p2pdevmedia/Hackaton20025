@@ -11,39 +11,51 @@ const isValidDestination = ethers.utils.isAddress(destinationWallet);
 
 const DEFAULT_ACTIVITIES = [
   {
-    id: 1,
-    name: 'Lolog Lakeshore Asado',
+    id: 'patagonian-asado',
+    name: 'Intimate Patagonian asado on the lakeshore',
     description:
-      'Sail across Lago Lolog to Iván Moritz Karl’s remote cabin, tour his studio, and share a Patagonian asado on a secluded beach.',
+      'A six-hour outing from San Martín de los Andes that includes a private boat across Lago Lolog to Iván Moritz Karl’s remote cabin, a guided viewing of his finished works, and a fire-cooked feast on a secluded beach.',
     date: Math.floor(Date.UTC(2025, 0, 18, 21, 0) / 1000),
     maxParticipants: 20,
     registeredCount: 12,
-    price: '0.03 ETH deposit',
+    price: 'USD 300 per person (0.03 ETH deposit)',
     priceEth: '0.03',
     active: true
   },
   {
-    id: 2,
-    name: 'Granite Climbing Clinic',
+    id: 'mountain-expedition',
+    name: 'Mountain expedition to the heart of the Andes',
     description:
-      'Guided progression on Patagonian granite with breathing rituals, safety coaching, and media documentation of every pitch.',
-    date: Math.floor(Date.UTC(2025, 1, 14, 14, 0) / 1000),
-    maxParticipants: 12,
-    registeredCount: 7,
-    price: '0.05 ETH deposit',
-    priceEth: '0.05',
+      'A guided ascent through native forests, hidden viewpoints, and local stories to connect with the energy of Lanín National Park, closing with breathwork facing the volcano.',
+    date: Math.floor(Date.UTC(2025, 1, 7, 13, 0) / 1000),
+    maxParticipants: 14,
+    registeredCount: 6,
+    price: 'USD 180 per person (0.04 ETH deposit)',
+    priceEth: '0.04',
     active: true
   },
   {
-    id: 3,
-    name: 'Sunset Kayak Crossing',
+    id: 'lake-kayak',
+    name: 'Kayak journey across Lake Lolog',
     description:
-      'A gentle paddle across translucent bays, ending with a fireside toast and stories from the residency community.',
+      'A gentle paddle through transparent bays with lessons on Patagonian weather patterns, on-chain check-in at embarkation, and a campfire toast on the volcanic-sand beach.',
     date: Math.floor(Date.UTC(2025, 1, 17, 22, 30) / 1000),
     maxParticipants: 16,
     registeredCount: 4,
-    price: '0 ETH — message only',
-    priceEth: '0',
+    price: 'USD 120 per person (0.02 ETH deposit)',
+    priceEth: '0.02',
+    active: true
+  },
+  {
+    id: 'rock-climbing',
+    name: 'Rock-climbing clinic and mindful movement',
+    description:
+      'A progressive session at the local granite school to connect strength, breathing, and creative focus, with progress tracking and digital waivers recorded on-chain.',
+    date: Math.floor(Date.UTC(2025, 1, 24, 15, 0) / 1000),
+    maxParticipants: 12,
+    registeredCount: 5,
+    price: 'USD 150 per person (0.05 ETH deposit)',
+    priceEth: '0.05',
     active: true
   }
 ];
