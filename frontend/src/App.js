@@ -220,6 +220,7 @@ function App() {
                       activity={activity}
                       account={account}
                       getProvider={getProvider}
+                      onRequestConnect={connect}
                       text={text}
                     />
                   </div>

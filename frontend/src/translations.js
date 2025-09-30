@@ -74,7 +74,9 @@ export const translations = {
       registrationComplete: 'Registration message sent successfully!',
       registrationFailed: 'Could not send the registration. Check the console for more details.',
       processingRegistration: 'We are processing your registration.',
-      insufficientBalance: 'Your USDT balance is not sufficient to cover this registration.'
+      insufficientBalance: 'Your USDT balance is not sufficient to cover this registration.',
+      connectingWallet: 'Connecting your wallet...',
+      connectionFailed: 'Wallet connection was cancelled or failed.'
     },
     alerts: {
       metaMask: 'Install MetaMask to continue.'
@@ -173,7 +175,9 @@ export const translations = {
       registrationComplete: '¡Mensaje de registro enviado con éxito!',
       registrationFailed: 'No pudimos enviar el registro. Revisá la consola para más detalles.',
       processingRegistration: 'Estamos procesando tu registro.',
-      insufficientBalance: 'Tu balance de USDT no es suficiente para cubrir esta inscripción.'
+      insufficientBalance: 'Tu balance de USDT no es suficiente para cubrir esta inscripción.',
+      connectingWallet: 'Conectando tu wallet...',
+      connectionFailed: 'La conexión con la wallet fue cancelada o falló.'
     },
     alerts: {
       metaMask: 'Instalá MetaMask para continuar.'
@@ -272,7 +276,9 @@ export const translations = {
       registrationComplete: 'Inscription terminée !',
       registrationFailed: 'Impossible de finaliser l’inscription. Consultez la console pour plus de détails.',
       processingRegistration: 'Nous traitons votre inscription.',
-      insufficientBalance: 'Votre solde en USDT est insuffisant pour couvrir cette inscription.'
+      insufficientBalance: 'Votre solde en USDT est insuffisant pour couvrir cette inscription.',
+      connectingWallet: 'Connexion du wallet…',
+      connectionFailed: 'La connexion au wallet a été annulée ou a échoué.'
     },
     alerts: {
       metaMask: 'Installez MetaMask pour continuer.'
@@ -382,7 +388,9 @@ export const translations = {
       registrationComplete: 'Anmeldung abgeschlossen!',
       registrationFailed: 'Anmeldung konnte nicht abgeschlossen werden. Sieh für Details in die Konsole.',
       processingRegistration: 'Wir verarbeiten deine Anmeldung.',
-      insufficientBalance: 'Dein USDT-Guthaben reicht für diese Anmeldung nicht aus.'
+      insufficientBalance: 'Dein USDT-Guthaben reicht für diese Anmeldung nicht aus.',
+      connectingWallet: 'Wallet wird verbunden...',
+      connectionFailed: 'Die Wallet-Verbindung wurde abgebrochen oder ist fehlgeschlagen.'
     },
     alerts: {
       metaMask: 'Installiere MetaMask, um fortzufahren.'

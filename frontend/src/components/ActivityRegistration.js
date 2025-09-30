@@ -7,7 +7,7 @@ const USDT_ABI = [
   'function balanceOf(address account) view returns (uint256)'
 ];
 
-function ActivityRegistration({ activity, account, getProvider, text }) {
+function ActivityRegistration({ activity, account, getProvider, onRequestConnect, text }) {
   const [quantity, setQuantity] = useState(1);
   const [decimals, setDecimals] = useState(6);
   const [isLoadingDecimals, setIsLoadingDecimals] = useState(false);
@@ -153,11 +153,6 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
       return;
     }
 
-    if (!account) {
-      setStatusMessage(statusText.connectWalletToRegister || 'Connect your wallet to continue.');
-      return;
-    }
-
     if (!hasPaymentConfig) {
       setStatusMessage(
         missingPaymentConfigMessage ||
@@ -182,6 +177,28 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
       return;
     }
 
+    let activeAccount = account;
+
+    if (!activeAccount && typeof onRequestConnect === 'function') {
+      try {
+        setStatusMessage(statusText.connectingWallet || 'Connecting your wallet...');
+        await onRequestConnect();
+        const accounts = await provider.listAccounts();
+        if (accounts.length) {
+          activeAccount = ethers.utils.getAddress(accounts[0]);
+        }
+      } catch (error) {
+        console.error('Wallet connection failed', error);
+        setStatusMessage(statusText.connectionFailed || 'Wallet connection was cancelled or failed.');
+        return;
+      }
+    }
+
+    if (!activeAccount) {
+      setStatusMessage(statusText.connectWalletToRegister || 'Connect your wallet to continue.');
+      return;
+    }
+
     try {
       setIsProcessing(true);
       setStatusMessage(statusText.requestingSignature || 'Review the transaction in your wallet.');
@@ -192,7 +209,7 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
       const total = (Number(activity.priceUSDT) * quantity).toFixed(2);
       const amount = ethers.utils.parseUnits(total, decimals);
 
-      const balance = await contract.balanceOf(account);
+      const balance = await contract.balanceOf(activeAccount);
       if (balance.lt(amount)) {
         setStatusMessage(
           statusText.insufficientBalance || 'Your USDT balance is not sufficient to cover this registration.'
@@ -211,16 +228,17 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
       setIsProcessing(false);
     }
   }, [
-    account,
     activity,
     decimals,
     getProvider,
     hasPaymentConfig,
+    account,
     quantity,
     statusText,
     missingPaymentConfigMessage,
     normalizedDestinationWallet,
-    normalizedUsdtAddress
+    normalizedUsdtAddress,
+    onRequestConnect
   ]);
 
   return (
