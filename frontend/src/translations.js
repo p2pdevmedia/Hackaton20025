@@ -57,7 +57,8 @@ export const translations = {
       }
     },
     warnings: {
-      destination: 'Set <code>REACT_APP_DESTINATION_WALLET</code> to receive the registration transactions.'
+      destination: 'Set <code>REACT_APP_DESTINATION_WALLET</code> to receive the registration transactions.',
+      usdt: 'Set <code>REACT_APP_USDT_ADDRESS</code> to target the USDT token used for registrations.'
     },
     status: {
       connectWalletToRegister: 'Connect your wallet to send the registration.',
@@ -152,7 +153,8 @@ export const translations = {
       }
     },
     warnings: {
-      destination: 'Configurá <code>REACT_APP_DESTINATION_WALLET</code> para recibir las transacciones de registro.'
+      destination: 'Configurá <code>REACT_APP_DESTINATION_WALLET</code> para recibir las transacciones de registro.',
+      usdt: 'Configurá <code>REACT_APP_USDT_ADDRESS</code> para apuntar al token USDT usado en los registros.'
     },
     status: {
       connectWalletToRegister: 'Conectá tu wallet para enviar el registro.',
