@@ -18,6 +18,29 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
 
   const hasPaymentConfig = Boolean(usdtAddress && destinationWallet);
 
+  const destinationWarning = warningsText.destination;
+  const usdtWarning = warningsText.usdt;
+
+  const missingPaymentConfigMessage = useMemo(() => {
+    if (!usdtAddress && usdtWarning) {
+      return usdtWarning;
+    }
+
+    if (!destinationWallet && destinationWarning) {
+      return destinationWarning;
+    }
+
+    if (!destinationWallet) {
+      return 'Set the destination wallet environment variable to enable registrations.';
+    }
+
+    if (!usdtAddress) {
+      return 'Set the USDT token address environment variable to enable registrations.';
+    }
+
+    return destinationWarning || usdtWarning || 'Payment configuration is missing.';
+  }, [destinationWallet, destinationWarning, usdtAddress, usdtWarning]);
+
   const agendaText = text?.agenda || {};
   const statusText = text?.status || {};
   const warningsText = text?.warnings || {};
@@ -95,9 +118,7 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
     }
 
     if (!hasPaymentConfig) {
-      setStatusMessage(
-        warningsText.destination || warningsText.usdt || 'Payment configuration is missing.'
-      );
+      setStatusMessage(missingPaymentConfigMessage);
       return;
     }
 
