@@ -7,8 +7,6 @@ import ActivityGallery from './components/ActivityGallery';
 import ActivityRegistration from './components/ActivityRegistration';
 import { translations, residencyActivities as residencyCatalog, localeMap } from './translations';
 
-const ETHEREUM_MAINNET_CHAIN_ID = '0x1';
-
 function App() {
   const [account, setAccount] = useState(null);
   const [language, setLanguage] = useState('en');
@@ -98,28 +96,6 @@ function App() {
       window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
     };
   }, [hasProvider]);
-
-  const ensureEthereumNetwork = useCallback(
-    async provider => {
-      try {
-        const chainId = await provider.send('eth_chainId', []);
-        if (chainId === ETHEREUM_MAINNET_CHAIN_ID) {
-          return true;
-        }
-
-        await provider.send('wallet_switchEthereumChain', [
-          { chainId: ETHEREUM_MAINNET_CHAIN_ID }
-        ]);
-        return true;
-      } catch (error) {
-        console.error('Failed to ensure Ethereum network', error);
-        alert(text.alerts.wrongNetwork || 'Switch to the Ethereum network in your wallet to continue.');
-        return false;
-      }
-    },
-    [text.alerts]
-  );
-
   const connect = async () => {
     if (!hasProvider) {
       alert(text.alerts.metaMask);
@@ -127,15 +103,6 @@ function App() {
     }
     try {
       const provider = getProvider();
-      if (!provider) {
-        return;
-      }
-
-      const networkReady = await ensureEthereumNetwork(provider);
-      if (!networkReady) {
-        return;
-      }
-
       const accounts = await provider.send('eth_requestAccounts', []);
       if (accounts.length) {
         const normalized = ethers.utils.getAddress(accounts[0]);
