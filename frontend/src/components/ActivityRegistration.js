@@ -3,8 +3,11 @@ import { ethers } from 'ethers';
 
 const USDT_ABI = [
   'function decimals() view returns (uint8)',
-  'function transfer(address to, uint256 value) returns (bool)'
+  'function allowance(address owner, address spender) view returns (uint256)',
+  'function approve(address spender, uint256 value) returns (bool)'
 ];
+
+const REGISTRY_ABI = ['function registerForActivity(uint256 id)'];
 
 function ActivityRegistration({ activity, account, getProvider, text }) {
   const [quantity, setQuantity] = useState(1);
@@ -14,36 +17,49 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
   const [isProcessing, setIsProcessing] = useState(false);
 
   const usdtAddress = process.env.REACT_APP_USDT_ADDRESS;
+  const contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS;
   const destinationWallet = process.env.REACT_APP_DESTINATION_WALLET;
 
   const agendaText = text?.agenda || {};
   const statusText = text?.status || {};
   const warningsText = text?.warnings || {};
 
-  const hasPaymentConfig = Boolean(usdtAddress && destinationWallet);
+  const hasPaymentConfig = Boolean(usdtAddress && contractAddress);
 
   const destinationWarning = warningsText.destination;
   const usdtWarning = warningsText.usdt;
+  const contractWarning = warningsText.contract;
 
   const missingPaymentConfigMessage = useMemo(() => {
+    if (!contractAddress && contractWarning) {
+      return contractWarning;
+    }
+
     if (!usdtAddress && usdtWarning) {
       return usdtWarning;
-    }
-
-    if (!destinationWallet && destinationWarning) {
-      return destinationWarning;
-    }
-
-    if (!destinationWallet) {
-      return 'Set the destination wallet environment variable to enable registrations.';
     }
 
     if (!usdtAddress) {
       return 'Set the USDT token address environment variable to enable registrations.';
     }
 
-    return destinationWarning || usdtWarning || 'Payment configuration is missing.';
-  }, [destinationWallet, destinationWarning, usdtAddress, usdtWarning]);
+    if (!contractAddress) {
+      return 'Set the contract address environment variable to enable registrations.';
+    }
+
+    if (!destinationWallet && destinationWarning) {
+      return destinationWarning;
+    }
+
+    return contractWarning || destinationWarning || usdtWarning || 'Payment configuration is missing.';
+  }, [
+    contractAddress,
+    contractWarning,
+    destinationWallet,
+    destinationWarning,
+    usdtAddress,
+    usdtWarning
+  ]);
 
   useEffect(() => {
     let cancelled = false;
@@ -132,15 +148,32 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
       setIsProcessing(true);
       setStatusMessage(statusText.requestingSignature || 'Review the transaction in your wallet.');
 
+      if (quantity !== 1) {
+        setStatusMessage(statusText.invalidParticipantCount || 'Select a valid participant count.');
+        return;
+      }
+
       const signer = provider.getSigner();
-      const normalizedDestination = ethers.utils.getAddress(destinationWallet);
-      const contract = new ethers.Contract(usdtAddress, USDT_ABI, signer);
+      const normalizedContract = ethers.utils.getAddress(contractAddress);
+      const registry = new ethers.Contract(normalizedContract, REGISTRY_ABI, signer);
+      const stablecoin = new ethers.Contract(usdtAddress, USDT_ABI, signer);
 
-      const total = (Number(activity.priceUSDT) * quantity).toFixed(2);
-      const amount = ethers.utils.parseUnits(total, decimals);
+      const total = Number(activity.priceUSDT) * quantity;
+      const amount = ethers.utils.parseUnits(total.toFixed(decimals), decimals);
 
-      const tx = await contract.transfer(normalizedDestination, amount);
-      setStatusMessage(statusText.confirmingOnChain || 'Waiting for on-chain confirmation...');
+      const allowance = await stablecoin.allowance(account, normalizedContract);
+      if (allowance.lt(amount)) {
+        setStatusMessage(statusText.approvingUsdt || 'Approving USDT...');
+        const approveTx = await stablecoin.approve(normalizedContract, amount);
+        await approveTx.wait();
+      }
+
+      setStatusMessage(
+        statusText.confirmingRegistration ||
+          statusText.confirmingOnChain ||
+          'Waiting for on-chain confirmation...'
+      );
+      const tx = await registry.registerForActivity(activity.id);
       await tx.wait();
       setStatusMessage(statusText.registrationComplete || 'Payment completed successfully!');
     } catch (error) {
@@ -152,14 +185,13 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
   }, [
     account,
     activity,
+    contractAddress,
     decimals,
-    destinationWallet,
     getProvider,
     hasPaymentConfig,
     quantity,
     statusText,
-    usdtAddress,
-    warningsText
+    usdtAddress
   ]);
 
   return (
