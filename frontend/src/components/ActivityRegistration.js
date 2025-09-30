@@ -101,6 +101,10 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
 
       setIsLoadingDecimals(true);
       try {
+        const contractCode = await provider.getCode(normalizedUsdtAddress);
+        if (!contractCode || contractCode === '0x') {
+          throw new Error('USDT contract code not found');
+        }
         const contract = new ethers.Contract(normalizedUsdtAddress, USDT_ABI, provider);
         const value = await contract.decimals();
         const resolved = typeof value === 'number' ? value : Number(value);
@@ -187,6 +191,14 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
       setStatusMessage(statusText.requestingSignature || 'Review the transaction in your wallet.');
 
       const signer = provider.getSigner();
+      const contractCode = await provider.getCode(normalizedUsdtAddress);
+      if (!contractCode || contractCode === '0x') {
+        setStatusMessage(
+          statusText.usdtUnavailable ||
+            'The configured USDT token is not deployed on the connected network.'
+        );
+        return;
+      }
       const contract = new ethers.Contract(normalizedUsdtAddress, USDT_ABI, signer);
 
       const total = (Number(activity.priceUSDT) * quantity).toFixed(2);
