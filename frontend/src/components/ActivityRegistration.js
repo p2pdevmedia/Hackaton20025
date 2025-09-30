@@ -16,6 +16,10 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
   const usdtAddress = process.env.REACT_APP_USDT_ADDRESS;
   const destinationWallet = process.env.REACT_APP_DESTINATION_WALLET;
 
+  const agendaText = text?.agenda || {};
+  const statusText = text?.status || {};
+  const warningsText = text?.warnings || {};
+
   const hasPaymentConfig = Boolean(usdtAddress && destinationWallet);
 
   const destinationWarning = warningsText.destination;
@@ -40,10 +44,6 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
 
     return destinationWarning || usdtWarning || 'Payment configuration is missing.';
   }, [destinationWallet, destinationWarning, usdtAddress, usdtWarning]);
-
-  const agendaText = text?.agenda || {};
-  const statusText = text?.status || {};
-  const warningsText = text?.warnings || {};
 
   useEffect(() => {
     let cancelled = false;
