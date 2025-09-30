@@ -4,6 +4,7 @@ import { ethers } from 'ethers';
 import Navbar from './components/Navbar';
 import ActivityCalendar from './components/ActivityCalendar';
 import ActivityGallery from './components/ActivityGallery';
+import ActivityRegistration from './components/ActivityRegistration';
 import { translations, residencyActivities as residencyCatalog, localeMap } from './translations';
 
 function App() {
@@ -25,7 +26,9 @@ function App() {
         return {
           ...localized,
           id: activity.id,
-          images: activity.images ? activity.images.filter(Boolean) : []
+          images: activity.images ? activity.images.filter(Boolean) : [],
+          priceUSDT: activity.priceUSDT,
+          maxParticipants: activity.maxParticipants
         };
       }),
     [language]
@@ -213,6 +216,12 @@ function App() {
                     <p className={`text-xs uppercase tracking-wide ${isPatagonianAsado ? 'text-slate-200' : 'text-slate-500'}`}>
                       {activity.guide}
                     </p>
+                    <ActivityRegistration
+                      activity={activity}
+                      account={account}
+                      getProvider={getProvider}
+                      text={text}
+                    />
                   </div>
                 </div>
               </article>

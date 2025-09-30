@@ -630,6 +630,8 @@ export const localeMap = {
 export const residencyActivities = [
   {
     id: 'patagonian-asado',
+    priceUSDT: 300,
+    maxParticipants: 20,
     images: [
       'https://ipfs.io/ipfs/bafybeic23gavkexic2nmmccmknbff4ngwhzhzqxcic7qdzbysc7rzeyzo4',
       'https://ipfs.io/ipfs/bafybeifqkwx3c6rr7d22sdnmss5j6atmkvsis5ivh42gdwfcy3znssaw5m'
@@ -705,6 +707,8 @@ export const residencyActivities = [
   },
   {
     id: 'mountain-expedition',
+    priceUSDT: 180,
+    maxParticipants: 18,
     images: ['https://ipfs.io/ipfs/bafybeienxvgvzj4a4qhozas5cd5hgnkk2dkkylnv4q6tiypqz6qqxswwru'],
     translations: {
       en: {
@@ -777,6 +781,8 @@ export const residencyActivities = [
   },
   {
     id: 'lake-kayak',
+    priceUSDT: 150,
+    maxParticipants: 16,
     images: ['https://ipfs.io/ipfs/bafkreia6mqussojkw3tcngfj6iyow2gjszuxsjereznjomefa2iajg7x4q'],
     translations: {
       en: {
@@ -849,6 +855,8 @@ export const residencyActivities = [
   },
   {
     id: 'rock-climbing',
+    priceUSDT: 140,
+    maxParticipants: 12,
     images: ['https://ipfs.io/ipfs/bafkreiazmgq5d4xq72ggid33nkh4fozsn6ek6feaf3oqes3mczybyjyqca'],
     translations: {
       en: {
