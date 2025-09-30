@@ -58,7 +58,9 @@ export const translations = {
     },
     warnings: {
       destination: 'Set <code>REACT_APP_DESTINATION_WALLET</code> to receive the registration transactions.',
-      usdt: 'Set <code>REACT_APP_USDT_ADDRESS</code> to target the USDT token used for registrations.'
+      usdt: 'Set <code>REACT_APP_USDT_ADDRESS</code> to target the USDT token used for registrations.',
+      invalidDestination: 'The configured destination wallet address is invalid.',
+      invalidUsdt: 'The configured USDT token address is invalid.'
     },
     status: {
       connectWalletToRegister: 'Connect your wallet to send the registration.',
@@ -71,7 +73,8 @@ export const translations = {
       confirmingOnChain: 'Waiting for the transaction to confirm...',
       registrationComplete: 'Registration message sent successfully!',
       registrationFailed: 'Could not send the registration. Check the console for more details.',
-      processingRegistration: 'We are processing your registration.'
+      processingRegistration: 'We are processing your registration.',
+      insufficientBalance: 'Your USDT balance is not sufficient to cover this registration.'
     },
     alerts: {
       metaMask: 'Install MetaMask to continue.'
@@ -154,7 +157,9 @@ export const translations = {
     },
     warnings: {
       destination: 'Configurá <code>REACT_APP_DESTINATION_WALLET</code> para recibir las transacciones de registro.',
-      usdt: 'Configurá <code>REACT_APP_USDT_ADDRESS</code> para apuntar al token USDT usado en los registros.'
+      usdt: 'Configurá <code>REACT_APP_USDT_ADDRESS</code> para apuntar al token USDT usado en los registros.',
+      invalidDestination: 'La dirección configurada para la wallet de destino no es válida.',
+      invalidUsdt: 'La dirección configurada para el token USDT no es válida.'
     },
     status: {
       connectWalletToRegister: 'Conectá tu wallet para enviar el registro.',
@@ -167,7 +172,8 @@ export const translations = {
       confirmingOnChain: 'Esperando la confirmación en cadena...',
       registrationComplete: '¡Mensaje de registro enviado con éxito!',
       registrationFailed: 'No pudimos enviar el registro. Revisá la consola para más detalles.',
-      processingRegistration: 'Estamos procesando tu registro.'
+      processingRegistration: 'Estamos procesando tu registro.',
+      insufficientBalance: 'Tu balance de USDT no es suficiente para cubrir esta inscripción.'
     },
     alerts: {
       metaMask: 'Instalá MetaMask para continuar.'
@@ -249,7 +255,9 @@ export const translations = {
     },
     warnings: {
       contract: 'Configurez <code>REACT_APP_CONTRACT_ADDRESS</code> pour interagir avec le contrat d’activités.',
-      usdt: 'Configurez <code>REACT_APP_USDT_ADDRESS</code> pour cibler le jeton USDT utilisé pour les paiements.'
+      usdt: 'Configurez <code>REACT_APP_USDT_ADDRESS</code> pour cibler le jeton USDT utilisé pour les paiements.',
+      invalidDestination: 'L’adresse de portefeuille configurée pour la destination n’est pas valide.',
+      invalidUsdt: 'L’adresse configurée pour le jeton USDT n’est pas valide.'
     },
     status: {
       contractMissing: 'Configurez l’adresse du contrat pour créer des activités.',
@@ -263,7 +271,8 @@ export const translations = {
       confirmingRegistration: 'Confirmation de l’inscription…',
       registrationComplete: 'Inscription terminée !',
       registrationFailed: 'Impossible de finaliser l’inscription. Consultez la console pour plus de détails.',
-      processingRegistration: 'Nous traitons votre inscription.'
+      processingRegistration: 'Nous traitons votre inscription.',
+      insufficientBalance: 'Votre solde en USDT est insuffisant pour couvrir cette inscription.'
     },
     alerts: {
       metaMask: 'Installez MetaMask pour continuer.'
@@ -356,7 +365,9 @@ export const translations = {
     },
     warnings: {
       contract: 'Setze <code>REACT_APP_CONTRACT_ADDRESS</code>, um mit dem Aktivitätsvertrag zu interagieren.',
-      usdt: 'Setze <code>REACT_APP_USDT_ADDRESS</code>, um auf den für Zahlungen verwendeten USDT-Token zu verweisen.'
+      usdt: 'Setze <code>REACT_APP_USDT_ADDRESS</code>, um auf den für Zahlungen verwendeten USDT-Token zu verweisen.',
+      invalidDestination: 'Die konfigurierte Ziel-Wallet-Adresse ist ungültig.',
+      invalidUsdt: 'Die konfigurierte USDT-Token-Adresse ist ungültig.'
     },
     status: {
       contractMissing: 'Konfiguriere die Vertragsadresse, um Aktivitäten zu erstellen.',
@@ -370,7 +381,8 @@ export const translations = {
       confirmingRegistration: 'Anmeldung wird bestätigt...',
       registrationComplete: 'Anmeldung abgeschlossen!',
       registrationFailed: 'Anmeldung konnte nicht abgeschlossen werden. Sieh für Details in die Konsole.',
-      processingRegistration: 'Wir verarbeiten deine Anmeldung.'
+      processingRegistration: 'Wir verarbeiten deine Anmeldung.',
+      insufficientBalance: 'Dein USDT-Guthaben reicht für diese Anmeldung nicht aus.'
     },
     alerts: {
       metaMask: 'Installiere MetaMask, um fortzufahren.'
@@ -463,7 +475,9 @@ export const translations = {
     },
     warnings: {
       contract: '请设置 <code>REACT_APP_CONTRACT_ADDRESS</code> 以便与活动合约交互。',
-      usdt: '请设置 <code>REACT_APP_USDT_ADDRESS</code> 指向用于支付的 USDT 代币。'
+      usdt: '请设置 <code>REACT_APP_USDT_ADDRESS</code> 指向用于支付的 USDT 代币。',
+      invalidDestination: '配置的钱包地址无效。',
+      invalidUsdt: '配置的 USDT 代币地址无效。'
     },
     status: {
       contractMissing: '请配置合约地址以创建活动。',
@@ -477,7 +491,8 @@ export const translations = {
       confirmingRegistration: '正在确认报名…',
       registrationComplete: '报名完成！',
       registrationFailed: '无法完成报名。请查看控制台了解更多详情。',
-      processingRegistration: '我们正在处理您的报名。'
+      processingRegistration: '我们正在处理您的报名。',
+      insufficientBalance: '您的 USDT 余额不足，无法完成此报名。'
     },
     alerts: {
       metaMask: '请安装 MetaMask 以继续。'
@@ -570,7 +585,9 @@ export const translations = {
     },
     warnings: {
       contract: 'Укажите <code>REACT_APP_CONTRACT_ADDRESS</code>, чтобы взаимодействовать с контрактом активностей.',
-      usdt: 'Укажите <code>REACT_APP_USDT_ADDRESS</code>, чтобы настроить USDT-токен для платежей.'
+      usdt: 'Укажите <code>REACT_APP_USDT_ADDRESS</code>, чтобы настроить USDT-токен для платежей.',
+      invalidDestination: 'Указанный адрес кошелька-получателя недействителен.',
+      invalidUsdt: 'Указанный адрес токена USDT недействителен.'
     },
     status: {
       contractMissing: 'Настройте адрес контракта, чтобы создавать активности.',
@@ -584,7 +601,8 @@ export const translations = {
       confirmingRegistration: 'Подтверждение регистрации…',
       registrationComplete: 'Регистрация завершена!',
       registrationFailed: 'Не удалось завершить регистрацию. Подробности смотрите в консоли.',
-      processingRegistration: 'Мы обрабатываем вашу регистрацию.'
+      processingRegistration: 'Мы обрабатываем вашу регистрацию.',
+      insufficientBalance: 'Вашего баланса USDT недостаточно, чтобы оплатить эту регистрацию.'
     },
     alerts: {
       metaMask: 'Установите MetaMask, чтобы продолжить.'

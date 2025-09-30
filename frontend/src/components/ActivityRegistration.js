@@ -3,7 +3,8 @@ import { ethers } from 'ethers';
 
 const USDT_ABI = [
   'function decimals() view returns (uint8)',
-  'function transfer(address to, uint256 value) returns (bool)'
+  'function transfer(address to, uint256 value) returns (bool)',
+  'function balanceOf(address account) view returns (uint256)'
 ];
 
 function ActivityRegistration({ activity, account, getProvider, text }) {
@@ -20,36 +21,76 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
   const statusText = text?.status || {};
   const warningsText = text?.warnings || {};
 
-  const hasPaymentConfig = Boolean(usdtAddress && destinationWallet);
+  const normalizedUsdtAddress = useMemo(() => {
+    if (!usdtAddress) {
+      return null;
+    }
+    try {
+      return ethers.utils.getAddress(usdtAddress);
+    } catch (error) {
+      console.warn('Invalid USDT token address configured', error);
+      return null;
+    }
+  }, [usdtAddress]);
+
+  const normalizedDestinationWallet = useMemo(() => {
+    if (!destinationWallet) {
+      return null;
+    }
+    try {
+      return ethers.utils.getAddress(destinationWallet);
+    } catch (error) {
+      console.warn('Invalid destination wallet configured', error);
+      return null;
+    }
+  }, [destinationWallet]);
+
+  const hasPaymentConfig = Boolean(normalizedUsdtAddress && normalizedDestinationWallet);
 
   const destinationWarning = warningsText.destination;
   const usdtWarning = warningsText.usdt;
 
-  const missingPaymentConfigMessage = useMemo(() => {
-    if (!usdtAddress && usdtWarning) {
-      return usdtWarning;
-    }
-
-    if (!destinationWallet && destinationWarning) {
-      return destinationWarning;
-    }
-
+  const paymentConfigurationIssue = useMemo(() => {
     if (!destinationWallet) {
-      return 'Set the destination wallet environment variable to enable registrations.';
+      return destinationWarning || 'Set the destination wallet environment variable to enable registrations.';
+    }
+
+    if (!normalizedDestinationWallet) {
+      return warningsText.invalidDestination || 'The configured destination wallet address is invalid.';
     }
 
     if (!usdtAddress) {
-      return 'Set the USDT token address environment variable to enable registrations.';
+      return usdtWarning || 'Set the USDT token address environment variable to enable registrations.';
     }
 
-    return destinationWarning || usdtWarning || 'Payment configuration is missing.';
-  }, [destinationWallet, destinationWarning, usdtAddress, usdtWarning]);
+    if (!normalizedUsdtAddress) {
+      return warningsText.invalidUsdt || 'The configured USDT token address is invalid.';
+    }
+
+    return null;
+  }, [
+    destinationWallet,
+    destinationWarning,
+    normalizedDestinationWallet,
+    normalizedUsdtAddress,
+    usdtAddress,
+    usdtWarning,
+    warningsText.invalidDestination,
+    warningsText.invalidUsdt
+  ]);
+
+  const missingPaymentConfigMessage = useMemo(() => {
+    if (!paymentConfigurationIssue) {
+      return null;
+    }
+    return paymentConfigurationIssue;
+  }, [paymentConfigurationIssue]);
 
   useEffect(() => {
     let cancelled = false;
 
     const loadDecimals = async () => {
-      if (!account || !hasPaymentConfig) {
+      if (!account || !normalizedUsdtAddress) {
         return;
       }
 
@@ -60,7 +101,7 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
 
       setIsLoadingDecimals(true);
       try {
-        const contract = new ethers.Contract(usdtAddress, USDT_ABI, provider);
+        const contract = new ethers.Contract(normalizedUsdtAddress, USDT_ABI, provider);
         const value = await contract.decimals();
         const resolved = typeof value === 'number' ? value : Number(value);
         if (!cancelled && Number.isFinite(resolved)) {
@@ -84,7 +125,7 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
     return () => {
       cancelled = true;
     };
-  }, [account, getProvider, hasPaymentConfig, usdtAddress]);
+  }, [account, getProvider, normalizedUsdtAddress]);
 
   const unitPriceLabel = useMemo(() => {
     if (!activity?.priceUSDT) {
@@ -118,7 +159,20 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
     }
 
     if (!hasPaymentConfig) {
-      setStatusMessage(missingPaymentConfigMessage);
+      setStatusMessage(
+        missingPaymentConfigMessage ||
+          statusText.destinationMissing ||
+          'Payment configuration is missing.'
+      );
+      return;
+    }
+
+    if (!normalizedDestinationWallet || !normalizedUsdtAddress) {
+      setStatusMessage(
+        missingPaymentConfigMessage ||
+          statusText.destinationMissing ||
+          'Payment configuration is missing.'
+      );
       return;
     }
 
@@ -133,13 +187,20 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
       setStatusMessage(statusText.requestingSignature || 'Review the transaction in your wallet.');
 
       const signer = provider.getSigner();
-      const normalizedDestination = ethers.utils.getAddress(destinationWallet);
-      const contract = new ethers.Contract(usdtAddress, USDT_ABI, signer);
+      const contract = new ethers.Contract(normalizedUsdtAddress, USDT_ABI, signer);
 
       const total = (Number(activity.priceUSDT) * quantity).toFixed(2);
       const amount = ethers.utils.parseUnits(total, decimals);
 
-      const tx = await contract.transfer(normalizedDestination, amount);
+      const balance = await contract.balanceOf(account);
+      if (balance.lt(amount)) {
+        setStatusMessage(
+          statusText.insufficientBalance || 'Your USDT balance is not sufficient to cover this registration.'
+        );
+        return;
+      }
+
+      const tx = await contract.transfer(normalizedDestinationWallet, amount);
       setStatusMessage(statusText.confirmingOnChain || 'Waiting for on-chain confirmation...');
       await tx.wait();
       setStatusMessage(statusText.registrationComplete || 'Payment completed successfully!');
@@ -153,13 +214,13 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
     account,
     activity,
     decimals,
-    destinationWallet,
     getProvider,
     hasPaymentConfig,
     quantity,
     statusText,
-    usdtAddress,
-    warningsText
+    missingPaymentConfigMessage,
+    normalizedDestinationWallet,
+    normalizedUsdtAddress
   ]);
 
   return (
