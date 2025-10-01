@@ -152,8 +152,7 @@ export const translations = {
       heading: 'Lo que activa la residencia',
       items: [
         'Salidas curadas a montaña, agua y roca con guías locales.',
-        'Cocina territorial y rituales artísticos con Iván Moritz Karl.',
-        'Registros confirmados con un mensaje desde la wallet compartida de Edge City.'
+        'Somos locales de San Martín de los Andes fanáticos de la tecnología.'
       ]
     },
     calendar: {
