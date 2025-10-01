@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ethers } from 'ethers';
 
-const USDT_ABI = [
+const ERC20_ABI = [
   'function decimals() view returns (uint8)',
   'function transfer(address to, uint256 value) returns (bool)',
   'function balanceOf(address account) view returns (uint256)'
@@ -13,25 +13,89 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
   const [isLoadingDecimals, setIsLoadingDecimals] = useState(false);
   const [statusMessage, setStatusMessage] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
+  const [selectedTokenSymbol, setSelectedTokenSymbol] = useState('USDT');
 
   const usdtAddress = process.env.REACT_APP_USDT_ADDRESS;
+  const usdcAddress = process.env.REACT_APP_USDC_ADDRESS || '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48';
   const destinationWallet = process.env.REACT_APP_DESTINATION_WALLET;
 
   const agendaText = text?.agenda || {};
   const statusText = text?.status || {};
   const warningsText = text?.warnings || {};
 
-  const normalizedUsdtAddress = useMemo(() => {
-    if (!usdtAddress) {
-      return null;
+  const tokenOptions = useMemo(() => {
+    const entries = [
+      {
+        symbol: 'USDT',
+        label: 'USDT',
+        warningKey: 'usdt',
+        invalidWarningKey: 'invalidUsdt',
+        rawAddress: usdtAddress,
+        hasFallback: false
+      },
+      {
+        symbol: 'USDC',
+        label: 'USDC',
+        warningKey: 'usdc',
+        invalidWarningKey: 'invalidUsdc',
+        rawAddress: usdcAddress,
+        hasFallback: true
+      }
+    ];
+
+    return entries.map(entry => {
+      const address = entry.rawAddress;
+      if (!address) {
+        return {
+          ...entry,
+          address: null,
+          normalizedAddress: null,
+          isConfigured: false,
+          isInvalid: false
+        };
+      }
+
+      try {
+        const normalized = ethers.utils.getAddress(address);
+        return {
+          ...entry,
+          address,
+          normalizedAddress: normalized,
+          isConfigured: true,
+          isInvalid: false
+        };
+      } catch (error) {
+        console.warn(`Invalid ${entry.symbol} token address configured`, error);
+        return {
+          ...entry,
+          address,
+          normalizedAddress: null,
+          isConfigured: true,
+          isInvalid: true
+        };
+      }
+    });
+  }, [usdtAddress, usdcAddress]);
+
+  const selectedToken = useMemo(() => {
+    const resolved = tokenOptions.find(option => option.symbol === selectedTokenSymbol);
+    if (resolved) {
+      return resolved;
     }
-    try {
-      return ethers.utils.getAddress(usdtAddress);
-    } catch (error) {
-      console.warn('Invalid USDT token address configured', error);
-      return null;
+    return tokenOptions[0];
+  }, [selectedTokenSymbol, tokenOptions]);
+
+  useEffect(() => {
+    const preferred = tokenOptions.find(option => option.symbol === selectedTokenSymbol);
+    if (preferred?.normalizedAddress || !tokenOptions.length) {
+      return;
     }
-  }, [usdtAddress]);
+
+    const firstAvailable = tokenOptions.find(option => option.normalizedAddress);
+    if (firstAvailable && firstAvailable.symbol !== selectedTokenSymbol) {
+      setSelectedTokenSymbol(firstAvailable.symbol);
+    }
+  }, [selectedTokenSymbol, tokenOptions]);
 
   const normalizedDestinationWallet = useMemo(() => {
     if (!destinationWallet) {
@@ -45,10 +109,13 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
     }
   }, [destinationWallet]);
 
-  const hasPaymentConfig = Boolean(normalizedUsdtAddress && normalizedDestinationWallet);
+  const hasPaymentConfig = useMemo(
+    () => Boolean(selectedToken?.normalizedAddress && normalizedDestinationWallet),
+    [normalizedDestinationWallet, selectedToken?.normalizedAddress]
+  );
 
   const destinationWarning = warningsText.destination;
-  const usdtWarning = warningsText.usdt;
+  const tokenWarning = selectedToken ? warningsText[selectedToken.warningKey] : null;
 
   const paymentConfigurationIssue = useMemo(() => {
     if (!destinationWallet) {
@@ -59,12 +126,23 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
       return warningsText.invalidDestination || 'The configured destination wallet address is invalid.';
     }
 
-    if (!usdtAddress) {
-      return usdtWarning || 'Set the USDT token address environment variable to enable registrations.';
+    if (!selectedToken?.address) {
+      return (
+        tokenWarning ||
+        `Set the ${selectedToken?.symbol || 'token'} environment variable to enable registrations.`
+      );
     }
 
-    if (!normalizedUsdtAddress) {
-      return warningsText.invalidUsdt || 'The configured USDT token address is invalid.';
+    if (selectedToken?.isInvalid) {
+      const invalidKey = selectedToken?.invalidWarningKey;
+      const fallbackWarning = warningsText[invalidKey];
+      return (
+        fallbackWarning || `The configured ${selectedToken?.symbol || 'token'} address is invalid.`
+      );
+    }
+
+    if (!selectedToken?.normalizedAddress) {
+      return `The ${selectedToken?.symbol || 'token'} configuration is missing.`;
     }
 
     return null;
@@ -72,11 +150,9 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
     destinationWallet,
     destinationWarning,
     normalizedDestinationWallet,
-    normalizedUsdtAddress,
-    usdtAddress,
-    usdtWarning,
-    warningsText.invalidDestination,
-    warningsText.invalidUsdt
+    selectedToken,
+    tokenWarning,
+    warningsText
   ]);
 
   const missingPaymentConfigMessage = useMemo(() => {
@@ -90,29 +166,31 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
     let cancelled = false;
 
     const loadDecimals = async () => {
-      if (!account || !normalizedUsdtAddress) {
+      if (!account || !selectedToken?.normalizedAddress) {
+        setDecimals(6);
         return;
       }
 
       const provider = getProvider?.();
       if (!provider) {
+        setDecimals(6);
         return;
       }
 
       setIsLoadingDecimals(true);
       try {
-        const contractCode = await provider.getCode(normalizedUsdtAddress);
+        const contractCode = await provider.getCode(selectedToken.normalizedAddress);
         if (!contractCode || contractCode === '0x') {
-          throw new Error('USDT contract code not found');
+          throw new Error(`${selectedToken.symbol} contract code not found`);
         }
-        const contract = new ethers.Contract(normalizedUsdtAddress, USDT_ABI, provider);
+        const contract = new ethers.Contract(selectedToken.normalizedAddress, ERC20_ABI, provider);
         const value = await contract.decimals();
         const resolved = typeof value === 'number' ? value : Number(value);
         if (!cancelled && Number.isFinite(resolved)) {
           setDecimals(resolved);
         }
       } catch (error) {
-        console.error('Could not read USDT decimals', error);
+        console.error(`Could not read ${selectedToken?.symbol} decimals`, error);
         // Default to 6 decimals when decimals() is unavailable.
         if (!cancelled) {
           setDecimals(6);
@@ -129,19 +207,21 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
     return () => {
       cancelled = true;
     };
-  }, [account, getProvider, normalizedUsdtAddress]);
+  }, [account, getProvider, selectedToken]);
 
   const unitPriceLabel = useMemo(() => {
     if (!activity?.priceUSDT) {
       return null;
     }
-    return `${Number(activity.priceUSDT).toFixed(2)} USDT`;
-  }, [activity?.priceUSDT]);
+    const tokenLabel = selectedToken?.label || 'USDT';
+    return `${Number(activity.priceUSDT).toFixed(2)} ${tokenLabel}`;
+  }, [activity?.priceUSDT, selectedToken]);
 
   const totalPriceLabel = useMemo(() => {
     const total = (Number(activity?.priceUSDT || 0) * quantity).toFixed(2);
-    return `${total} USDT`;
-  }, [activity?.priceUSDT, quantity]);
+    const tokenLabel = selectedToken?.label || 'USDT';
+    return `${total} ${tokenLabel}`;
+  }, [activity?.priceUSDT, quantity, selectedToken]);
 
   const handleQuantityChange = useCallback(event => {
     const value = Number(event.target.value);
@@ -171,7 +251,7 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
       return;
     }
 
-    if (!normalizedDestinationWallet || !normalizedUsdtAddress) {
+    if (!normalizedDestinationWallet || !selectedToken?.normalizedAddress) {
       setStatusMessage(
         missingPaymentConfigMessage ||
           statusText.destinationMissing ||
@@ -193,7 +273,7 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
       const signer = provider.getSigner();
 
       const network = await provider.getNetwork().catch(() => null);
-      const contractCode = await provider.getCode(normalizedUsdtAddress);
+      const contractCode = await provider.getCode(selectedToken.normalizedAddress);
       if (!contractCode || contractCode === '0x') {
         const networkLabel =
           network?.name && network.name !== 'unknown'
@@ -202,18 +282,20 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
             ? `chain ID ${network.chainId}`
             : 'the connected network';
         const template =
+          statusText.tokenUnavailable ||
           statusText.usdtUnavailable ||
-          'The configured USDT token ({address}) is not deployed on {network}.';
+          'The configured token ({address}) is not deployed on {network}.';
         const formattedMessage = template
           .replace('{network}', networkLabel)
-          .replace('{address}', normalizedUsdtAddress);
+          .replace('{address}', selectedToken.normalizedAddress)
+          .replace('{token}', selectedToken.label);
         setStatusMessage(
           formattedMessage
 
         );
         return;
       }
-      const contract = new ethers.Contract(normalizedUsdtAddress, USDT_ABI, signer);
+      const contract = new ethers.Contract(selectedToken.normalizedAddress, ERC20_ABI, signer);
 
       const total = (Number(activity.priceUSDT) * quantity).toFixed(2);
       const amount = ethers.utils.parseUnits(total, decimals);
@@ -221,7 +303,9 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
       const balance = await contract.balanceOf(account);
       if (balance.lt(amount)) {
         setStatusMessage(
-          statusText.insufficientBalance || 'Your USDT balance is not sufficient to cover this registration.'
+          statusText.insufficientBalanceToken ||
+            statusText.insufficientBalance ||
+            `Your ${selectedToken.symbol} balance is not sufficient to cover this registration.`
         );
         return;
       }
@@ -231,7 +315,7 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
       await tx.wait();
       setStatusMessage(statusText.registrationComplete || 'Payment completed successfully!');
     } catch (error) {
-      console.error('USDT payment failed', error);
+      console.error(`${selectedToken?.symbol || 'Token'} payment failed`, error);
       setStatusMessage(statusText.registrationFailed || 'Payment could not be completed.');
     } finally {
       setIsProcessing(false);
@@ -242,11 +326,11 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
     decimals,
     getProvider,
     hasPaymentConfig,
+    selectedToken,
     quantity,
     statusText,
     missingPaymentConfigMessage,
-    normalizedDestinationWallet,
-    normalizedUsdtAddress
+    normalizedDestinationWallet
   ]);
 
   return (
@@ -291,6 +375,33 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
             <p className="text-xs text-slate-500">Loading token details…</p>
           )}
         </div>
+      </div>
+      <div className="mt-4">
+        <p className="text-xs uppercase tracking-wide text-slate-500">
+          {agendaText.paymentTokenLabel || 'Payment token'}
+        </p>
+        <div className="mt-2 inline-flex gap-2 rounded-xl bg-white p-1">
+          {tokenOptions.map(option => (
+            <button
+              key={option.symbol}
+              type="button"
+              onClick={() => setSelectedTokenSymbol(option.symbol)}
+              className={`rounded-lg px-3 py-1 text-sm font-medium transition ${
+                option.symbol === selectedToken?.symbol
+                  ? 'bg-slate-900 text-white shadow'
+                  : 'text-slate-600 hover:bg-slate-100'
+              }`}
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
+        {selectedToken?.isInvalid && (
+          <p className="mt-2 text-xs text-red-600">
+            {warningsText[selectedToken.invalidWarningKey] ||
+              `The configured ${selectedToken.symbol} address is invalid.`}
+          </p>
+        )}
       </div>
       <button
         type="button"
