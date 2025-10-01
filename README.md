@@ -23,8 +23,18 @@ The `frontend` folder contains a React application that surfaces residency data 
 publish activities once they connect their wallet. Update the following environment variables to
 point at your deployment:
 
-- `REACT_APP_ORGANIZER_WALLET`: wallet address that receives participant payments.
+- `REACT_APP_DESTINATION_WALLET`: wallet address that receives participant payments.
 - `REACT_APP_USDT_ADDRESS`: address of the ERC20 token accepted for payments.
+
+## Hardcoded on-chain addresses
+
+The hackathon demo is wired to the following addresses. They live in `frontend/.env.example` so you
+can copy the file into `.env` and override them when deploying elsewhere:
+
+- **Receiving wallet** (`REACT_APP_DESTINATION_WALLET`): `0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266`
+  (Hardhat default account #0 used for local testing).
+- **USDT token** (`REACT_APP_USDT_ADDRESS`): `0xdAC17F958D2ee523a2206206994597C13D831ec7` (Tether on
+  Ethereum mainnet).
 
 ## Getting started
 
