@@ -59,8 +59,10 @@ export const translations = {
     warnings: {
       destination: 'Set <code>REACT_APP_DESTINATION_WALLET</code> to receive the registration transactions.',
       usdt: 'Set <code>REACT_APP_USDT_ADDRESS</code> to target the USDT token used for registrations.',
+      usdc: 'Set <code>REACT_APP_USDC_ADDRESS</code> if you need to override the default USDC token address.',
       invalidDestination: 'The configured destination wallet address is invalid.',
-      invalidUsdt: 'The configured USDT token address is invalid.'
+      invalidUsdt: 'The configured USDT token address is invalid.',
+      invalidUsdc: 'The configured USDC token address is invalid.'
     },
     status: {
       connectWalletToRegister: 'Connect your wallet to send the registration.',
@@ -75,7 +77,9 @@ export const translations = {
       registrationFailed: 'Could not send the registration. Check the console for more details.',
       processingRegistration: 'We are processing your registration.',
       insufficientBalance: 'Your USDT balance is not sufficient to cover this registration.',
-      usdtUnavailable: 'The configured USDT token ({address}) is not deployed on {network}.'
+      insufficientBalanceToken: 'Your {token} balance is not sufficient to cover this registration.',
+      usdtUnavailable: 'The configured USDT token ({address}) is not deployed on {network}.',
+      tokenUnavailable: 'The configured {token} token ({address}) is not deployed on {network}.'
 
     },
     alerts: {
@@ -96,7 +100,8 @@ export const translations = {
       inactiveBadge: 'Inactive activity',
       participantCountLabel: 'Participants',
       participantCountHelper: 'Choose how many seats to reserve.',
-      transactionInfo: 'MetaMask will deliver your message on-chain to {wallet}.'
+      transactionInfo: 'MetaMask will deliver your message on-chain to {wallet}.',
+      paymentTokenLabel: 'Select the token to pay'
     }
   },
   es: {
@@ -160,8 +165,10 @@ export const translations = {
     warnings: {
       destination: 'Configurá <code>REACT_APP_DESTINATION_WALLET</code> para recibir las transacciones de registro.',
       usdt: 'Configurá <code>REACT_APP_USDT_ADDRESS</code> para apuntar al token USDT usado en los registros.',
+      usdc: 'Configurá <code>REACT_APP_USDC_ADDRESS</code> si necesitás reemplazar la dirección predeterminada de USDC.',
       invalidDestination: 'La dirección configurada para la wallet de destino no es válida.',
-      invalidUsdt: 'La dirección configurada para el token USDT no es válida.'
+      invalidUsdt: 'La dirección configurada para el token USDT no es válida.',
+      invalidUsdc: 'La dirección configurada para el token USDC no es válida.'
     },
     status: {
       connectWalletToRegister: 'Conectá tu wallet para enviar el registro.',
@@ -176,7 +183,9 @@ export const translations = {
       registrationFailed: 'No pudimos enviar el registro. Revisá la consola para más detalles.',
       processingRegistration: 'Estamos procesando tu registro.',
       insufficientBalance: 'Tu balance de USDT no es suficiente para cubrir esta inscripción.',
-      usdtUnavailable: 'El token de USDT configurado ({address}) no está desplegado en {network}.'
+      insufficientBalanceToken: 'Tu balance de {token} no es suficiente para cubrir esta inscripción.',
+      usdtUnavailable: 'El token de USDT configurado ({address}) no está desplegado en {network}.',
+      tokenUnavailable: 'El token de {token} configurado ({address}) no está desplegado en {network}.'
 
     },
     alerts: {
@@ -197,7 +206,8 @@ export const translations = {
       inactiveBadge: 'Actividad inactiva',
       participantCountLabel: 'Participantes',
       participantCountHelper: 'Elegí cuántos lugares querés reservar.',
-      transactionInfo: 'MetaMask enviará tu mensaje on-chain a {wallet}.'
+      transactionInfo: 'MetaMask enviará tu mensaje on-chain a {wallet}.',
+      paymentTokenLabel: 'Seleccioná el token de pago'
     }
   },
   fr: {
