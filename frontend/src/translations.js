@@ -22,8 +22,7 @@ export const translations = {
       heading: 'What the residency activates',
       items: [
         'Curated outings to mountains, water, and rock with local guides.',
-        'Territory cuisine and artistic rituals with Iván Moritz Karl.',
-        'Registrations confirmed via a shared Edge City wallet message.'
+        'We are locals from San Martín de los Andes and technology fanatics.'
       ]
     },
     calendar: {
@@ -152,8 +151,7 @@ export const translations = {
       heading: 'Lo que activa la residencia',
       items: [
         'Salidas curadas a montaña, agua y roca con guías locales.',
-        'Cocina territorial y rituales artísticos con Iván Moritz Karl.',
-        'Registros confirmados con un mensaje desde la wallet compartida de Edge City.'
+        'Somos locales de San Martín de los Andes fanáticos de la tecnología.'
       ]
     },
     calendar: {
