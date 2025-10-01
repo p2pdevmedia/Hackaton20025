@@ -5,11 +5,15 @@ import Navbar from './components/Navbar';
 import ActivityCalendar from './components/ActivityCalendar';
 import ActivityGallery from './components/ActivityGallery';
 import ActivityRegistration from './components/ActivityRegistration';
+import ParticipantInfoModal from './components/ParticipantInfoModal';
 import { translations, residencyActivities as residencyCatalog, localeMap } from './translations';
 
 function App() {
   const [account, setAccount] = useState(null);
   const [language, setLanguage] = useState('en');
+  const [participantInfo, setParticipantInfo] = useState(null);
+  const [isParticipantModalOpen, setIsParticipantModalOpen] = useState(false);
+  const [pendingConnection, setPendingConnection] = useState(false);
 
   const text = useMemo(() => translations[language] || translations.en, [language]);
   const languageOptions = useMemo(
@@ -74,6 +78,9 @@ function App() {
     ];
   }, [text.calendar.events]);
   const hasProvider = useMemo(() => typeof window !== 'undefined' && window.ethereum, []);
+  const participantFormText = text?.participantForm || {};
+  const registrationEndpoint = process.env.REACT_APP_REGISTRATION_ENDPOINT;
+  const metaMaskAlert = text?.alerts?.metaMask || 'Install MetaMask to continue.';
 
   const getProvider = useCallback(() => {
     if (!hasProvider) {
@@ -81,6 +88,40 @@ function App() {
     }
     return new ethers.providers.Web3Provider(window.ethereum);
   }, [hasProvider]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    try {
+      const stored = window.localStorage.getItem('edgecityParticipantInfo');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed && typeof parsed === 'object') {
+          setParticipantInfo(parsed);
+        }
+      }
+    } catch (error) {
+      console.error('Failed to restore participant information from storage', error);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    try {
+      if (participantInfo) {
+        window.localStorage.setItem('edgecityParticipantInfo', JSON.stringify(participantInfo));
+      } else {
+        window.localStorage.removeItem('edgecityParticipantInfo');
+      }
+    } catch (error) {
+      console.error('Failed to persist participant information', error);
+    }
+  }, [participantInfo]);
 
   useEffect(() => {
     if (!hasProvider) return;
@@ -96,9 +137,9 @@ function App() {
       window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
     };
   }, [hasProvider]);
-  const connect = async () => {
+  const connectWallet = useCallback(async () => {
     if (!hasProvider) {
-      alert(text.alerts.metaMask);
+      alert(metaMaskAlert);
       return;
     }
     try {
@@ -110,8 +151,72 @@ function App() {
       }
     } catch (error) {
       console.error('Wallet connection failed', error);
+    } finally {
+      setPendingConnection(false);
     }
-  };
+  }, [getProvider, hasProvider, metaMaskAlert]);
+
+  const handleConnectRequest = useCallback(() => {
+    if (!hasProvider) {
+      alert(metaMaskAlert);
+      return;
+    }
+
+    if (!participantInfo) {
+      setPendingConnection(true);
+      setIsParticipantModalOpen(true);
+      return;
+    }
+
+    connectWallet();
+  }, [connectWallet, hasProvider, metaMaskAlert, participantInfo]);
+
+  const handleParticipantModalClose = useCallback(() => {
+    setIsParticipantModalOpen(false);
+    setPendingConnection(false);
+  }, []);
+
+  const handleParticipantSubmit = useCallback(
+    values => {
+      setParticipantInfo(values);
+      setIsParticipantModalOpen(false);
+      if (pendingConnection) {
+        setPendingConnection(false);
+        connectWallet();
+      }
+    },
+    [connectWallet, pendingConnection]
+  );
+
+  const sendRegistrationDetails = useCallback(
+    async payload => {
+      if (!payload) {
+        return;
+      }
+
+      if (!registrationEndpoint) {
+        console.info('Registration details payload', payload);
+        return;
+      }
+
+      try {
+        const response = await fetch(registrationEndpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) {
+          console.error('Registration endpoint returned an error', response.status, await response.text());
+        }
+      } catch (error) {
+        console.error('Failed to send registration details to the endpoint', error);
+      }
+    },
+    [registrationEndpoint]
+  );
 
   const disconnect = () => {
     setAccount(null);
@@ -121,7 +226,7 @@ function App() {
     <div className="min-h-screen bg-gray-50">
       <Navbar
         account={account}
-        connect={connect}
+        connect={handleConnectRequest}
         disconnect={disconnect}
         language={language}
         setLanguage={setLanguage}
@@ -221,6 +326,8 @@ function App() {
                       account={account}
                       getProvider={getProvider}
                       text={text}
+                      participantInfo={participantInfo}
+                      onRegistrationDetails={sendRegistrationDetails}
                     />
                   </div>
                 </div>
@@ -236,6 +343,13 @@ function App() {
           text={text.calendar}
         />
       </main>
+      <ParticipantInfoModal
+        isOpen={isParticipantModalOpen}
+        onClose={handleParticipantModalClose}
+        onSubmit={handleParticipantSubmit}
+        text={participantFormText}
+        initialValues={participantInfo}
+      />
     </div>
   );
 }
