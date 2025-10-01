@@ -191,11 +191,25 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
       setStatusMessage(statusText.requestingSignature || 'Review the transaction in your wallet.');
 
       const signer = provider.getSigner();
+
+      const network = await provider.getNetwork().catch(() => null);
       const contractCode = await provider.getCode(normalizedUsdtAddress);
       if (!contractCode || contractCode === '0x') {
-        setStatusMessage(
+        const networkLabel =
+          network?.name && network.name !== 'unknown'
+            ? network.name
+            : network?.chainId
+            ? `chain ID ${network.chainId}`
+            : 'the connected network';
+        const template =
           statusText.usdtUnavailable ||
-            'The configured USDT token is not deployed on the connected network.'
+          'The configured USDT token ({address}) is not deployed on {network}.';
+        const formattedMessage = template
+          .replace('{network}', networkLabel)
+          .replace('{address}', normalizedUsdtAddress);
+        setStatusMessage(
+          formattedMessage
+
         );
         return;
       }
