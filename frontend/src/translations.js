@@ -297,5 +297,94 @@ export const residencyActivities = [
         guide: 'Curaduría del equipo culinario de Edge City.'
       }
     }
+  },
+  {
+    id: 'mountain-expedition',
+    priceUSDT: 150,
+    maxParticipants: 40,
+    images: [],
+    imageFolderCid: 'bafybeih77q6wubddx6phljd6ajbcua7jooh2wnxbxz4c2rvna2tdrjzdha',
+    translations: {
+      en: {
+        title: 'Children’s mountain school in the heart of the Andes',
+        summary:
+          'An outdoor school for ages 5–16 with rotating kayak, mountain biking, trekking, nature living, orientation, and team sport modules. Every Sunday we share the weekly plan for two-and-a-half-hour sessions across the week plus a three-hour family outing on Saturdays. Sports and safety gear are provided and groups open from a minimum of 3 up to 40 participants.',
+        highlights: [
+          'Designed for children aged 5–16 with all sports and safety equipment included.',
+          'Rotating disciplines: kayak, mountain biking, trekking, nature living workshops, orientation circuits, and team sports.',
+          'Flexible plans: USD 150 for 2 sessions per week, USD 200 for 3 sessions, USD 270 for 4 sessions; Saturday family excursion at USD 60 per person.',
+          'Weekly schedule sent every Sunday with groups confirmed from 3 to 40 participants.'
+        ],
+        guide: 'Coordinated by the Edge City youth mountain guides.'
+      },
+      es: {
+        title: 'Escuela de montaña infantil en el corazón de la cordillera',
+        summary:
+          'Programa para infancias de 5 a 16 años con módulos rotativos de kayak, bici de montaña, trekking, vida en la naturaleza, orientación y deportes de conjunto. Cada domingo se envía el cronograma semanal de encuentros de dos horas y media, más una salida familiar de tres horas los sábados. Incluye equipamiento deportivo y de seguridad, con grupos que se arman desde un mínimo de 3 hasta un máximo de 40 participantes.',
+        highlights: [
+          'Pensada para infancias de 5 a 16 años con todo el equipamiento deportivo y de seguridad incluido.',
+          'Actividades rotativas: kayak, bici de montaña, trekking, vida en la naturaleza, circuitos de orientación y deportes de conjunto.',
+          'Planes flexibles: USD 150 por 2 encuentros semanales, USD 200 por 3 encuentros, USD 270 por 4 encuentros; excursión familiar del sábado a USD 60 por persona.',
+          'Cronograma enviado cada domingo con cupos habilitados desde 3 hasta 40 participantes.'
+        ],
+        guide: 'Coordinación del equipo de guías de montaña para infancias de Edge City.'
+      }
+    }
+  },
+  {
+    id: 'lake-kayak',
+    images: ['https://ipfs.io/ipfs/bafkreia6mqussojkw3tcngfj6iyow2gjszuxsjereznjomefa2iajg7x4q'],
+    translations: {
+      en: {
+        title: 'Kayak journey across Lake Lolog',
+        summary:
+          'A gentle paddle through transparent bays, learning Patagonian weather patterns and gliding silently at sunset.',
+        highlights: [
+          'Double kayaks, life vests, and safety briefing included.',
+          'On-chain check-in at embarkation with live tracking of spots.',
+          'Campfire toast on the volcanic-sand beach.'
+        ],
+        guide: 'Logistics with the Lolog nautical club and resident artists.'
+      },
+      es: {
+        title: 'Travesía en kayak por el lago Lolog',
+        summary:
+          'Remada suave entre bahías transparentes, aprendiendo lectura del clima patagónico y navegando en silencio al atardecer.',
+        highlights: [
+          'Kayaks dobles, chalecos y briefing de seguridad incluidos.',
+          'Check-in en cadena al embarcar y seguimiento de cupos en vivo.',
+          'Brindis con cocina de campamento en la playa de arena volcánica.'
+        ],
+        guide: 'Logística junto al club náutico de Lolog y artistas residentes.'
+      }
+    }
+  },
+  {
+    id: 'rock-climbing',
+    images: ['https://ipfs.io/ipfs/bafkreiazmgq5d4xq72ggid33nkh4fozsn6ek6feaf3oqes3mczybyjyqca'],
+    translations: {
+      en: {
+        title: 'Rock-climbing clinic and mindful movement',
+        summary:
+          'A progressive session at the local granite school to connect strength, breathing, and creative focus.',
+        highlights: [
+          'All levels welcome: from intro bouldering to roped routes.',
+          'Progress tracking and digital waiver recorded on-chain.',
+          'Integration circle with sound at the base of the wall.'
+        ],
+        guide: 'Mentored by IFMGA guides and Edge City performers.'
+      },
+      es: {
+        title: 'Clínica de escalada en roca y movimientos conscientes',
+        summary:
+          'Sesión progresiva en la escuela de granito local para conectar fuerza, respiración y foco creativo.',
+        highlights: [
+          'Todos los niveles: desde boulder introductorio a vías con cuerda.',
+          'Seguimiento de progresos y liberación de responsabilidad digital firmada on-chain.',
+          'Círculo de integración sonora al pie de la pared.'
+        ],
+        guide: 'Mentoreada por guías IFMGA y performers de Edge City.'
+      }
+    }
   }
 ];
