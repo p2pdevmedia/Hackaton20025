@@ -82,6 +82,12 @@ export const translations = {
       tokenUnavailable: 'The configured {token} token ({address}) is not deployed on {network}.'
 
     },
+    networkWarning: {
+      title: 'Switch to Ethereum Mainnet',
+      description: 'You are connected to {network}. Switch to the Ethereum network to continue with registrations.',
+      unknownNetwork: 'an unknown network',
+      action: 'Switch to Ethereum'
+    },
     alerts: {
       metaMask: 'Install MetaMask to continue.'
     },
@@ -187,6 +193,12 @@ export const translations = {
       usdtUnavailable: 'El token de USDT configurado ({address}) no está desplegado en {network}.',
       tokenUnavailable: 'El token de {token} configurado ({address}) no está desplegado en {network}.'
 
+    },
+    networkWarning: {
+      title: 'Cambiá a la red de Ethereum',
+      description: 'Estás conectado a {network}. Cambiá a la red de Ethereum para continuar con los registros.',
+      unknownNetwork: 'una red desconocida',
+      action: 'Cambiar a Ethereum'
     },
     alerts: {
       metaMask: 'Instalá MetaMask para continuar.'

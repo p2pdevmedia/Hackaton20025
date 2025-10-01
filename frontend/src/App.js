@@ -7,9 +7,28 @@ import ActivityGallery from './components/ActivityGallery';
 import ActivityRegistration from './components/ActivityRegistration';
 import { translations, residencyActivities as residencyCatalog, localeMap } from './translations';
 
+const KNOWN_NETWORK_NAMES = {
+  1: 'Ethereum Mainnet',
+  5: 'Goerli',
+  11155111: 'Sepolia'
+};
+
+const getNetworkDisplayName = (chainId, fallbackName = '') => {
+  if (KNOWN_NETWORK_NAMES[chainId]) {
+    return KNOWN_NETWORK_NAMES[chainId];
+  }
+  if (fallbackName && fallbackName !== 'unknown') {
+    return fallbackName.replace(/\b\w/g, char => char.toUpperCase());
+  }
+  return chainId ? `Chain ${chainId}` : '';
+};
+
 function App() {
   const [account, setAccount] = useState(null);
   const [language, setLanguage] = useState('en');
+  const [isOnEthereumNetwork, setIsOnEthereumNetwork] = useState(true);
+  const [networkChecked, setNetworkChecked] = useState(false);
+  const [networkName, setNetworkName] = useState('');
 
   const text = useMemo(() => translations[language] || translations.en, [language]);
   const languageOptions = useMemo(
@@ -96,6 +115,97 @@ function App() {
       window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
     };
   }, [hasProvider]);
+
+  useEffect(() => {
+    if (!hasProvider) {
+      setNetworkChecked(false);
+      setIsOnEthereumNetwork(false);
+      setNetworkName('');
+      return;
+    }
+
+    let cancelled = false;
+    const provider = getProvider();
+
+    const evaluateNetwork = async () => {
+      try {
+        const network = await provider.getNetwork();
+        if (cancelled) return;
+
+        const isEthereum = network.chainId === 1;
+        setIsOnEthereumNetwork(isEthereum);
+        setNetworkName(getNetworkDisplayName(network.chainId, network.name));
+        setNetworkChecked(true);
+      } catch (error) {
+        if (cancelled) return;
+        console.error('Failed to detect network', error);
+        setIsOnEthereumNetwork(false);
+        setNetworkName('');
+        setNetworkChecked(true);
+      }
+    };
+
+    evaluateNetwork();
+
+    const handleChainChanged = chainId => {
+      const numericChainId = Number.parseInt(chainId, 16);
+      const isEthereum = numericChainId === 1;
+      setIsOnEthereumNetwork(isEthereum);
+      setNetworkName(getNetworkDisplayName(numericChainId));
+      setNetworkChecked(true);
+    };
+
+    window.ethereum.on('chainChanged', handleChainChanged);
+
+    return () => {
+      cancelled = true;
+      window.ethereum.removeListener('chainChanged', handleChainChanged);
+    };
+  }, [getProvider, hasProvider]);
+
+  const switchToEthereumNetwork = useCallback(async () => {
+    if (!hasProvider) {
+      return;
+    }
+
+    try {
+      await window.ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: '0x1' }]
+      });
+      setIsOnEthereumNetwork(true);
+      setNetworkName(KNOWN_NETWORK_NAMES[1]);
+      setNetworkChecked(true);
+    } catch (error) {
+      if (error?.code === 4902) {
+        try {
+          await window.ethereum.request({
+            method: 'wallet_addEthereumChain',
+            params: [
+              {
+                chainId: '0x1',
+                chainName: KNOWN_NETWORK_NAMES[1],
+                nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+                rpcUrls: ['https://cloudflare-eth.com']
+              }
+            ]
+          });
+          await window.ethereum.request({
+            method: 'wallet_switchEthereumChain',
+            params: [{ chainId: '0x1' }]
+          });
+          setIsOnEthereumNetwork(true);
+          setNetworkName(KNOWN_NETWORK_NAMES[1]);
+          setNetworkChecked(true);
+        } catch (addError) {
+          console.error('Failed to add Ethereum Mainnet', addError);
+        }
+      } else {
+        console.error('Network switch failed', error);
+      }
+    }
+  }, [hasProvider]);
+
   const connect = async () => {
     if (!hasProvider) {
       alert(text.alerts.metaMask);
@@ -129,6 +239,24 @@ function App() {
         languageLabel={text.languageSelectorLabel}
         languageOptions={languageOptions}
       />
+      {hasProvider && networkChecked && !isOnEthereumNetwork && (
+        <div className="bg-amber-50 border-l-4 border-amber-400 text-amber-700 px-4 py-3">
+          <p className="font-semibold">{text.networkWarning.title}</p>
+          <p className="mt-1 text-sm">
+            {text.networkWarning.description.replace(
+              '{network}',
+              networkName || text.networkWarning.unknownNetwork
+            )}{' '}
+            <button
+              type="button"
+              onClick={switchToEthereumNetwork}
+              className="font-semibold underline decoration-amber-500 hover:text-amber-900"
+            >
+              {text.networkWarning.action}
+            </button>
+          </p>
+        </div>
+      )}
       <header className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
         <div className="max-w-5xl mx-auto px-4 py-16 grid gap-8 lg:grid-cols-[1.2fr,0.8fr] items-center">
           <div className="space-y-4">
