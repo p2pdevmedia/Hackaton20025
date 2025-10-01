@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { COUNTRIES } from '../constants/countries';
 
 function ParticipantInfoModal({ isOpen, onClose, onSubmit, text = {}, initialValues }) {
   const [formValues, setFormValues] = useState({
@@ -13,6 +14,13 @@ function ParticipantInfoModal({ isOpen, onClose, onSubmit, text = {}, initialVal
     observations: ''
   });
   const [errors, setErrors] = useState({});
+  const countries = useMemo(() => COUNTRIES, []);
+  const defaultCountry = useMemo(
+    () => countries.find(country => country.code === 'AR') || countries[0],
+    [countries]
+  );
+  const [selectedCountry, setSelectedCountry] = useState(defaultCountry);
+  const [contactNumber, setContactNumber] = useState('');
 
   const idTypeOptions = useMemo(
     () => [
@@ -34,6 +42,26 @@ function ParticipantInfoModal({ isOpen, onClose, onSubmit, text = {}, initialVal
   }, [initialValues]);
 
   useEffect(() => {
+    if (!initialValues) {
+      setSelectedCountry(defaultCountry);
+      setContactNumber('');
+      return;
+    }
+
+    const contactValue = initialValues.contact || '';
+    const matchedCountry = countries.find(country => contactValue?.startsWith(country.dialCode));
+
+    if (matchedCountry) {
+      const numberPart = contactValue.slice(matchedCountry.dialCode.length).trimStart();
+      setSelectedCountry(matchedCountry);
+      setContactNumber(numberPart);
+    } else {
+      setSelectedCountry(defaultCountry);
+      setContactNumber(contactValue);
+    }
+  }, [countries, defaultCountry, initialValues]);
+
+  useEffect(() => {
     if (!isOpen) {
       setErrors({});
     }
@@ -48,6 +76,34 @@ function ParticipantInfoModal({ isOpen, onClose, onSubmit, text = {}, initialVal
     setFormValues(prev => ({
       ...prev,
       [name]: value
+    }));
+  };
+
+  const formatContactValue = (country, number) => {
+    if (!number) {
+      return '';
+    }
+    return `${country.dialCode} ${number}`.trim();
+  };
+
+  const handleContactNumberChange = event => {
+    const { value } = event.target;
+    setContactNumber(value);
+    setFormValues(prev => ({
+      ...prev,
+      contact: formatContactValue(selectedCountry, value)
+    }));
+  };
+
+  const handleCountryChange = event => {
+    const country = countries.find(option => option.code === event.target.value);
+    if (!country) {
+      return;
+    }
+    setSelectedCountry(country);
+    setFormValues(prev => ({
+      ...prev,
+      contact: formatContactValue(country, contactNumber)
     }));
   };
 
@@ -212,15 +268,38 @@ function ParticipantInfoModal({ isOpen, onClose, onSubmit, text = {}, initialVal
             <label className="block text-sm font-medium text-slate-700" htmlFor="participant-contact">
               {text.contactLabel || 'Contact phone'}
             </label>
-            <input
-              id="participant-contact"
-              name="contact"
-              type="tel"
-              value={formValues.contact}
-              onChange={handleChange}
-              className="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-200"
-              required
-            />
+            <div className="mt-1 flex gap-2">
+              <div className="min-w-[130px]">
+                <label className="sr-only" htmlFor="participant-country-code">
+                  {text.countryLabel || 'Country'}
+                </label>
+                <select
+                  id="participant-country-code"
+                  value={selectedCountry?.code || ''}
+                  onChange={handleCountryChange}
+                  className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-200"
+                >
+                  {countries.map(country => (
+                    <option key={country.code} value={country.code}>
+                      {`${country.flag} ${country.dialCode} - ${country.name}`}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex-1">
+                <input
+                  id="participant-contact"
+                  name="contact"
+                  type="tel"
+                  inputMode="tel"
+                  value={contactNumber}
+                  onChange={handleContactNumberChange}
+                  placeholder={text.contactPlaceholder || '123 456 7890'}
+                  className="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-200"
+                  required
+                />
+              </div>
+            </div>
             {errors.contact && <p className="mt-1 text-xs text-red-600">{errors.contact}</p>}
           </div>
 
