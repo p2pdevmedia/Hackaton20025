@@ -6,7 +6,8 @@ export const translations = {
       title: 'Edge City · Patagonia Experience',
       subtitle: 'An immersive nature experience with every registration confirmed on-chain through a single wallet message.',
       connect: 'Connect wallet',
-      disconnect: 'Disconnect'
+      disconnect: 'Disconnect',
+      editProfile: 'Edit personal information'
     },
     hero: {
       badge: 'NEW EDITION 2025 · SAN MARTIN DE LOS ANDES',
@@ -133,7 +134,8 @@ export const translations = {
       title: 'Edge City · Residencia Patagonia',
       subtitle: 'Una experiencia inmersiva en la naturaleza con confirmaciones on-chain enviadas desde tu wallet.',
       connect: 'Conectar wallet',
-      disconnect: 'Desconectar'
+      disconnect: 'Desconectar',
+      editProfile: 'Editar datos personales'
     },
     hero: {
       badge: 'Nueva edición 2025 · San Martín de los Andes',
@@ -261,7 +263,8 @@ export const translations = {
       title: 'Edge City · Résidence Patagonie',
       subtitle: 'Une expérience immersive dans la nature avec inscriptions et paiements sécurisés sur la blockchain.',
       connect: 'Connecter le wallet',
-      disconnect: 'Déconnecter'
+      disconnect: 'Déconnecter',
+      editProfile: 'Modifier les données personnelles'
     },
     hero: {
       badge: 'Nouvelle édition 2025 · San Martín de los Andes',
@@ -377,7 +380,8 @@ export const translations = {
       title: 'Edge City · Patagonien-Residenz',
       subtitle: 'Eine immersive Naturerfahrung mit Anmeldungen und Zahlungen, die on-chain abgesichert sind.',
       connect: 'Wallet verbinden',
-      disconnect: 'Trennen'
+      disconnect: 'Trennen',
+      editProfile: 'Persönliche Daten bearbeiten'
     },
     hero: {
       badge: 'Neue Ausgabe 2025 · San Martín de los Andes',
@@ -492,7 +496,8 @@ export const translations = {
       title: 'Edge City · 巴塔哥尼亚驻地',
       subtitle: '沉浸式自然体验，报名和付款全部通过区块链保障。',
       connect: '连接钱包',
-      disconnect: '断开连接'
+      disconnect: '断开连接',
+      editProfile: '编辑个人资料'
     },
     hero: {
       badge: '2025 年全新一季 · 圣马丁德洛斯安第斯',
@@ -608,7 +613,8 @@ export const translations = {
       title: 'Edge City · Резиденция в Патагонии',
       subtitle: 'Иммерсивный опыт в природе с регистрациями и платежами, защищёнными блокчейном.',
       connect: 'Подключить кошелёк',
-      disconnect: 'Отключить'
+      disconnect: 'Отключить',
+      editProfile: 'Редактировать данные'
     },
     hero: {
       badge: 'Новое издание 2025 · Сан-Мартин-де-лос-Андес',
