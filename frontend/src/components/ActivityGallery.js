@@ -1,8 +1,82 @@
 import { useEffect, useMemo, useState } from 'react';
 
-function ActivityGallery({ images = [], alt }) {
-  const gallery = useMemo(() => images.filter(Boolean), [images]);
+const IPFS_GATEWAYS = [
+  'https://nftstorage.link',
+  'https://cloudflare-ipfs.com',
+  'https://ipfs.io'
+];
+
+function ActivityGallery({ images = [], alt, imageFolderCid }) {
+  const [folderImages, setFolderImages] = useState([]);
   const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    if (!imageFolderCid) {
+      setFolderImages([]);
+      return;
+    }
+
+    let isMounted = true;
+    const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+
+    const loadFromGateway = async gateway => {
+      const url = `${gateway}/api/v0/ls?arg=${encodeURIComponent(imageFolderCid)}`;
+      const response = await fetch(url, controller ? { signal: controller.signal } : undefined);
+      if (!response.ok) {
+        throw new Error(`Gateway responded with ${response.status}`);
+      }
+
+      const data = await response.json();
+      const links = data?.Objects?.[0]?.Links || [];
+
+      const files = links
+        .filter(link => link && link.Name && !link.Name.startsWith('.') && Number(link.Type) === 2)
+        .sort((a, b) => a.Name.localeCompare(b.Name))
+        .map(link => {
+          const encodedName = encodeURIComponent(link.Name);
+          if (link.Hash) {
+            return `${gateway}/ipfs/${link.Hash}?filename=${encodedName}`;
+          }
+          return `${gateway}/ipfs/${imageFolderCid}/${encodedName}`;
+        });
+
+      return files;
+    };
+
+    const loadFolderImages = async () => {
+      for (const gateway of IPFS_GATEWAYS) {
+        try {
+          const files = await loadFromGateway(gateway);
+          if (isMounted) {
+            setFolderImages(files);
+            setActiveIndex(0);
+          }
+          return;
+        } catch (error) {
+          if (controller?.signal?.aborted) {
+            return;
+          }
+          console.warn(`Failed to load IPFS folder from ${gateway}`, error);
+        }
+      }
+
+      if (isMounted) {
+        setFolderImages([]);
+      }
+    };
+
+    loadFolderImages();
+
+    return () => {
+      isMounted = false;
+      controller?.abort();
+    };
+  }, [imageFolderCid]);
+
+  const gallery = useMemo(() => {
+    const combined = [...folderImages, ...images].filter(Boolean);
+    return Array.from(new Set(combined));
+  }, [folderImages, images]);
 
   useEffect(() => {
     if (gallery.length === 0) {

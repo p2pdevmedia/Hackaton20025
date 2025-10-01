@@ -813,9 +813,10 @@ export const residencyActivities = [
     }
   },
   {
-    id: 'mountain-expedition',
+    id: 'mountain-expedition-for-kinds',
     priceUSDT: 1,
     maxParticipants: 18,
+    imageFolderCid: 'bafybeih77q6wubddx6phljd6ajbcua7jooh2wnxbxz4c2rvna2tdrjzdha',
     images: ['https://ipfs.io/ipfs/bafybeienxvgvzj4a4qhozas5cd5hgnkk2dkkylnv4q6tiypqz6qqxswwru'],
     translations: {
       en: {
@@ -830,15 +831,16 @@ export const residencyActivities = [
         guide: 'Led by Iván Moritz Karl and the resident community.'
       },
       es: {
-        title: 'Salida de montaña al corazón de la cordillera',
+        title: 'Escuela de montaña infantil',
         summary:
-          'Ascenso guiado entre bosques nativos, miradores ocultos y relatos locales para sentir la energía del Parque Nacional Lanín.',
+          'Actividad para infancias de 5 a 16 años que combina juegos, aprendizaje y vida al aire libre para desarrollar habilidades en la naturaleza junto a guías especializados.',
         highlights: [
-          'Guía habilitado de Edge City y equipo de trekking incluido.',
-          'Registro fotográfico y checkpoints sincronizados con el contrato electrónico.',
-          'Cierre con breathwork frente al volcán Lanín.'
+          'Incluye materiales deportivos y de seguridad para kayak, bici de montaña, trekking, orientación y deportes de conjunto.',
+          'Actividades rotativas con cronogramas semanales enviados cada domingo y grupos de mínimo 3 y máximo 40 participantes.',
+          'Plan flexible: USD 150 por 2 encuentros semanales (2,5 h), USD 200 por 3 encuentros semanales (2,5 h) o USD 270 por 4 encuentros semanales (2,5 h).',
+          'Sábados con excursiones familiares de 3 horas a USD 60 por persona.'
         ],
-        guide: 'Coordinada por Iván Moritz Karl y la comunidad residente.'
+        guide: 'Coordinada por el equipo de montaña de Edge City con acompañamiento familiar.'
       },
       fr: {
         title: 'Expédition en montagne au cœur des Andes',
