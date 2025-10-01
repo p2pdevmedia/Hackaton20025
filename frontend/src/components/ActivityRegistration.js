@@ -7,7 +7,14 @@ const ERC20_ABI = [
   'function balanceOf(address account) view returns (uint256)'
 ];
 
-function ActivityRegistration({ activity, account, getProvider, text }) {
+function ActivityRegistration({
+  activity,
+  account,
+  getProvider,
+  text,
+  participantInfo,
+  onRegistrationDetails
+}) {
   const [quantity, setQuantity] = useState(1);
   const [decimals, setDecimals] = useState(6);
   const [isLoadingDecimals, setIsLoadingDecimals] = useState(false);
@@ -242,6 +249,14 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
       return;
     }
 
+    if (!participantInfo) {
+      setStatusMessage(
+        statusText.missingParticipantInfo ||
+          'Complete your participant information before registering for an activity.'
+      );
+      return;
+    }
+
     if (!hasPaymentConfig) {
       setStatusMessage(
         missingPaymentConfigMessage ||
@@ -269,6 +284,25 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
     try {
       setIsProcessing(true);
       setStatusMessage(statusText.requestingSignature || 'Review the transaction in your wallet.');
+
+      if (onRegistrationDetails) {
+        const payload = {
+          wallet: account,
+          participants: quantity,
+          activity: {
+            id: activity?.id || null,
+            title: activity?.title || null
+          },
+          participantInfo,
+          timestamp: new Date().toISOString()
+        };
+
+        try {
+          await onRegistrationDetails(payload);
+        } catch (error) {
+          console.error('Failed to send participant information for registration', error);
+        }
+      }
 
       const signer = provider.getSigner();
 
@@ -330,7 +364,9 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
     quantity,
     statusText,
     missingPaymentConfigMessage,
-    normalizedDestinationWallet
+    normalizedDestinationWallet,
+    participantInfo,
+    onRegistrationDetails
   ]);
 
   return (

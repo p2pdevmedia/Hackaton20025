@@ -79,7 +79,8 @@ export const translations = {
       insufficientBalance: 'Your USDT balance is not sufficient to cover this registration.',
       insufficientBalanceToken: 'Your {token} balance is not sufficient to cover this registration.',
       usdtUnavailable: 'The configured USDT token ({address}) is not deployed on {network}.',
-      tokenUnavailable: 'The configured {token} token ({address}) is not deployed on {network}.'
+      tokenUnavailable: 'The configured {token} token ({address}) is not deployed on {network}.',
+      missingParticipantInfo: 'Complete your participant information before sending a registration.'
 
     },
     alerts: {
@@ -102,6 +103,23 @@ export const translations = {
       participantCountHelper: 'Choose how many seats to reserve.',
       transactionInfo: 'MetaMask will deliver your message on-chain to {wallet}.',
       paymentTokenLabel: 'Select the token to pay'
+    },
+    participantForm: {
+      title: 'Complete your participant profile',
+      description: 'Fill in your personal information so we can share the registration with the hosts.',
+      firstNameLabel: 'First name',
+      lastNameLabel: 'Last name',
+      idTypeLabel: 'Identification type',
+      idNumberLabel: 'Identification number',
+      accommodationLabel: 'Accommodation',
+      nationalityLabel: 'Nationality',
+      birthDateLabel: 'Birth date',
+      idTypeDni: 'DNI',
+      idTypePassport: 'Passport',
+      idTypeOther: 'Other',
+      cancelButton: 'Cancel',
+      saveButton: 'Save and continue',
+      requiredField: 'This field is required.'
     }
   },
   es: {
@@ -185,7 +203,8 @@ export const translations = {
       insufficientBalance: 'Tu balance de USDT no es suficiente para cubrir esta inscripción.',
       insufficientBalanceToken: 'Tu balance de {token} no es suficiente para cubrir esta inscripción.',
       usdtUnavailable: 'El token de USDT configurado ({address}) no está desplegado en {network}.',
-      tokenUnavailable: 'El token de {token} configurado ({address}) no está desplegado en {network}.'
+      tokenUnavailable: 'El token de {token} configurado ({address}) no está desplegado en {network}.',
+      missingParticipantInfo: 'Completá tu información personal antes de enviar el registro.'
 
     },
     alerts: {
@@ -208,6 +227,23 @@ export const translations = {
       participantCountHelper: 'Elegí cuántos lugares querés reservar.',
       transactionInfo: 'MetaMask enviará tu mensaje on-chain a {wallet}.',
       paymentTokenLabel: 'Seleccioná el token de pago'
+    },
+    participantForm: {
+      title: 'Completá tu perfil de participante',
+      description: 'Ingresá tus datos personales para compartir el registro con los anfitriones.',
+      firstNameLabel: 'Nombre',
+      lastNameLabel: 'Apellido',
+      idTypeLabel: 'Tipo de documento',
+      idNumberLabel: 'Número o código del documento',
+      accommodationLabel: 'Alojamiento',
+      nationalityLabel: 'Nacionalidad',
+      birthDateLabel: 'Fecha de nacimiento',
+      idTypeDni: 'DNI',
+      idTypePassport: 'Pasaporte',
+      idTypeOther: 'Otro',
+      cancelButton: 'Cancelar',
+      saveButton: 'Guardar y continuar',
+      requiredField: 'Este campo es obligatorio.'
     }
   },
   fr: {
