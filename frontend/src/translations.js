@@ -21,8 +21,7 @@ export const translations = {
       heading: 'What the residency activates',
       items: [
         'Curated outings to mountains, water, and rock with local guides.',
-        'Territory cuisine and artistic rituals with Iván Moritz Karl.',
-        'Registrations confirmed via a shared Edge City wallet message.'
+        'We are San Martín de los Andes locals and Crypto Degens.'
       ]
     },
     calendar: {
@@ -150,8 +149,7 @@ export const translations = {
       heading: 'Lo que activa la residencia',
       items: [
         'Salidas curadas a montaña, agua y roca con guías locales.',
-        'Cocina de territorio y rituales artísticos con Iván Moritz Karl.',
-        'Registros confirmados con un mensaje en la wallet compartida de Edge City.'
+        'Somos locales de San Martín de los Andes y degenerados cripto.'
       ]
     },
     calendar: {
@@ -278,8 +276,7 @@ export const translations = {
       heading: 'Ce que la résidence active',
       items: [
         'Sorties curatoriales en montagne, sur l’eau et la roche avec des guides locaux.',
-        'Cuisine du territoire et rituels artistiques avec Iván Moritz Karl.',
-        'Places, paiements et livrables sécurisés par le contrat Edge City.'
+        'Nous sommes des locaux de San Martín de los Andes et des dégénérés de la crypto.'
       ]
     },
     calendar: {
@@ -395,8 +392,7 @@ export const translations = {
       heading: 'Was die Residenz aktiviert',
       items: [
         'Kuratiere Ausflüge zu Bergen, Wasser und Fels mit lokalen Guides.',
-        'Regionale Küche und künstlerische Rituale mit Iván Moritz Karl.',
-        'Plätze, Zahlungen und Deliverables, gesichert durch den Edge City-Vertrag.'
+        'Wir sind Einheimische aus San Martín de los Andes und Krypto-Degens.'
       ]
     },
     calendar: {
@@ -511,8 +507,7 @@ export const translations = {
       heading: '驻地带来的体验',
       items: [
         '与本地向导一起前往山地、湖水与岩壁的精选行程。',
-        '与 Iván Moritz Karl 共同呈现的地域料理与艺术仪式。',
-        '由 Edge City 合约保障的席位、付款与成果。'
+        '我们是来自圣马丁-德洛斯安第斯的本地人，也是加密退化者。'
       ]
     },
     calendar: {
@@ -628,8 +623,7 @@ export const translations = {
       heading: 'Что предлагает резиденция',
       items: [
         'Кураторские выезды в горы, к воде и скалам с местными гидами.',
-        'Кухня региона и художественные ритуалы с Иваном Морицем Карлом.',
-        'Места, платежи и результаты под защитой контракта Edge City.'
+        'Мы — местные из Сан-Мартин-де-лос-Андес и крипто-дегенераты.'
       ]
     },
     calendar: {
