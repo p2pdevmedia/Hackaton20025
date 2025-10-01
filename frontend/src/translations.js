@@ -4,7 +4,8 @@ export const translations = {
     languageSelectorLabel: 'Language',
     navbar: {
       title: 'Edge City · Patagonia Experience',
-      subtitle: 'An immersive nature experience with every registration confirmed on-chain through a single wallet message.',
+      subtitle:
+        'An immersive nature experience with every registration confirmed on-chain through a single wallet message.',
       connect: 'Connect wallet',
       disconnect: 'Disconnect',
       editProfile: 'Edit personal information'
@@ -82,7 +83,6 @@ export const translations = {
       usdtUnavailable: 'The configured USDT token ({address}) is not deployed on {network}.',
       tokenUnavailable: 'The configured {token} token ({address}) is not deployed on {network}.',
       missingParticipantInfo: 'Complete your participant information before sending a registration.'
-
     },
     alerts: {
       metaMask: 'Install MetaMask to continue.',
@@ -134,17 +134,17 @@ export const translations = {
     languageSelectorLabel: 'Idioma',
     navbar: {
       title: 'Edge City · Residencia Patagonia',
-      subtitle: 'Una experiencia inmersiva en la naturaleza con confirmaciones on-chain enviadas desde tu wallet.',
+      subtitle:
+        'Una experiencia inmersiva en la naturaleza con cada registro confirmado on-chain mediante un único mensaje desde tu wallet.',
       connect: 'Conectar wallet',
       disconnect: 'Desconectar',
       editProfile: 'Editar datos personales'
     },
     hero: {
       badge: 'Nueva edición 2025 · San Martín de los Andes',
-      title: 'Residencia Edge City Patagonia: arte vivo, naturaleza y comunidad con confirmaciones directas desde la wallet.',
+      title: 'Residencia Edge City Patagonia: arte vivo, naturaleza y comunidad con confirmaciones directas desde tu wallet.',
       description:
-
-        'Diseñamos una inmersión de varios días para explorar la cordillera, activar prácticas físicas y culinarias, y confirmar tu participación enviando un mensaje en cadena al anfitrión desde tu wallet.',
+        'Diseñamos una inmersión de varios días para explorar los Andes, activar prácticas físicas y culinarias, y confirmar cada cupo con una sola transacción desde tu wallet que envía tu mensaje al anfitrión.',
       primaryLink: 'Ver programa completo',
       dataBadge: 'Confirmaciones on-chain en vivo'
     },
@@ -152,8 +152,8 @@ export const translations = {
       heading: 'Lo que activa la residencia',
       items: [
         'Salidas curadas a montaña, agua y roca con guías locales.',
-        'Cocina de territorio y rituales artísticos con Iván Moritz Karl.',
-        'Registros confirmados con un mensaje en la wallet compartida de Edge City.'
+        'Cocina territorial y rituales artísticos con Iván Moritz Karl.',
+        'Registros confirmados con un mensaje desde la wallet compartida de Edge City.'
       ]
     },
     calendar: {
@@ -174,12 +174,12 @@ export const translations = {
         octoberClimb: {
           title: 'Inmersión de escalada en roca',
           shortLabel: 'Escalada',
-          description: 'Progresión guiada en rutas de granito del 20 al 23 de octubre.'
+          description: 'Progresión guiada en paredes de granito del 20 al 23 de octubre.'
         },
         novemberKayak: {
           title: 'Travesías en kayak por el lago Lolog',
           shortLabel: 'Kayak',
-          description: 'Remadas al amanecer y atardecer del 1 al 3 de noviembre.'
+          description: 'Remadas al amanecer y al atardecer del 1 al 3 de noviembre.'
         },
         novemberClimb: {
           title: 'Bloque de cumbres en granito',
@@ -213,7 +213,6 @@ export const translations = {
       usdtUnavailable: 'El token de USDT configurado ({address}) no está desplegado en {network}.',
       tokenUnavailable: 'El token de {token} configurado ({address}) no está desplegado en {network}.',
       missingParticipantInfo: 'Completá tu información personal antes de enviar el registro.'
-
     },
     alerts: {
       metaMask: 'Instalá MetaMask para continuar.',
@@ -246,7 +245,7 @@ export const translations = {
       firstNameLabel: 'Nombre',
       lastNameLabel: 'Apellido',
       idTypeLabel: 'Tipo de documento',
-      idNumberLabel: 'Número o código del documento',
+      idNumberLabel: 'Número del documento',
       accommodationLabel: 'Alojamiento',
       nationalityLabel: 'Nacionalidad',
       birthDateLabel: 'Fecha de nacimiento',
@@ -259,483 +258,12 @@ export const translations = {
       saveButton: 'Guardar y continuar',
       requiredField: 'Este campo es obligatorio.'
     }
-  },
-  fr: {
-    languageName: 'Français',
-    languageSelectorLabel: 'Langue',
-    navbar: {
-      title: 'Edge City · Résidence Patagonie',
-      subtitle: 'Une expérience immersive dans la nature avec inscriptions et paiements sécurisés sur la blockchain.',
-      connect: 'Connecter le wallet',
-      disconnect: 'Déconnecter',
-      editProfile: 'Modifier les données personnelles'
-    },
-    hero: {
-      badge: 'Nouvelle édition 2025 · San Martín de los Andes',
-      title: 'Résidence Edge City Patagonie : art vivant, nature et communauté reliés on-chain.',
-      description:
-        'Nous concevons des immersions d’une journée de six heures à travers les Andes, avec transport, repas et tout inclus, et nous documentons chaque moment grâce à des smart contracts qui protègent places, paiements et souvenirs.',
-      primaryLink: 'Voir le programme complet',
-      dataBadge: 'Données du contrat en direct'
-    },
-    heroCard: {
-      heading: 'Ce que la résidence active',
-      items: [
-        'Sorties curatoriales en montagne, sur l’eau et la roche avec des guides locaux.',
-        'Cuisine du territoire et rituels artistiques avec Iván Moritz Karl.',
-        'Places, paiements et livrables sécurisés par le contrat Edge City.'
-      ]
-    },
-    calendar: {
-      heading: 'Calendrier des expéditions d’octobre et novembre',
-      description: 'Aperçu des jours réservés aux sessions d’escalade et de kayak pendant la résidence.',
-      legendTitle: 'Activités',
-      legend: {
-        climb: 'Escalade',
-        kayak: 'Kayak'
-      },
-      months: {
-        october: 'Octobre 2024',
-        november: 'Novembre 2024'
-      },
-      location: 'Lac Lolog · Patagonie, Argentine',
-      addToGoogle: 'Ajouter au Google Agenda',
-      events: {
-        octoberClimb: {
-          title: 'Immersion escalade sur granite',
-          shortLabel: 'Escalade',
-          description: 'Progression guidée sur parois de granite du 20 au 23 octobre.'
-        },
-        novemberKayak: {
-          title: 'Traversées en kayak sur le lac Lolog',
-          shortLabel: 'Kayak',
-          description: 'Sorties à l’aube et au crépuscule du 1er au 3 novembre.'
-        },
-        novemberClimb: {
-          title: 'Bloc d’ascensions sur granite',
-          shortLabel: 'Escalade',
-          description: 'Cliniques avancées de fissures et dalles du 10 au 13 novembre.'
-        }
-      }
-    },
-    warnings: {
-      contract: 'Configurez <code>REACT_APP_CONTRACT_ADDRESS</code> pour interagir avec le contrat d’activités.',
-      usdt: 'Configurez <code>REACT_APP_USDT_ADDRESS</code> pour cibler le jeton USDT utilisé pour les paiements.',
-      invalidDestination: 'L’adresse de portefeuille configurée pour la destination n’est pas valide.',
-      invalidUsdt: 'L’adresse configurée pour le jeton USDT n’est pas valide.'
-    },
-    status: {
-      contractMissing: 'Configurez l’adresse du contrat pour créer des activités.',
-      connectWalletToCreate: 'Connectez votre wallet pour créer des activités.',
-      creatingActivity: 'Création de l’activité…',
-      activityCreated: 'Activité créée avec succès.',
-      activityCreationFailed: 'Impossible de créer l’activité. Consultez la console pour plus d’informations.',
-      connectWalletToRegister: 'Connectez votre wallet pour vous inscrire.',
-      activityUnavailable: 'Cette activité n’est pas disponible.',
-      approvingUsdt: 'Approbation des USDT…',
-      confirmingRegistration: 'Confirmation de l’inscription…',
-      registrationComplete: 'Inscription terminée !',
-      registrationFailed: 'Impossible de finaliser l’inscription. Consultez la console pour plus de détails.',
-      processingRegistration: 'Nous traitons votre inscription.',
-      insufficientBalance: 'Votre solde en USDT est insuffisant pour couvrir cette inscription.',
-      usdtUnavailable: 'Le jeton USDT configuré ({address}) n’est pas déployé sur {network}.'
-
-    },
-    alerts: {
-      metaMask: 'Installez MetaMask pour continuer.',
-      wrongNetwork: {
-        message: "Vous n'êtes pas connecté au réseau Ethereum.",
-        action: 'Passer sur Ethereum'
-      }
-    },
-    agenda: {
-      loading: 'Chargement des activités…',
-      detailsButton: 'Voir les détails',
-      detailBackButton: 'Retour aux activités',
-      detailHeading: "Informations sur l'activité",
-      activityNotFound: "Impossible de charger cette activité. Retournez à l'agenda.",
-      balanceLabel: 'Solde USDT',
-      dateLabel: 'Date',
-      spotsLabel: 'Places',
-      priceLabel: 'Prix',
-      registeredBadge: 'Vous êtes inscrit·e',
-      subscribeButton: 'M’inscrire avec MetaMask',
-      noSpotsButton: 'Plus de places disponibles',
-      inactiveBadge: 'Activité inactive'
-    },
-    adminForm: {
-      heading: 'Créer une nouvelle activité',
-      description: 'Définissez l’expérience, la date et les places disponibles. Le prix sera exprimé en USDT.',
-      nameLabel: 'Nom',
-      namePlaceholder: 'Nom de l’activité',
-      descriptionLabel: 'Description',
-      descriptionPlaceholder: 'Décrivez l’expérience',
-      dateLabel: 'Date et horaire',
-      maxParticipantsLabel: 'Participants maximum',
-      priceLabel: 'Prix en USDT',
-      pricePlaceholder: 'Ex : 25',
-      submit: 'Créer l’activité'
-    }
-  },
-  de: {
-    languageName: 'Deutsch',
-    languageSelectorLabel: 'Sprache',
-    navbar: {
-      title: 'Edge City · Patagonien-Residenz',
-      subtitle: 'Eine immersive Naturerfahrung mit Anmeldungen und Zahlungen, die on-chain abgesichert sind.',
-      connect: 'Wallet verbinden',
-      disconnect: 'Trennen',
-      editProfile: 'Persönliche Daten bearbeiten'
-    },
-    hero: {
-      badge: 'Neue Ausgabe 2025 · San Martín de los Andes',
-      title: 'Edge City Patagonien-Residenz: lebendige Kunst, Natur und Gemeinschaft on-chain vernetzt.',
-      description:
-        'Wir gestalten eine mehrtägige Immersion, um die Anden zu erkunden, körperliche und kulinarische Praktiken zu aktivieren und jeden Moment mit Smart Contracts zu dokumentieren, die Plätze, Zahlungen und Erinnerungen schützen.',
-      primaryLink: 'Gesamtes Programm ansehen',
-      dataBadge: 'Live-Daten des Smart Contracts'
-    },
-    heroCard: {
-      heading: 'Was die Residenz aktiviert',
-      items: [
-        'Kuratiere Ausflüge zu Bergen, Wasser und Fels mit lokalen Guides.',
-        'Regionale Küche und künstlerische Rituale mit Iván Moritz Karl.',
-        'Plätze, Zahlungen und Deliverables, gesichert durch den Edge City-Vertrag.'
-      ]
-    },
-    calendar: {
-      heading: 'Oktober- und November-Expeditionskalender',
-      description: 'Sieh dir die reservierten Tage für Kletter- und Kayaksessions während der Residenz an.',
-      legendTitle: 'Aktivitäten',
-      legend: {
-        climb: 'Klettern',
-        kayak: 'Kayak'
-      },
-      months: {
-        october: 'Oktober 2024',
-        november: 'November 2024'
-      },
-      location: 'Lago Lolog · Patagonien, Argentinien',
-      addToGoogle: 'Zu Google Kalender hinzufügen',
-      events: {
-        octoberClimb: {
-          title: 'Kletter-Immersion auf Granit',
-          shortLabel: 'Klettern',
-          description: 'Geführte Mehrseillängen vom 20. bis 23. Oktober.'
-        },
-        novemberKayak: {
-          title: 'Kayaküberquerungen auf dem Lolog-See',
-          shortLabel: 'Kayak',
-          description: 'Paddeln bei Sonnenaufgang und -untergang vom 1. bis 3. November.'
-        },
-        novemberClimb: {
-          title: 'Gipfelklettern auf Granit',
-          shortLabel: 'Klettern',
-          description: 'Fortgeschrittene Riss- und Plattenclinics vom 10. bis 13. November.'
-        }
-      }
-    },
-    warnings: {
-      contract: 'Setze <code>REACT_APP_CONTRACT_ADDRESS</code>, um mit dem Aktivitätsvertrag zu interagieren.',
-      usdt: 'Setze <code>REACT_APP_USDT_ADDRESS</code>, um auf den für Zahlungen verwendeten USDT-Token zu verweisen.',
-      invalidDestination: 'Die konfigurierte Ziel-Wallet-Adresse ist ungültig.',
-      invalidUsdt: 'Die konfigurierte USDT-Token-Adresse ist ungültig.'
-    },
-    status: {
-      contractMissing: 'Konfiguriere die Vertragsadresse, um Aktivitäten zu erstellen.',
-      connectWalletToCreate: 'Verbinde dein Wallet, um Aktivitäten zu erstellen.',
-      creatingActivity: 'Aktivität wird erstellt...',
-      activityCreated: 'Aktivität erfolgreich erstellt.',
-      activityCreationFailed: 'Aktivität konnte nicht erstellt werden. Sieh für mehr Informationen in die Konsole.',
-      connectWalletToRegister: 'Verbinde dein Wallet, um dich anzumelden.',
-      activityUnavailable: 'Diese Aktivität ist nicht verfügbar.',
-      approvingUsdt: 'USDT werden genehmigt...',
-      confirmingRegistration: 'Anmeldung wird bestätigt...',
-      registrationComplete: 'Anmeldung abgeschlossen!',
-      registrationFailed: 'Anmeldung konnte nicht abgeschlossen werden. Sieh für Details in die Konsole.',
-      processingRegistration: 'Wir verarbeiten deine Anmeldung.',
-      insufficientBalance: 'Dein USDT-Guthaben reicht für diese Anmeldung nicht aus.',
-      usdtUnavailable: 'Der konfigurierte USDT-Token ({address}) ist auf {network} nicht bereitgestellt.'
-    },
-    alerts: {
-      metaMask: 'Installiere MetaMask, um fortzufahren.',
-      wrongNetwork: {
-        message: 'Sie sind nicht mit dem Ethereum-Netzwerk verbunden.',
-        action: 'Zu Ethereum wechseln'
-      }
-    },
-    agenda: {
-      loading: 'Aktivitäten werden geladen...',
-      detailsButton: 'Details ansehen',
-      detailBackButton: 'Zurück zu den Aktivitäten',
-      detailHeading: 'Aktivitätsinformationen',
-      activityNotFound: 'Diese Aktivität konnte nicht geladen werden. Kehre zur Übersicht zurück.',
-      balanceLabel: 'USDT-Guthaben',
-      dateLabel: 'Datum',
-      spotsLabel: 'Plätze',
-      priceLabel: 'Preis',
-      registeredBadge: 'Du bist angemeldet',
-      subscribeButton: 'Mit MetaMask anmelden',
-      noSpotsButton: 'Keine Plätze verfügbar',
-      inactiveBadge: 'Inaktive Aktivität'
-    },
-    adminForm: {
-      heading: 'Neue Aktivität erstellen',
-      description: 'Definiere Erlebnis, Termin und verfügbare Plätze. Der Preis wird in USDT angegeben.',
-      nameLabel: 'Name',
-      namePlaceholder: 'Name der Aktivität',
-      descriptionLabel: 'Beschreibung',
-      descriptionPlaceholder: 'Beschreibe das Erlebnis',
-      dateLabel: 'Datum und Uhrzeit',
-      maxParticipantsLabel: 'Maximale Teilnehmer',
-      priceLabel: 'Preis in USDT',
-      pricePlaceholder: 'Z. B. 25',
-      submit: 'Aktivität erstellen'
-    }
-  },
-  zh: {
-    languageName: '中文',
-    languageSelectorLabel: '语言',
-    navbar: {
-      title: 'Edge City · 巴塔哥尼亚驻地',
-      subtitle: '沉浸式自然体验，报名和付款全部通过区块链保障。',
-      connect: '连接钱包',
-      disconnect: '断开连接',
-      editProfile: '编辑个人资料'
-    },
-    hero: {
-      badge: '2025 年全新一季 · 圣马丁德洛斯安第斯',
-      title: 'Edge City 巴塔哥尼亚驻地：在链上连接的现场艺术、自然与社区。',
-      description:
-        '我们策划为期多日的沉浸体验，探索安第斯山脉，开启身体与美食实践，并通过智能合约记录每一个守护席位、支付与记忆的瞬间。',
-      primaryLink: '查看完整日程',
-      dataBadge: '智能合约实时数据'
-    },
-    heroCard: {
-      heading: '驻地带来的体验',
-      items: [
-        '与本地向导一起前往山地、湖水与岩壁的精选行程。',
-        '与 Iván Moritz Karl 共同呈现的地域料理与艺术仪式。',
-        '由 Edge City 合约保障的席位、付款与成果。'
-      ]
-    },
-    calendar: {
-      heading: '十月与十一月探险日历',
-      description: '预览驻地期间为攀登与皮划艇课程保留的具体日期。',
-      legendTitle: '活动',
-      legend: {
-        climb: '攀登',
-        kayak: '皮划艇'
-      },
-      months: {
-        october: '2024 年 10 月',
-        november: '2024 年 11 月'
-      },
-      location: '洛洛格湖 · 阿根廷巴塔哥尼亚',
-      addToGoogle: '添加到 Google 日历',
-      events: {
-        octoberClimb: {
-          title: '花岗岩攀登沉浸营',
-          shortLabel: '攀登',
-          description: '10 月 20 日至 23 日的指导式多段攀登。'
-        },
-        novemberKayak: {
-          title: '洛洛格湖皮划艇穿越',
-          shortLabel: '皮划艇',
-          description: '11 月 1 日至 3 日的日出与日落划行。'
-        },
-        novemberClimb: {
-          title: '花岗岩山峰攀登营',
-          shortLabel: '攀登',
-          description: '11 月 10 日至 13 日的高阶裂缝与板岩课程。'
-        }
-      }
-    },
-    warnings: {
-      contract: '请设置 <code>REACT_APP_CONTRACT_ADDRESS</code> 以便与活动合约交互。',
-      usdt: '请设置 <code>REACT_APP_USDT_ADDRESS</code> 指向用于支付的 USDT 代币。',
-      invalidDestination: '配置的钱包地址无效。',
-      invalidUsdt: '配置的 USDT 代币地址无效。'
-    },
-    status: {
-      contractMissing: '请配置合约地址以创建活动。',
-      connectWalletToCreate: '连接钱包以创建活动。',
-      creatingActivity: '正在创建活动…',
-      activityCreated: '活动创建成功。',
-      activityCreationFailed: '无法创建活动。请查看控制台了解更多信息。',
-      connectWalletToRegister: '连接钱包以报名。',
-      activityUnavailable: '该活动当前不可用。',
-      approvingUsdt: '正在授权 USDT…',
-      confirmingRegistration: '正在确认报名…',
-      registrationComplete: '报名完成！',
-      registrationFailed: '无法完成报名。请查看控制台了解更多详情。',
-      processingRegistration: '我们正在处理您的报名。',
-      insufficientBalance: '您的 USDT 余额不足，无法完成此报名。',
-      usdtUnavailable: '配置的 USDT 代币 ({address}) 未在 {network} 上部署。'
-
-    },
-    alerts: {
-      metaMask: '请安装 MetaMask 以继续。',
-      wrongNetwork: {
-        message: '您当前未连接到以太坊网络。',
-        action: '切换到以太坊'
-      }
-    },
-    agenda: {
-      loading: '正在加载活动…',
-      detailsButton: '查看详情',
-      detailBackButton: '返回活动列表',
-      detailHeading: '活动信息',
-      activityNotFound: '无法加载该活动，请返回日程列表。',
-      balanceLabel: 'USDT 余额',
-      dateLabel: '日期',
-      spotsLabel: '名额',
-      priceLabel: '价格',
-      registeredBadge: '你已报名',
-      subscribeButton: '使用 MetaMask 报名',
-      noSpotsButton: '名额已满',
-      inactiveBadge: '活动未开放'
-    },
-    adminForm: {
-      heading: '创建新活动',
-      description: '设定体验内容、时间与可用名额。价格将以 USDT 表示。',
-      nameLabel: '名称',
-      namePlaceholder: '活动名称',
-      descriptionLabel: '描述',
-      descriptionPlaceholder: '介绍这项体验',
-      dateLabel: '日期与时间',
-      maxParticipantsLabel: '最大参与人数',
-      priceLabel: 'USDT 价格',
-      pricePlaceholder: '例如：25',
-      submit: '创建活动'
-    }
-  },
-  ru: {
-    languageName: 'Русский',
-    languageSelectorLabel: 'Язык',
-    navbar: {
-      title: 'Edge City · Резиденция в Патагонии',
-      subtitle: 'Иммерсивный опыт в природе с регистрациями и платежами, защищёнными блокчейном.',
-      connect: 'Подключить кошелёк',
-      disconnect: 'Отключить',
-      editProfile: 'Редактировать данные'
-    },
-    hero: {
-      badge: 'Новое издание 2025 · Сан-Мартин-де-лос-Андес',
-      title: 'Резиденция Edge City в Патагонии: живое искусство, природа и сообщество, соединённые on-chain.',
-      description:
-        'Мы создаём многодневное погружение, чтобы исследовать Анды, развивать телесные и кулинарные практики и фиксировать каждый момент с помощью смарт-контрактов, которые защищают места, платежи и воспоминания.',
-      primaryLink: 'Посмотреть программу полностью',
-      dataBadge: 'Данные смарт-контракта в реальном времени'
-    },
-    heroCard: {
-      heading: 'Что предлагает резиденция',
-      items: [
-        'Кураторские выезды в горы, к воде и скалам с местными гидами.',
-        'Кухня региона и художественные ритуалы с Иваном Морицем Карлом.',
-        'Места, платежи и результаты под защитой контракта Edge City.'
-      ]
-    },
-    calendar: {
-      heading: 'Календарь экспедиций на октябрь и ноябрь',
-      description: 'Посмотрите точные дни, выделенные под скалолазание и каякинг во время резиденции.',
-      legendTitle: 'Активности',
-      legend: {
-        climb: 'Скалолазание',
-        kayak: 'Каяк'
-      },
-      months: {
-        october: 'Октябрь 2024',
-        november: 'Ноябрь 2024'
-      },
-      location: 'Озеро Лолог · Патагония, Аргентина',
-      addToGoogle: 'Добавить в Google Календарь',
-      events: {
-        octoberClimb: {
-          title: 'Иммерсия в скалолазание',
-          shortLabel: 'Скалолазание',
-          description: 'Пошаговое восхождение по гранитным маршрутам с 20 по 23 октября.'
-        },
-        novemberKayak: {
-          title: 'Переходы на каяках по озеру Лолог',
-          shortLabel: 'Каяк',
-          description: 'Заплывы на рассвете и закате с 1 по 3 ноября.'
-        },
-        novemberClimb: {
-          title: 'Кампания по вершинам на граните',
-          shortLabel: 'Скалолазание',
-          description: 'Продвинутые занятия по трещинам и плитам с 10 по 13 ноября.'
-        }
-      }
-    },
-    warnings: {
-      contract: 'Укажите <code>REACT_APP_CONTRACT_ADDRESS</code>, чтобы взаимодействовать с контрактом активностей.',
-      usdt: 'Укажите <code>REACT_APP_USDT_ADDRESS</code>, чтобы настроить USDT-токен для платежей.',
-      invalidDestination: 'Указанный адрес кошелька-получателя недействителен.',
-      invalidUsdt: 'Указанный адрес токена USDT недействителен.'
-    },
-    status: {
-      contractMissing: 'Настройте адрес контракта, чтобы создавать активности.',
-      connectWalletToCreate: 'Подключите кошелёк, чтобы создавать активности.',
-      creatingActivity: 'Создание активности…',
-      activityCreated: 'Активность успешно создана.',
-      activityCreationFailed: 'Не удалось создать активность. Подробности смотрите в консоли.',
-      connectWalletToRegister: 'Подключите кошелёк, чтобы зарегистрироваться.',
-      activityUnavailable: 'Эта активность недоступна.',
-      approvingUsdt: 'Идёт подтверждение USDT…',
-      confirmingRegistration: 'Подтверждение регистрации…',
-      registrationComplete: 'Регистрация завершена!',
-      registrationFailed: 'Не удалось завершить регистрацию. Подробности смотрите в консоли.',
-      processingRegistration: 'Мы обрабатываем вашу регистрацию.',
-      insufficientBalance: 'Вашего баланса USDT недостаточно, чтобы оплатить эту регистрацию.',
-      usdtUnavailable: 'Настроенный токен USDT ({address}) не развернут в сети {network}.'
-
-    },
-    alerts: {
-      metaMask: 'Установите MetaMask, чтобы продолжить.',
-      wrongNetwork: {
-        message: 'Вы не подключены к сети Ethereum.',
-        action: 'Переключиться на Ethereum'
-      }
-    },
-    agenda: {
-      loading: 'Загрузка активностей…',
-      detailsButton: 'Подробнее',
-      detailBackButton: 'Назад к активностям',
-      detailHeading: 'Информация об активности',
-      activityNotFound: 'Не удалось загрузить активность. Вернитесь к расписанию.',
-      balanceLabel: 'Баланс USDT',
-      dateLabel: 'Дата',
-      spotsLabel: 'Места',
-      priceLabel: 'Цена',
-      registeredBadge: 'Вы зарегистрированы',
-      subscribeButton: 'Подписаться через MetaMask',
-      noSpotsButton: 'Нет свободных мест',
-      inactiveBadge: 'Активность неактивна'
-    },
-    adminForm: {
-      heading: 'Создать новую активность',
-      description: 'Определите опыт, дату и количество мест. Цена указывается в USDT.',
-      nameLabel: 'Название',
-      namePlaceholder: 'Название активности',
-      descriptionLabel: 'Описание',
-      descriptionPlaceholder: 'Опишите опыт',
-      dateLabel: 'Дата и время',
-      maxParticipantsLabel: 'Максимум участников',
-      priceLabel: 'Цена в USDT',
-      pricePlaceholder: 'Напр.: 25',
-      submit: 'Создать активность'
-    }
   }
 };
 
 export const localeMap = {
   en: 'en-US',
-  es: 'es-ES',
-  fr: 'fr-FR',
-  de: 'de-DE',
-  zh: 'zh-CN',
-  ru: 'ru-RU'
+  es: 'es-ES'
 };
 
 export const residencyActivities = [
@@ -762,280 +290,14 @@ export const residencyActivities = [
       es: {
         title: 'Asado patagónico íntimo en la orilla del lago',
         summary:
-          'Salida de seis horas con traslado ida y vuelta desde San Martín de los Andes: navegación privada de 45 minutos por el lago Lácar hasta Quilaquina para una inmersión guiada en la costa con anfitriones locales antes de un asado a fuego lento curado por Edge City en una playa escondida.',
+          'Salida de seis horas con traslado ida y vuelta desde San Martín de los Andes: navegación privada de 45 minutos por el lago Lácar hasta Quilaquina para una inmersión guiada en la costa con anfitriones locales antes de un festín a fuego abierto curado por Edge City en una playa escondida.',
         highlights: [
-          'Travesía en lancha privada para hasta 60 personas, con transporte incluido.',
-          'Recorrido guiado en Quilaquina con anfitriones locales.',
-          'Asado patagónico al fuego (cordero al asador) con vinos y bebidas incluidos por USD 230 por persona.'
+          'Travesía en lancha privada para hasta 60 personas, con transporte ida y vuelta incluido.',
+          'Inmersión guiada en la costa de Quilaquina junto a anfitriones locales.',
+          'Asado patagónico al fuego (cordero al asador) con vinos locales y bebidas sin alcohol incluidos por USD 230 por persona.'
         ],
-        guide: 'Curaduría gastronómica de la cocina Edge City.'
-      },
-      fr: {
-        title: 'Asado patagonique intimiste au bord du lac',
-        summary:
-          'Excursion de six heures avec transport aller-retour depuis San Martín de los Andes : traversée privée de 45 minutes du lac Lácar jusqu’à Quilaquina pour une immersion guidée sur le rivage avec des hôtes locaux, suivie d’un festin au feu de bois curaté par Edge City sur une plage secrète.',
-        highlights: [
-          'Traversée en bateau privé (max 60 personnes) avec transport aller-retour inclus.',
-          'Immersion guidée à Quilaquina avec des hôtes locaux.',
-          'Asado patagonique au feu (cordero al asador) avec vins et boissons inclus pour 230 USD par personne.'
-        ],
-        guide: 'Curaté par l’équipe culinaire d’Edge City.'
-      },
-      de: {
-        title: 'Intimes patagonisches Asado am Seeufer',
-        summary:
-          'Sechsstündiger Ausflug mit Hin- und Rücktransport ab San Martín de los Andes: 45-minütige Privatüberfahrt über den Lago Lácar nach Quilaquina für eine geführte Ufer-Immersion mit lokalen Gastgeber:innen, bevor ein von Edge City kuratiertes Feuermahl an einem versteckten Strand serviert wird.',
-        highlights: [
-          'Private Bootsfahrt für bis zu 60 Gäste mit Hin- und Rücktransport inklusive.',
-          'Geführte Ufer-Immersion in Quilaquina mit lokalen Gastgeber:innen.',
-          'Patagonisches Feuermahl (Cordero al Asador) mit lokalen Weinen und alkoholfreien Getränken inklusive für 230 USD pro Person.'
-        ],
-        guide: 'Kuratiert vom Edge City-Küchenteam.'
-      },
-      zh: {
-        title: '湖畔的私密巴塔哥尼亚烤肉',
-        summary:
-          '从圣马丁－德洛斯安第斯出发的六小时行程：私人船只 45 分钟横渡拉卡尔湖抵达 Quilaquina，与当地向导一起体验湖岸风貌，随后在隐秘沙滩享用由 Edge City 策划的火烤盛宴。',
-        highlights: [
-          '私人船只往返，限 60 名来宾，含全程交通。',
-          '在 Quilaquina 与当地向导一同进行湖岸导览。',
-          '巴塔哥尼亚火烤盛宴（烤羊 Cordero al Asador），含当地葡萄酒与软饮，每人 230 美元。'
-        ],
-        guide: '由 Edge City 烹饪团队策展。'
-      },
-      ru: {
-        title: 'Камерное патагонское асадо на берегу озера',
-        summary:
-          'Шестичасовая поездка с трансфером туда и обратно из Сан-Мартин-де-лос-Андес: 45-минутный приватный переход через озеро Лакар в Килакину для погружения в береговую культуру с местными хозяевами, после чего на уединённом пляже подают пир на открытом огне от Edge City.',
-        highlights: [
-          'Приватная лодочная прогулка для группы до 60 человек с трансфером туда и обратно.',
-          'Погружение в Килакине с местными гидами.',
-          'Патагонское асадо на огне (cordero al asador) с местными винами и безалкогольными напитками включено, стоимость 230 USD с человека.'
-        ],
-        guide: 'Кураторская работа кулинарной команды Edge City.'
+        guide: 'Curaduría del equipo culinario de Edge City.'
       }
     }
-  },
-  {
-    id: 'mountain-expedition',
-    priceUSDT: 1,
-    maxParticipants: 18,
-    images: ['https://ipfs.io/ipfs/bafybeienxvgvzj4a4qhozas5cd5hgnkk2dkkylnv4q6tiypqz6qqxswwru'],
-    translations: {
-      en: {
-        title: 'Mountain expedition to the heart of the Andes',
-        summary:
-          'A guided ascent through native forests, hidden viewpoints, and local stories to feel the energy of Lanín National Park.',
-        highlights: [
-          'Certified Edge City guide and trekking gear included.',
-          'Photo log and checkpoints synced with the smart contract.',
-          'Closing breathwork facing the Lanín volcano.'
-        ],
-        guide: 'Led by Iván Moritz Karl and the resident community.'
-      },
-      es: {
-        title: 'Salida de montaña al corazón de la cordillera',
-        summary:
-          'Ascenso guiado entre bosques nativos, miradores ocultos y relatos locales para sentir la energía del Parque Nacional Lanín.',
-        highlights: [
-          'Guía habilitado de Edge City y equipo de trekking incluido.',
-          'Registro fotográfico y checkpoints sincronizados con el contrato electrónico.',
-          'Cierre con breathwork frente al volcán Lanín.'
-        ],
-        guide: 'Coordinada por Iván Moritz Karl y la comunidad residente.'
-      },
-      fr: {
-        title: 'Expédition en montagne au cœur des Andes',
-        summary:
-          'Ascension guidée à travers forêts natives, belvédères cachés et récits locaux pour ressentir l’énergie du parc national Lanín.',
-        highlights: [
-          'Guide Edge City certifié et équipement de trekking inclus.',
-          'Journal photo et checkpoints synchronisés avec le smart contract.',
-          'Séance de breathwork face au volcan Lanín.'
-        ],
-        guide: 'Coordonnée par Iván Moritz Karl et la communauté résidente.'
-      },
-      de: {
-        title: 'Bergexpedition ins Herz der Anden',
-        summary:
-          'Geführter Aufstieg durch heimische Wälder, versteckte Aussichtspunkte und lokale Geschichten, um die Energie des Lanín-Nationalparks zu spüren.',
-        highlights: [
-          'Zertifizierter Edge City-Guide und Trekkingausrüstung inklusive.',
-          'Fotoprotokoll und Checkpoints, die mit dem Smart Contract synchronisiert sind.',
-          'Abschluss mit Breathwork vor dem Vulkan Lanín.'
-        ],
-        guide: 'Koordiniert von Iván Moritz Karl und der Resident-Community.'
-      },
-      zh: {
-        title: '深入安第斯山脉的高山远征',
-        summary:
-          '在向导带领下穿越原始森林、隐秘观景点与在地故事，感受拉宁国家公园的能量。',
-        highlights: [
-          'Edge City 认证向导与登山装备全程提供。',
-          '与智能合约同步的影像记录与打卡点。',
-          '在拉宁火山前的呼吸练习收尾。'
-        ],
-        guide: '由 Iván Moritz Karl 与驻地社区共同带领。'
-      },
-      ru: {
-        title: 'Горная экспедиция в сердце Анд',
-        summary:
-          'Сопровождаемый подъём через родные леса, скрытые смотровые площадки и местные истории, чтобы почувствовать энергию национального парка Ланин.',
-        highlights: [
-          'Сертифицированный гид Edge City и включённое снаряжение для треккинга.',
-          'Фотопротокол и чекпоинты, синхронизированные со смарт-контрактом.',
-          'Завершение дыхательной практикой перед вулканом Ланин.'
-        ],
-        guide: 'Координация Ивана Морица Карла и резидентского сообщества.'
-      }
-    }
-  },
-  {
-    id: 'lake-kayak',
-    priceUSDT: 150,
-    maxParticipants: 16,
-    images: ['https://ipfs.io/ipfs/bafkreia6mqussojkw3tcngfj6iyow2gjszuxsjereznjomefa2iajg7x4q'],
-    translations: {
-      en: {
-        title: 'Kayak journey across Lake Lolog',
-        summary:
-          'A gentle paddle through transparent bays, learning Patagonian weather patterns and gliding silently at sunset.',
-        highlights: [
-          'Double kayaks, life vests, and safety briefing included.',
-          'On-chain check-in at embarkation with live tracking of spots.',
-          'Campfire toast on the volcanic-sand beach.'
-        ],
-        guide: 'Logistics with the Lolog nautical club and resident artists.'
-      },
-      es: {
-        title: 'Travesía en kayak por el lago Lolog',
-        summary:
-          'Remada suave entre bahías transparentes, aprendiendo lectura del clima patagónico y navegando en silencio al atardecer.',
-        highlights: [
-          'Kayaks dobles, chalecos y briefing de seguridad incluidos.',
-          'Check-in en cadena al embarcar y tracking de cupos en vivo.',
-          'Brindis con cocina de campamento en la playa de arena volcánica.'
-        ],
-        guide: 'Logística junto al club náutico de Lolog y artistas residentes.'
-      },
-      fr: {
-        title: 'Traversée en kayak du lac Lolog',
-        summary:
-          'Pagayage doux entre baies transparentes, apprentissage de la météo patagonienne et navigation silencieuse au coucher du soleil.',
-        highlights: [
-          'Kayaks doubles, gilets de sauvetage et briefing de sécurité inclus.',
-          'Check-in on-chain à l’embarquement et suivi des places en direct.',
-          'Toast autour du feu de camp sur la plage de sable volcanique.'
-        ],
-        guide: 'Logistique avec le club nautique de Lolog et les artistes résidents.'
-      },
-      de: {
-        title: 'Kajaktour über den Lago Lolog',
-        summary:
-          'Sanftes Paddeln durch glasklare Buchten, Patagonische Wetterkunde und lautloses Gleiten bei Sonnenuntergang.',
-        highlights: [
-          'Doppelkajaks, Schwimmwesten und Sicherheitsbriefing inklusive.',
-          'On-Chain-Check-in beim Einsteigen und Live-Tracking der Plätze.',
-          'Lagerfeuer-Toast am Strand aus vulkanischem Sand.'
-        ],
-        guide: 'Logistik mit dem Yachtclub Lolog und den Resident-Künstler:innen.'
-      },
-      zh: {
-        title: '洛洛湖皮划艇之旅',
-        summary:
-          '在透明海湾间轻松划行，学习巴塔哥尼亚的天气判断，傍晚静静滑向夕阳。',
-        highlights: [
-          '提供双人皮划艇、救生衣和安全简报。',
-          '登船时链上签到，并实时追踪剩余名额。',
-          '在火山砂海滩上以营地餐点举杯。'
-        ],
-        guide: '由洛洛湖航海俱乐部与驻地艺术家协同策划。'
-      },
-      ru: {
-        title: 'Путешествие на каяках по озеру Лолог',
-        summary:
-          'Неспешная гребля по прозрачным бухтам, знакомство с патагонской погодой и тихое скольжение на закате.',
-        highlights: [
-          'Двухместные каяки, спасательные жилеты и инструктаж по безопасности включены.',
-          'Чек-ин на блокчейне при посадке и живой трекинг свободных мест.',
-          'Тост с походной кухней на пляже из вулканического песка.'
-        ],
-        guide: 'Логистика совместно с яхт-клубом Лолога и резидентами-художниками.'
-      }
-    }
-  },
-  {
-    id: 'rock-climbing',
-    priceUSDT: 140,
-    maxParticipants: 12,
-    images: ['https://ipfs.io/ipfs/bafkreiazmgq5d4xq72ggid33nkh4fozsn6ek6feaf3oqes3mczybyjyqca'],
-    translations: {
-      en: {
-        title: 'Rock-climbing clinic and mindful movement',
-        summary:
-          'A progressive session at the local granite school to connect strength, breathing, and creative focus.',
-        highlights: [
-          'All levels welcome: from intro bouldering to roped routes.',
-          'Progress tracking and digital waiver recorded on-chain.',
-          'Integration circle with sound at the base of the wall.'
-        ],
-        guide: 'Mentored by IFMGA guides and Edge City performers.'
-      },
-      es: {
-        title: 'Clínica de escalada en roca y movimientos conscientes',
-        summary:
-          'Sesión progresiva en la escuela de granito local para conectar fuerza, respiración y foco creativo.',
-        highlights: [
-          'Todos los niveles: desde boulder introductorio a vías con cuerda.',
-          'Seguimiento de progresos y liberación de responsabilidad digital firmada on-chain.',
-          'Círculo de integración sonora al pie de la pared.'
-        ],
-        guide: 'Mentoreada por guías IFMGA y performers de Edge City.'
-      },
-      fr: {
-        title: 'Clinique d’escalade sur roche et mouvement conscient',
-        summary:
-          'Session progressive à l’école locale de granit pour relier force, respiration et focus créatif.',
-        highlights: [
-          'Tous niveaux : du bloc d’initiation aux voies sur corde.',
-          'Suivi des progrès et décharge de responsabilité numérique signée on-chain.',
-          'Cercle d’intégration sonore au pied de la paroi.'
-        ],
-        guide: 'Encadrée par des guides IFMGA et des performers Edge City.'
-      },
-      de: {
-        title: 'Kletterklinik und achtsame Bewegung',
-        summary:
-          'Progressive Session in der lokalen Granitschule, um Kraft, Atmung und kreativen Fokus zu verbinden.',
-        highlights: [
-          'Alle Levels: vom Einsteiger-Bouldern bis zu Seilrouten.',
-          'Fortschrittsverfolgung und digitale Haftungsfreistellung on-chain.',
-          'Integrationskreis mit Klang am Fuß der Wand.'
-        ],
-        guide: 'Begleitet von IFMGA-Guides und Edge City-Performer:innen.'
-      },
-      zh: {
-        title: '岩壁攀登诊所与身心觉察',
-        summary:
-          '在当地花岗岩学校循序渐进地训练，连结力量、呼吸与创意专注。',
-        highlights: [
-          '欢迎所有程度：从抱石入门到绳索线路。',
-          '进度追踪与数字责任豁免表链上签署。',
-          '在岩壁下以声音圈完成整合。'
-        ],
-        guide: '由 IFMGA 向导与 Edge City 表演者带领。'
-      },
-      ru: {
-        title: 'Клиника скалолазания и осознанного движения',
-        summary:
-          'Постепенная сессия в местной гранитной школе, соединяющая силу, дыхание и творческий фокус.',
-        highlights: [
-          'Все уровни: от вводного болдеринга до маршрутов с верёвкой.',
-          'Отслеживание прогресса и цифровой отказ от ответственности, подписанный on-chain.',
-          'Интеграционный звуковой круг у подножия скалы.'
-        ],
-        guide: 'Наставники — гиды IFMGA и исполнители Edge City.'
-      }
-    }
-  },
+  }
 ];
