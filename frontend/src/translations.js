@@ -76,6 +76,7 @@ export const translations = {
       processingRegistration: 'We are processing your registration.',
       insufficientBalance: 'Your USDT balance is not sufficient to cover this registration.',
       usdtUnavailable: 'The configured USDT token ({address}) is not deployed on {network}.'
+
     },
     alerts: {
       metaMask: 'Install MetaMask to continue.'
@@ -176,6 +177,7 @@ export const translations = {
       processingRegistration: 'Estamos procesando tu registro.',
       insufficientBalance: 'Tu balance de USDT no es suficiente para cubrir esta inscripción.',
       usdtUnavailable: 'El token de USDT configurado ({address}) no está desplegado en {network}.'
+
     },
     alerts: {
       metaMask: 'Instalá MetaMask para continuar.'
@@ -276,6 +278,7 @@ export const translations = {
       processingRegistration: 'Nous traitons votre inscription.',
       insufficientBalance: 'Votre solde en USDT est insuffisant pour couvrir cette inscription.',
       usdtUnavailable: 'Le jeton USDT configuré ({address}) n’est pas déployé sur {network}.'
+
     },
     alerts: {
       metaMask: 'Installez MetaMask pour continuer.'
@@ -498,6 +501,7 @@ export const translations = {
       processingRegistration: '我们正在处理您的报名。',
       insufficientBalance: '您的 USDT 余额不足，无法完成此报名。',
       usdtUnavailable: '配置的 USDT 代币 ({address}) 未在 {network} 上部署。'
+
     },
     alerts: {
       metaMask: '请安装 MetaMask 以继续。'
@@ -609,6 +613,7 @@ export const translations = {
       processingRegistration: 'Мы обрабатываем вашу регистрацию.',
       insufficientBalance: 'Вашего баланса USDT недостаточно, чтобы оплатить эту регистрацию.',
       usdtUnavailable: 'Настроенный токен USDT ({address}) не развернут в сети {network}.'
+
     },
     alerts: {
       metaMask: 'Установите MetaMask, чтобы продолжить.'

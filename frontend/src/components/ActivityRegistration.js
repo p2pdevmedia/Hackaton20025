@@ -191,6 +191,7 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
       setStatusMessage(statusText.requestingSignature || 'Review the transaction in your wallet.');
 
       const signer = provider.getSigner();
+
       const network = await provider.getNetwork().catch(() => null);
       const contractCode = await provider.getCode(normalizedUsdtAddress);
       if (!contractCode || contractCode === '0x') {
@@ -208,6 +209,7 @@ function ActivityRegistration({ activity, account, getProvider, text }) {
           .replace('{address}', normalizedUsdtAddress);
         setStatusMessage(
           formattedMessage
+
         );
         return;
       }
