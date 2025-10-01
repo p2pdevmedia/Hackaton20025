@@ -216,6 +216,11 @@ function App() {
     setPendingConnection(false);
   }, []);
 
+  const handleEditParticipantInfo = useCallback(() => {
+    setPendingConnection(false);
+    setIsParticipantModalOpen(true);
+  }, []);
+
   const handleParticipantSubmit = useCallback(
     values => {
       setParticipantInfo(values);
@@ -290,6 +295,8 @@ function App() {
         text={text.navbar}
         languageLabel={text.languageSelectorLabel}
         languageOptions={languageOptions}
+        hasParticipantInfo={Boolean(participantInfo)}
+        onEditParticipantInfo={handleEditParticipantInfo}
       />
       {isWrongNetwork && (
         <div className="bg-amber-100 border-b border-amber-200 text-amber-900">
