@@ -74,7 +74,8 @@ export const translations = {
       registrationComplete: 'Registration message sent successfully!',
       registrationFailed: 'Could not send the registration. Check the console for more details.',
       processingRegistration: 'We are processing your registration.',
-      insufficientBalance: 'Your USDT balance is not sufficient to cover this registration.'
+      insufficientBalance: 'Your USDT balance is not sufficient to cover this registration.',
+      usdtUnavailable: 'The configured USDT token ({address}) is not deployed on {network}.'
     },
     alerts: {
       metaMask: 'Install MetaMask to continue.'
@@ -173,7 +174,8 @@ export const translations = {
       registrationComplete: '¡Mensaje de registro enviado con éxito!',
       registrationFailed: 'No pudimos enviar el registro. Revisá la consola para más detalles.',
       processingRegistration: 'Estamos procesando tu registro.',
-      insufficientBalance: 'Tu balance de USDT no es suficiente para cubrir esta inscripción.'
+      insufficientBalance: 'Tu balance de USDT no es suficiente para cubrir esta inscripción.',
+      usdtUnavailable: 'El token de USDT configurado ({address}) no está desplegado en {network}.'
     },
     alerts: {
       metaMask: 'Instalá MetaMask para continuar.'
@@ -272,7 +274,8 @@ export const translations = {
       registrationComplete: 'Inscription terminée !',
       registrationFailed: 'Impossible de finaliser l’inscription. Consultez la console pour plus de détails.',
       processingRegistration: 'Nous traitons votre inscription.',
-      insufficientBalance: 'Votre solde en USDT est insuffisant pour couvrir cette inscription.'
+      insufficientBalance: 'Votre solde en USDT est insuffisant pour couvrir cette inscription.',
+      usdtUnavailable: 'Le jeton USDT configuré ({address}) n’est pas déployé sur {network}.'
     },
     alerts: {
       metaMask: 'Installez MetaMask pour continuer.'
@@ -382,7 +385,8 @@ export const translations = {
       registrationComplete: 'Anmeldung abgeschlossen!',
       registrationFailed: 'Anmeldung konnte nicht abgeschlossen werden. Sieh für Details in die Konsole.',
       processingRegistration: 'Wir verarbeiten deine Anmeldung.',
-      insufficientBalance: 'Dein USDT-Guthaben reicht für diese Anmeldung nicht aus.'
+      insufficientBalance: 'Dein USDT-Guthaben reicht für diese Anmeldung nicht aus.',
+      usdtUnavailable: 'Der konfigurierte USDT-Token ({address}) ist auf {network} nicht bereitgestellt.'
     },
     alerts: {
       metaMask: 'Installiere MetaMask, um fortzufahren.'
@@ -492,7 +496,8 @@ export const translations = {
       registrationComplete: '报名完成！',
       registrationFailed: '无法完成报名。请查看控制台了解更多详情。',
       processingRegistration: '我们正在处理您的报名。',
-      insufficientBalance: '您的 USDT 余额不足，无法完成此报名。'
+      insufficientBalance: '您的 USDT 余额不足，无法完成此报名。',
+      usdtUnavailable: '配置的 USDT 代币 ({address}) 未在 {network} 上部署。'
     },
     alerts: {
       metaMask: '请安装 MetaMask 以继续。'
@@ -602,7 +607,8 @@ export const translations = {
       registrationComplete: 'Регистрация завершена!',
       registrationFailed: 'Не удалось завершить регистрацию. Подробности смотрите в консоли.',
       processingRegistration: 'Мы обрабатываем вашу регистрацию.',
-      insufficientBalance: 'Вашего баланса USDT недостаточно, чтобы оплатить эту регистрацию.'
+      insufficientBalance: 'Вашего баланса USDT недостаточно, чтобы оплатить эту регистрацию.',
+      usdtUnavailable: 'Настроенный токен USDT ({address}) не развернут в сети {network}.'
     },
     alerts: {
       metaMask: 'Установите MetaMask, чтобы продолжить.'
