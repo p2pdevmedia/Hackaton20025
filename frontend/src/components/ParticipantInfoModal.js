@@ -8,7 +8,9 @@ function ParticipantInfoModal({ isOpen, onClose, onSubmit, text = {}, initialVal
     idNumber: '',
     accommodation: '',
     nationality: '',
-    birthDate: ''
+    birthDate: '',
+    contact: '',
+    observations: ''
   });
   const [errors, setErrors] = useState({});
 
@@ -53,7 +55,7 @@ function ParticipantInfoModal({ isOpen, onClose, onSubmit, text = {}, initialVal
     const newErrors = {};
     const requiredMessage = text.requiredField || 'This field is required.';
 
-    ['firstName', 'lastName', 'idType', 'idNumber', 'accommodation', 'nationality', 'birthDate'].forEach(field => {
+    ['firstName', 'lastName', 'idType', 'idNumber', 'accommodation', 'nationality', 'birthDate', 'contact'].forEach(field => {
       if (!values[field]) {
         newErrors[field] = requiredMessage;
       }
@@ -204,6 +206,36 @@ function ParticipantInfoModal({ isOpen, onClose, onSubmit, text = {}, initialVal
               />
               {errors.birthDate && <p className="mt-1 text-xs text-red-600">{errors.birthDate}</p>}
             </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-700" htmlFor="participant-contact">
+              {text.contactLabel || 'Contact phone'}
+            </label>
+            <input
+              id="participant-contact"
+              name="contact"
+              type="tel"
+              value={formValues.contact}
+              onChange={handleChange}
+              className="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-200"
+              required
+            />
+            {errors.contact && <p className="mt-1 text-xs text-red-600">{errors.contact}</p>}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-700" htmlFor="participant-observations">
+              {text.observationsLabel || 'Observations'}
+            </label>
+            <textarea
+              id="participant-observations"
+              name="observations"
+              value={formValues.observations}
+              onChange={handleChange}
+              className="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-200"
+              rows={3}
+            />
           </div>
 
           <div className="flex flex-col gap-2 sm:flex-row sm:justify-end">
