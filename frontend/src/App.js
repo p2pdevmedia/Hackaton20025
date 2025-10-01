@@ -263,9 +263,22 @@ function App() {
     [registrationEndpoint]
   );
 
-  const disconnect = () => {
+  const disconnect = useCallback(async () => {
     setAccount(null);
-  };
+
+    if (!hasProvider || !window.ethereum?.request) {
+      return;
+    }
+
+    try {
+      await window.ethereum.request({
+        method: 'wallet_revokePermissions',
+        params: [{ eth_accounts: {} }]
+      });
+    } catch (error) {
+      console.error('Failed to revoke wallet permissions', error);
+    }
+  }, [hasProvider]);
 
   const handleSwitchToEthereum = useCallback(async () => {
     if (!hasProvider || !window.ethereum?.request) {
