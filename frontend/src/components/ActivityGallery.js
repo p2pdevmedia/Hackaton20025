@@ -1,8 +1,82 @@
 import { useEffect, useMemo, useState } from 'react';
 
-function ActivityGallery({ images = [], alt }) {
-  const gallery = useMemo(() => images.filter(Boolean), [images]);
+const resolveFolderImages = async (folderCid, signal) => {
+  const endpoint = `https://ipfs.io/api/v0/ls?arg=${encodeURIComponent(folderCid)}`;
+  const response = await fetch(endpoint, {
+    method: 'POST',
+    signal,
+    headers: {
+      Accept: 'application/json'
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error(`Unexpected status ${response.status}`);
+  }
+
+  const payload = await response.json();
+  const links = payload?.Objects?.[0]?.Links || [];
+
+  return links
+    .filter(link => link && typeof link.Hash === 'string' && link.Type !== 1)
+    .sort((a, b) => (a?.Name || '').localeCompare(b?.Name || ''))
+    .map(link => {
+      const base = `https://ipfs.io/ipfs/${link.Hash}`;
+      if (link?.Name) {
+        return `${base}?filename=${encodeURIComponent(link.Name)}`;
+      }
+      return base;
+    });
+};
+
+function ActivityGallery({ images = [], alt, folderCid }) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [folderImages, setFolderImages] = useState([]);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    if (!folderCid) {
+      setFolderImages([]);
+      return () => {
+        isMounted = false;
+      };
+    }
+
+    const controller = new AbortController();
+
+    const loadImages = async () => {
+      try {
+        const resolved = await resolveFolderImages(folderCid, controller.signal);
+        if (isMounted) {
+          setFolderImages(resolved);
+        }
+      } catch (error) {
+        if (error.name === 'AbortError') {
+          return;
+        }
+        console.error(`Failed to load images for IPFS directory ${folderCid}`, error);
+        if (isMounted) {
+          setFolderImages([]);
+        }
+      }
+    };
+
+    loadImages();
+
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
+  }, [folderCid]);
+
+  const baseImages = useMemo(() => images.filter(Boolean), [images]);
+  const gallery = useMemo(() => {
+    if (folderImages.length > 0) {
+      return folderImages.filter(Boolean);
+    }
+    return baseImages;
+  }, [baseImages, folderImages]);
 
   useEffect(() => {
     if (gallery.length === 0) {

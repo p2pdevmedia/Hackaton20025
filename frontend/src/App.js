@@ -32,6 +32,7 @@ function App() {
           ...localized,
           id: activity.id,
           images: activity.images ? activity.images.filter(Boolean) : [],
+          imageFolderCid: activity.imageFolderCid || null,
           priceUSDT: activity.priceUSDT,
           maxParticipants: activity.maxParticipants
         };
@@ -376,7 +377,11 @@ function App() {
 
             return (
               <article key={activity.id} className="overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-slate-100">
-                <ActivityGallery images={activity.images} alt={activity.title} />
+                <ActivityGallery
+                  images={activity.images}
+                  alt={activity.title}
+                  folderCid={activity.imageFolderCid}
+                />
                 <div className="relative overflow-hidden px-6 py-6">
                   {isPatagonianAsado && (
                     <>
