@@ -84,7 +84,11 @@ export const translations = {
 
     },
     alerts: {
-      metaMask: 'Install MetaMask to continue.'
+      metaMask: 'Install MetaMask to continue.',
+      wrongNetwork: {
+        message: 'You are not connected to the Ethereum network.',
+        action: 'Switch to Ethereum'
+      }
     },
     agenda: {
       detailsButton: 'View details',
@@ -208,7 +212,11 @@ export const translations = {
 
     },
     alerts: {
-      metaMask: 'Instalá MetaMask para continuar.'
+      metaMask: 'Instalá MetaMask para continuar.',
+      wrongNetwork: {
+        message: 'No estás conectado a la red de Ethereum.',
+        action: 'Cambiar a Ethereum'
+      }
     },
     agenda: {
       detailsButton: 'Ver detalles',
@@ -327,7 +335,11 @@ export const translations = {
 
     },
     alerts: {
-      metaMask: 'Installez MetaMask pour continuer.'
+      metaMask: 'Installez MetaMask pour continuer.',
+      wrongNetwork: {
+        message: "Vous n'êtes pas connecté au réseau Ethereum.",
+        action: 'Passer sur Ethereum'
+      }
     },
     agenda: {
       loading: 'Chargement des activités…',
@@ -438,7 +450,11 @@ export const translations = {
       usdtUnavailable: 'Der konfigurierte USDT-Token ({address}) ist auf {network} nicht bereitgestellt.'
     },
     alerts: {
-      metaMask: 'Installiere MetaMask, um fortzufahren.'
+      metaMask: 'Installiere MetaMask, um fortzufahren.',
+      wrongNetwork: {
+        message: 'Sie sind nicht mit dem Ethereum-Netzwerk verbunden.',
+        action: 'Zu Ethereum wechseln'
+      }
     },
     agenda: {
       loading: 'Aktivitäten werden geladen...',
@@ -550,7 +566,11 @@ export const translations = {
 
     },
     alerts: {
-      metaMask: '请安装 MetaMask 以继续。'
+      metaMask: '请安装 MetaMask 以继续。',
+      wrongNetwork: {
+        message: '您当前未连接到以太坊网络。',
+        action: '切换到以太坊'
+      }
     },
     agenda: {
       loading: '正在加载活动…',
@@ -662,7 +682,11 @@ export const translations = {
 
     },
     alerts: {
-      metaMask: 'Установите MetaMask, чтобы продолжить.'
+      metaMask: 'Установите MetaMask, чтобы продолжить.',
+      wrongNetwork: {
+        message: 'Вы не подключены к сети Ethereum.',
+        action: 'Переключиться на Ethereum'
+      }
     },
     agenda: {
       loading: 'Загрузка активностей…',

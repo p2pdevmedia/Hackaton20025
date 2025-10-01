@@ -14,6 +14,7 @@ function App() {
   const [participantInfo, setParticipantInfo] = useState(null);
   const [isParticipantModalOpen, setIsParticipantModalOpen] = useState(false);
   const [pendingConnection, setPendingConnection] = useState(false);
+  const [chainId, setChainId] = useState(null);
 
   const text = useMemo(() => translations[language] || translations.en, [language]);
   const languageOptions = useMemo(
@@ -81,6 +82,7 @@ function App() {
   const participantFormText = text?.participantForm || {};
   const registrationEndpoint = process.env.REACT_APP_REGISTRATION_ENDPOINT;
   const metaMaskAlert = text?.alerts?.metaMask || 'Install MetaMask to continue.';
+  const wrongNetworkAlert = text?.alerts?.wrongNetwork;
 
   const getProvider = useCallback(() => {
     if (!hasProvider) {
@@ -88,6 +90,44 @@ function App() {
     }
     return new ethers.providers.Web3Provider(window.ethereum);
   }, [hasProvider]);
+
+  useEffect(() => {
+    if (!hasProvider) {
+      setChainId(null);
+      return;
+    }
+
+    const provider = getProvider();
+    if (!provider) {
+      setChainId(null);
+      return;
+    }
+
+    let isMounted = true;
+
+    const refreshChainId = async () => {
+      try {
+        const network = await provider.getNetwork();
+        if (isMounted) {
+          setChainId(Number(network.chainId));
+        }
+      } catch (error) {
+        console.error('Failed to read network information', error);
+      }
+    };
+
+    const handleChainChanged = newChainId => {
+      setChainId(Number(newChainId));
+    };
+
+    refreshChainId();
+    window.ethereum.on('chainChanged', handleChainChanged);
+
+    return () => {
+      isMounted = false;
+      window.ethereum.removeListener('chainChanged', handleChainChanged);
+    };
+  }, [getProvider, hasProvider]);
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -222,6 +262,23 @@ function App() {
     setAccount(null);
   };
 
+  const handleSwitchToEthereum = useCallback(async () => {
+    if (!hasProvider || !window.ethereum?.request) {
+      return;
+    }
+
+    try {
+      await window.ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: '0x1' }]
+      });
+    } catch (error) {
+      console.error('Failed to switch to Ethereum network', error);
+    }
+  }, [hasProvider]);
+
+  const isWrongNetwork = hasProvider && chainId !== null && chainId !== 1;
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar
@@ -234,6 +291,20 @@ function App() {
         languageLabel={text.languageSelectorLabel}
         languageOptions={languageOptions}
       />
+      {isWrongNetwork && (
+        <div className="bg-amber-100 border-b border-amber-200 text-amber-900">
+          <div className="max-w-5xl mx-auto px-4 py-3 text-sm flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <span>{wrongNetworkAlert?.message || 'You are not connected to the Ethereum network.'}</span>
+            <button
+              type="button"
+              onClick={handleSwitchToEthereum}
+              className="self-start rounded border border-amber-300 bg-amber-200 px-3 py-1 text-xs font-semibold uppercase tracking-wide hover:bg-amber-300 sm:self-auto"
+            >
+              {wrongNetworkAlert?.action || 'Switch to Ethereum'}
+            </button>
+          </div>
+        </div>
+      )}
       <header className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
         <div className="max-w-5xl mx-auto px-4 py-16 grid gap-8 lg:grid-cols-[1.2fr,0.8fr] items-center">
           <div className="space-y-4">
