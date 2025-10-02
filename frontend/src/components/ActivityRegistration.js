@@ -21,6 +21,7 @@ function ActivityRegistration({
   const [statusMessage, setStatusMessage] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [selectedTokenSymbol, setSelectedTokenSymbol] = useState('USDT');
+  const [hasUserSelectedToken, setHasUserSelectedToken] = useState(false);
 
   const usdtAddress = process.env.REACT_APP_USDT_ADDRESS;
   const usdcAddress = process.env.REACT_APP_USDC_ADDRESS || '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48';
@@ -94,7 +95,7 @@ function ActivityRegistration({
 
   useEffect(() => {
     const preferred = tokenOptions.find(option => option.symbol === selectedTokenSymbol);
-    if (preferred?.normalizedAddress || !tokenOptions.length) {
+    if (preferred?.normalizedAddress || !tokenOptions.length || hasUserSelectedToken) {
       return;
     }
 
@@ -102,7 +103,7 @@ function ActivityRegistration({
     if (firstAvailable && firstAvailable.symbol !== selectedTokenSymbol) {
       setSelectedTokenSymbol(firstAvailable.symbol);
     }
-  }, [selectedTokenSymbol, tokenOptions]);
+  }, [hasUserSelectedToken, selectedTokenSymbol, tokenOptions]);
 
   const normalizedDestinationWallet = useMemo(() => {
     if (!destinationWallet) {
@@ -421,7 +422,10 @@ function ActivityRegistration({
             <button
               key={option.symbol}
               type="button"
-              onClick={() => setSelectedTokenSymbol(option.symbol)}
+              onClick={() => {
+                setSelectedTokenSymbol(option.symbol);
+                setHasUserSelectedToken(true);
+              }}
               className={`rounded-lg px-3 py-1 text-sm font-medium transition ${
                 option.symbol === selectedToken?.symbol
                   ? 'bg-slate-900 text-white shadow'
