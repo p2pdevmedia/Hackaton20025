@@ -303,9 +303,11 @@ export const residencyActivities = [
     priceUSDT: 150,
     maxParticipants: 40,
     images: [
-      'https://ipfs.io/ipfs/bafybeih77q6wubddx6phljd6ajbcua7jooh2wnxbxz4c2rvna2tdrjzdha/1.jpg',
-      'https://ipfs.io/ipfs/bafybeih77q6wubddx6phljd6ajbcua7jooh2wnxbxz4c2rvna2tdrjzdha/2.jpg',
-      'https://ipfs.io/ipfs/bafybeih77q6wubddx6phljd6ajbcua7jooh2wnxbxz4c2rvna2tdrjzdha/3.jpg'
+      'https://ipfs.io/ipfs/bafybeia3u2efexakp4sgkjkaz64iu6iz2zi45io3jog2z4vw5xg273zuqm/1.jpeg',
+      'https://ipfs.io/ipfs/bafybeia3u2efexakp4sgkjkaz64iu6iz2zi45io3jog2z4vw5xg273zuqm/2.jpeg',
+      'https://ipfs.io/ipfs/bafybeia3u2efexakp4sgkjkaz64iu6iz2zi45io3jog2z4vw5xg273zuqm/3.jpeg',
+      'https://ipfs.io/ipfs/bafybeia3u2efexakp4sgkjkaz64iu6iz2zi45io3jog2z4vw5xg273zuqm/4.jpeg',
+      'https://ipfs.io/ipfs/bafybeia3u2efexakp4sgkjkaz64iu6iz2zi45io3jog2z4vw5xg273zuqm/5.jpeg'
     ],
     translations: {
       en: {
