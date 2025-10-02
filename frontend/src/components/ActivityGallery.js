@@ -11,7 +11,7 @@ const isFileLink = link => {
   if (!link || typeof link !== 'object') {
     return false;
   }
-  if (!link.Name) {
+  if (!link.Name && !link.Path) {
     return false;
   }
   if (link.Type === 1 || link.Type === 'directory') {
@@ -24,6 +24,111 @@ const isFileLink = link => {
     return link.Type !== 1;
   }
   return typeof link.Size === 'number' && link.Size > 0;
+};
+
+const toFileName = link => {
+  if (!link) {
+    return null;
+  }
+  if (typeof link === 'string') {
+    return link;
+  }
+  if (link.Name) {
+    return link.Name;
+  }
+  if (link.Path) {
+    const path = link.Path.split('/');
+    return path[path.length - 1];
+  }
+  return null;
+};
+
+const buildFileUrl = (gateway, baseHash, filename) => {
+  if (!filename) {
+    return null;
+  }
+  const sanitizedGateway = normalizeGateway(gateway);
+  const sanitizedName = encodeURIComponent(filename);
+  return `${sanitizedGateway}/ipfs/${baseHash}/${sanitizedName}`;
+};
+
+const extractLinksFromJson = (payload, cid) => {
+  if (!payload) {
+    return [];
+  }
+
+  const normalizeLinks = (links, baseHash) => {
+    if (!Array.isArray(links)) {
+      return [];
+    }
+    const hash = baseHash || cid;
+    return links.filter(isFileLink).map(link => ({
+      name: toFileName(link),
+      hash: link.Hash || hash,
+    }));
+  };
+
+  if (Array.isArray(payload)) {
+    return payload.map(entry => ({
+      name: toFileName(entry),
+      hash: entry?.Hash || cid,
+    }));
+  }
+
+  if (Array.isArray(payload.links)) {
+    return normalizeLinks(payload.links, payload.hash || payload.cid || cid);
+  }
+
+  if (Array.isArray(payload.Links)) {
+    return normalizeLinks(payload.Links, payload.Hash || payload.Cid || cid);
+  }
+
+  if (Array.isArray(payload.Objects)) {
+    return payload.Objects.flatMap(object => {
+      const baseHash = object?.Hash || cid;
+      return normalizeLinks(object?.Links, baseHash);
+    });
+  }
+
+  if (payload.files && Array.isArray(payload.files)) {
+    return normalizeLinks(payload.files, payload.hash || payload.cid || cid);
+  }
+
+  return [];
+};
+
+const extractLinksFromHtml = (html, baseUrl) => {
+  if (!html || typeof html !== 'string') {
+    return [];
+  }
+
+  if (typeof DOMParser === 'undefined') {
+    return [];
+  }
+
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+  const anchors = Array.from(doc.querySelectorAll('a[href]'));
+
+  const urls = anchors
+    .map(anchor => anchor.getAttribute('href') || '')
+    .map(href => href.trim())
+    .filter(Boolean)
+    .filter(href => !href.startsWith('?') && !href.startsWith('#'))
+    .filter(href => href !== '../' && href !== './');
+
+  const normalized = urls
+    .map(href => {
+      try {
+        return new URL(href, baseUrl).href;
+      } catch (error) {
+        return null;
+      }
+    })
+    .filter(Boolean)
+    .filter(url => !url.endsWith('/'));
+
+  return normalized;
 };
 
 function ActivityGallery({ images = [], alt }) {
@@ -53,37 +158,59 @@ function ActivityGallery({ images = [], alt }) {
       for (const source of directorySources) {
         const cid = source.cid;
         const gateway = normalizeGateway(source.gateway);
-        const endpoint = `${gateway}/api/v0/ls?arg=${encodeURIComponent(cid)}`;
+        const candidateEndpoints = [
+          `${gateway}/ipfs/${cid}?format=json`,
+          `${gateway}/ipfs/${cid}`,
+        ];
 
-        try {
-          const response = await fetch(endpoint);
-          if (!response.ok) {
-            console.warn(`Failed to load IPFS directory listing for ${cid}: ${response.status}`);
-            continue;
-          }
+        let resolved = false;
 
-          const payload = await response.json();
-          const objects = Array.isArray(payload?.Objects) ? payload.Objects : [];
-
-          objects.forEach(object => {
-            const baseHash = object?.Hash || cid;
-            const links = Array.isArray(object?.Links) ? object.Links : [];
-            const files = links
-              .filter(isFileLink)
-              .sort((a, b) => (a.Name || '').localeCompare(b.Name || ''));
-
-            files.forEach(link => {
-              const filename = link.Name;
-              if (!filename) {
-                return;
-              }
-
-              const encodedName = encodeURIComponent(filename);
-              aggregated.push(`${gateway}/ipfs/${baseHash}/${encodedName}`);
+        for (const endpoint of candidateEndpoints) {
+          try {
+            const response = await fetch(endpoint, {
+              headers: {
+                Accept: 'application/json, text/html;q=0.9, */*;q=0.8',
+              },
             });
-          });
-        } catch (error) {
-          console.error('Failed to load IPFS directory images', error);
+
+            if (!response.ok) {
+              continue;
+            }
+
+            const body = await response.text();
+            let links = [];
+
+            try {
+              const payload = JSON.parse(body);
+              links = extractLinksFromJson(payload, cid).map(entry =>
+                buildFileUrl(gateway, entry.hash || cid, entry.name)
+              );
+            } catch (error) {
+              // not JSON, fall back to HTML parsing
+            }
+
+            if (!links.length) {
+              links = extractLinksFromHtml(body, endpoint);
+            }
+
+            const filteredLinks = links.filter(Boolean);
+
+            if (filteredLinks.length > 0) {
+              filteredLinks
+                .sort((a, b) => a.localeCompare(b))
+                .forEach(url => {
+                  aggregated.push(url);
+                });
+              resolved = true;
+              break;
+            }
+          } catch (error) {
+            console.error('Failed to load IPFS directory images', error);
+          }
+        }
+
+        if (!resolved) {
+          console.warn(`Unable to resolve IPFS directory images for ${cid}`);
         }
       }
 
