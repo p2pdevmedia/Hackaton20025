@@ -297,5 +297,44 @@ export const residencyActivities = [
         guide: 'Curaduría del equipo culinario de Edge City.'
       }
     }
+  },
+  {
+    id: 'andes-mountain-school',
+    priceUSDT: 150,
+    maxParticipants: 40,
+    images: [
+      {
+        cid: 'bafybeih77q6wubddx6phljd6ajbcua7jooh2wnxbxz4c2rvna2tdrjzdha',
+        gateway: 'https://ipfs.io'
+      }
+    ],
+    translations: {
+      en: {
+        title: 'Andean mountain school for kids',
+        summary:
+          'A progressive outdoor program for ages 5–16 that explores the Andes through rotating modules in kayaking, mountain biking, trekking, orientation and team sports. Sports and safety gear are included, weekly schedules arrive every Sunday and families are invited to a three-hour Saturday outing.',
+        highlights: [
+          'Designed for children aged 5–16 with all sports and safety equipment provided.',
+          'Rotating modules include kayak, mountain biking, trekking, wilderness living skills, orientation and team sports.',
+          'Weekly planning sent every Sunday so you can choose 2, 3 or 4 sessions per week (2.5 hours each) at USD 150 / 200 / 270.',
+          'Three-hour family excursions every Saturday at USD 60 per person.',
+          'Groups run with a minimum of 3 and up to 40 participants guided by certified mountain instructors.'
+        ],
+        guide: 'Coordinated by local Patagonian mountain guides.'
+      },
+      es: {
+        title: 'Escuela de montaña infantil',
+        summary:
+          'Programa inmersivo para infancias de 5 a 16 años que recorre la cordillera con módulos rotativos de kayak, bici de montaña, trekking, vida en la naturaleza, orientación y deportes de conjunto. Incluye materiales deportivos y de seguridad, se envían cronogramas cada domingo y las familias se suman a una salida sabatina de tres horas.',
+        highlights: [
+          'Pensada para niñas, niños y adolescentes de 5 a 16 años con todo el equipamiento deportivo y de seguridad incluido.',
+          'Módulos rotativos de kayak, bici de montaña, trekking, vida en la naturaleza, orientación y deportes de conjunto.',
+          'Cronogramas semanales enviados cada domingo para elegir 2, 3 o 4 encuentros por semana (2,5 horas cada uno) a USD 150 / 200 / 270.',
+          'Excursiones en familia los sábados durante 3 horas a USD 60 por persona.',
+          'Grupos con cupos de un mínimo de 3 y hasta 40 participantes acompañados por guías de montaña certificados.'
+        ],
+        guide: 'Coordinación del equipo de guías de montaña de San Martín de los Andes.'
+      }
+    }
   }
 ];
