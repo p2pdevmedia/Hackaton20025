@@ -297,5 +297,45 @@ export const residencyActivities = [
         guide: 'Curaduría del equipo culinario de Edge City.'
       }
     }
+  },
+  {
+    id: 'youth-mountain-school',
+    priceUSDT: 150,
+    maxParticipants: 40,
+    images: [
+      'https://ipfs.io/ipfs/bafybeia3u2efexakp4sgkjkaz64iu6iz2zi45io3jog2z4vw5xg273zuqm/1.jpeg',
+      'https://ipfs.io/ipfs/bafybeia3u2efexakp4sgkjkaz64iu6iz2zi45io3jog2z4vw5xg273zuqm/2.jpeg',
+      'https://ipfs.io/ipfs/bafybeia3u2efexakp4sgkjkaz64iu6iz2zi45io3jog2z4vw5xg273zuqm/3.jpeg',
+      'https://ipfs.io/ipfs/bafybeia3u2efexakp4sgkjkaz64iu6iz2zi45io3jog2z4vw5xg273zuqm/4.jpeg',
+      'https://ipfs.io/ipfs/bafybeia3u2efexakp4sgkjkaz64iu6iz2zi45io3jog2z4vw5xg273zuqm/5.jpeg'
+    ],
+    translations: {
+      en: {
+        title: 'Youth mountain school',
+        summary:
+          'A rotating adventure program for children and teens (ages 5–16) that blends outdoor education, teamwork and mountain sports across the Patagonian landscape with weekly schedules shared every Sunday.',
+        highlights: [
+          'All technical and safety equipment is included so every participant can focus on learning and play.',
+          'Kayaking, mountain biking, trekking, orientation skills, nature stewardship and team sports rotate through each week for 2.5-hour sessions.',
+          'USD 150 for two sessions per week, USD 200 for three sessions per week, or USD 270 for four sessions per week (each lasting 2.5 hours).',
+          'Family excursions every Saturday (3 hours) at USD 60 per accompanying family member to explore the region together.',
+          'Groups run with a minimum of 3 and a maximum of 40 participants to keep instruction personal and safe.'
+        ],
+        guide: 'Led by certified mountain educators specialized in youth programs.'
+      },
+      es: {
+        title: 'Escuela de montaña infantil',
+        summary:
+          'Programa de aventura rotativo para infancias de 5 a 16 años que combina educación al aire libre, trabajo en equipo y deportes de montaña en la Patagonia, con cronogramas semanales enviados cada domingo.',
+        highlights: [
+          'Incluye materiales deportivos y de seguridad para que cada participante se concentre en aprender y disfrutar.',
+          'Actividades rotativas de kayak, bici de montaña, trekking, orientación, vida en la naturaleza y deportes de conjunto en módulos de 2,5 horas.',
+          'USD 150 por dos encuentros semanales, USD 200 por tres encuentros semanales o USD 270 por cuatro encuentros semanales (cada uno de 2,5 horas).',
+          'Los sábados se realizan excursiones familiares de 3 horas a USD 60 por persona para compartir la experiencia.',
+          'El grupo se conforma con un mínimo de 3 y un máximo de 40 participantes para garantizar acompañamiento y seguridad.'
+        ],
+        guide: 'Coordinado por educadores de montaña certificados en programas infantiles.'
+      }
+    }
   }
 ];
