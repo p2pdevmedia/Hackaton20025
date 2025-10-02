@@ -394,6 +394,23 @@ function App() {
         text={participantFormText}
         initialValues={participantInfo}
       />
+      <a
+        href="https://wa.me/5492944158559"
+        target="_blank"
+        rel="noreferrer"
+        aria-label="Contactar por WhatsApp"
+        className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-green-500 text-white shadow-lg transition hover:bg-green-600 focus:outline-none focus:ring-4 focus:ring-green-300"
+      >
+        <svg
+          className="h-7 w-7"
+          viewBox="0 0 32 32"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path d="M16 3C9.386 3 4 8.298 4 14.82c0 2.435.768 4.7 2.093 6.566L4 29l7.855-2.06c1.744.953 3.735 1.494 5.84 1.494 6.614 0 12-5.298 12-11.82C29.696 8.298 23.996 3 16 3Zm0 2c6.063 0 10.696 4.476 10.696 9.82 0 5.342-4.633 9.82-10.696 9.82-1.873 0-3.625-.494-5.156-1.404l-.36-.213-4.884 1.28 1.308-4.508-.235-.344C6.268 17.701 5.4 16.307 5.4 14.82 5.4 9.476 9.933 5 16 5Zm-4.105 5.465a.682.682 0 0 0-.493.24c-.352.389-.961 1.01-.961 1.687 0 .676.352 1.49.993 2.296.683.855 1.604 1.82 2.898 2.526 1.428.781 2.55 1.01 3.412 1.146.336.054.651.1.929.1.737 0 1.303-.198 1.687-.62.285-.31.453-.71.584-.997a.601.601 0 0 0-.084-.61 18.18 18.18 0 0 0-1.042-1.321.615.615 0 0 0-.619-.178l-1.372.391a.69.69 0 0 1-.695-.187l-.586-.65c-.123-.135-.316-.26-.51-.198-.225.067-.914.343-1.094.41-.18.068-.355.102-.573-.221-.218-.323-.92-1.115-1.092-1.314-.173-.2-.361-.168-.586-.102-.225.067-.58.21-.88.368Z" />
+        </svg>
+        <span className="sr-only">Abrir chat de WhatsApp</span>
+      </a>
     </div>
   );
 }
