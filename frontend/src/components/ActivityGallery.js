@@ -1,27 +1,123 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
+
+const normalizeGateway = value => {
+  if (!value || typeof value !== 'string') {
+    return 'https://ipfs.io';
+  }
+  return value.replace(/\/+$/, '');
+};
+
+const isFileLink = link => {
+  if (!link || typeof link !== 'object') {
+    return false;
+  }
+  if (!link.Name) {
+    return false;
+  }
+  if (link.Type === 1 || link.Type === 'directory') {
+    return false;
+  }
+  if (link.Type === 2 || link.Type === 'file') {
+    return true;
+  }
+  if (typeof link.Type === 'number') {
+    return link.Type !== 1;
+  }
+  return typeof link.Size === 'number' && link.Size > 0;
+};
 
 function ActivityGallery({ images = [], alt }) {
-  const gallery = useMemo(() => images.filter(Boolean), [images]);
+  const [resolvedImages, setResolvedImages] = useState([]);
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
-    if (gallery.length === 0) {
+    let cancelled = false;
+
+    const resolveImages = async () => {
+      const staticUrls = [];
+      const directorySources = [];
+
+      images.filter(Boolean).forEach(entry => {
+        if (typeof entry === 'string') {
+          staticUrls.push(entry);
+          return;
+        }
+
+        if (entry && typeof entry === 'object' && entry.cid) {
+          directorySources.push(entry);
+        }
+      });
+
+      const aggregated = [...staticUrls];
+
+      for (const source of directorySources) {
+        const cid = source.cid;
+        const gateway = normalizeGateway(source.gateway);
+        const endpoint = `${gateway}/api/v0/ls?arg=${encodeURIComponent(cid)}`;
+
+        try {
+          const response = await fetch(endpoint);
+          if (!response.ok) {
+            console.warn(`Failed to load IPFS directory listing for ${cid}: ${response.status}`);
+            continue;
+          }
+
+          const payload = await response.json();
+          const objects = Array.isArray(payload?.Objects) ? payload.Objects : [];
+
+          objects.forEach(object => {
+            const baseHash = object?.Hash || cid;
+            const links = Array.isArray(object?.Links) ? object.Links : [];
+            const files = links
+              .filter(isFileLink)
+              .sort((a, b) => (a.Name || '').localeCompare(b.Name || ''));
+
+            files.forEach(link => {
+              const filename = link.Name;
+              if (!filename) {
+                return;
+              }
+
+              const encodedName = encodeURIComponent(filename);
+              aggregated.push(`${gateway}/ipfs/${baseHash}/${encodedName}`);
+            });
+          });
+        } catch (error) {
+          console.error('Failed to load IPFS directory images', error);
+        }
+      }
+
+      if (!cancelled) {
+        const unique = Array.from(new Set(aggregated));
+        setResolvedImages(unique);
+      }
+    };
+
+    resolveImages();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [images]);
+
+  useEffect(() => {
+    if (resolvedImages.length === 0) {
       setActiveIndex(0);
       return;
     }
-    if (activeIndex >= gallery.length) {
+    if (activeIndex >= resolvedImages.length) {
       setActiveIndex(0);
     }
-  }, [gallery, activeIndex]);
+  }, [resolvedImages, activeIndex]);
 
-  if (gallery.length === 0) {
+  if (resolvedImages.length === 0) {
     return null;
   }
 
-  const showControls = gallery.length > 1;
+  const showControls = resolvedImages.length > 1;
 
   const goToIndex = index => {
-    setActiveIndex((index + gallery.length) % gallery.length);
+    setActiveIndex((index + resolvedImages.length) % resolvedImages.length);
   };
 
   const goToPrev = () => {
@@ -34,7 +130,7 @@ function ActivityGallery({ images = [], alt }) {
 
   return (
     <div className="relative h-56 overflow-hidden">
-      {gallery.map((src, index) => (
+      {resolvedImages.map((src, index) => (
         <img
           key={src}
           src={src}
@@ -69,7 +165,7 @@ function ActivityGallery({ images = [], alt }) {
             </button>
           </div>
           <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-2">
-            {gallery.map((src, index) => (
+            {resolvedImages.map((src, index) => (
               <button
                 key={`${src}-${index}`}
                 type="button"
