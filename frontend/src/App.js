@@ -2,11 +2,10 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ethers } from 'ethers';
 
 import Navbar from './components/Navbar';
-import ActivityCalendar from './components/ActivityCalendar';
 import ActivityGallery from './components/ActivityGallery';
 import ActivityRegistration from './components/ActivityRegistration';
 import ParticipantInfoModal from './components/ParticipantInfoModal';
-import { translations, residencyActivities as residencyCatalog, localeMap } from './translations';
+import { translations, residencyActivities as residencyCatalog } from './translations';
 
 function App() {
   const [account, setAccount] = useState(null);
@@ -38,46 +37,6 @@ function App() {
       }),
     [language]
   );
-  const locale = useMemo(() => localeMap[language] || localeMap.en, [language]);
-  const calendarMonths = useMemo(
-    () => [
-      { year: 2024, month: 9, label: text.calendar.months.october },
-      { year: 2024, month: 10, label: text.calendar.months.november }
-    ],
-    [text.calendar.months]
-  );
-  const seasonalEvents = useMemo(() => {
-    const createDate = (month, day) => new Date(Date.UTC(2024, month, day));
-    return [
-      {
-        id: 'october-climb',
-        title: text.calendar.events.octoberClimb.title,
-        shortLabel: text.calendar.events.octoberClimb.shortLabel,
-        description: text.calendar.events.octoberClimb.description,
-        type: 'climb',
-        start: createDate(9, 20),
-        end: createDate(9, 23)
-      },
-      {
-        id: 'november-kayak',
-        title: text.calendar.events.novemberKayak.title,
-        shortLabel: text.calendar.events.novemberKayak.shortLabel,
-        description: text.calendar.events.novemberKayak.description,
-        type: 'kayak',
-        start: createDate(10, 1),
-        end: createDate(10, 3)
-      },
-      {
-        id: 'november-climb',
-        title: text.calendar.events.novemberClimb.title,
-        shortLabel: text.calendar.events.novemberClimb.shortLabel,
-        description: text.calendar.events.novemberClimb.description,
-        type: 'climb',
-        start: createDate(10, 10),
-        end: createDate(10, 13)
-      }
-    ];
-  }, [text.calendar.events]);
   const hasProvider = useMemo(() => typeof window !== 'undefined' && window.ethereum, []);
   const participantFormText = text?.participantForm || {};
   const registrationEndpoint = process.env.REACT_APP_REGISTRATION_ENDPOINT;
@@ -427,12 +386,6 @@ function App() {
           })}
         </section>
 
-        <ActivityCalendar
-          months={calendarMonths}
-          events={seasonalEvents}
-          locale={locale}
-          text={text.calendar}
-        />
       </main>
       <ParticipantInfoModal
         isOpen={isParticipantModalOpen}
