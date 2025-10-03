@@ -27,8 +27,9 @@ point at your deployment:
 
 - `REACT_APP_DESTINATION_WALLET`: wallet address that receives participant payments.
 - `REACT_APP_USDT_ADDRESS`: address of the ERC20 token accepted for payments.
-- `REACT_APP_REGISTRATION_ENDPOINT` (optional): URL of the backend profile API. If omitted, the
-  dashboard will call the same origin it was loaded from.
+- `NEXTAUTH_URL` (optional): URL of the backend profile API. If omitted, the dashboard will call the
+  same origin it was loaded from. The previous `REACT_APP_REGISTRATION_ENDPOINT` variable remains
+  supported for backwards compatibility.
 
 ## Hardcoded on-chain addresses
 

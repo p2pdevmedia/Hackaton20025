@@ -39,7 +39,8 @@ function App() {
   );
   const hasProvider = useMemo(() => typeof window !== 'undefined' && window.ethereum, []);
   const participantFormText = text?.participantForm || {};
-  const registrationEndpoint = process.env.REACT_APP_REGISTRATION_ENDPOINT;
+  const registrationEndpoint =
+    process.env.NEXTAUTH_URL || process.env.REACT_APP_REGISTRATION_ENDPOINT;
   const registrationApiBase = useMemo(() => {
     if (registrationEndpoint && registrationEndpoint.trim()) {
       return registrationEndpoint.replace(/\/+$/, '');
