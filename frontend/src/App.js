@@ -40,6 +40,12 @@ function App() {
   const hasProvider = useMemo(() => typeof window !== 'undefined' && window.ethereum, []);
   const participantFormText = text?.participantForm || {};
   const registrationEndpoint = process.env.REACT_APP_REGISTRATION_ENDPOINT;
+  const registrationApiBase = useMemo(() => {
+    if (!registrationEndpoint) {
+      return null;
+    }
+    return registrationEndpoint.replace(/\/+$/, '');
+  }, [registrationEndpoint]);
   const metaMaskAlert = text?.alerts?.metaMask || 'Install MetaMask to continue.';
   const wrongNetworkAlert = text?.alerts?.wrongNetwork;
 
@@ -180,16 +186,153 @@ function App() {
     setIsParticipantModalOpen(true);
   }, []);
 
+  const persistParticipantProfile = useCallback(
+    async values => {
+      if (!registrationApiBase) {
+        throw new Error('Registration service is not configured.');
+      }
+
+      const provider = getProvider();
+      if (!provider) {
+        throw new Error('Wallet provider unavailable.');
+      }
+
+      const signer = provider.getSigner();
+      let signerAddress;
+      try {
+        const rawAddress = await signer.getAddress();
+        signerAddress = ethers.utils.getAddress(rawAddress);
+      } catch (error) {
+        console.warn('No signer address available, attempting to request accounts', error);
+        try {
+          const accounts = await provider.send('eth_requestAccounts', []);
+          if (!accounts?.length) {
+            throw new Error('No wallet accounts available.');
+          }
+          signerAddress = ethers.utils.getAddress(accounts[0]);
+        } catch (requestError) {
+          console.error('Failed to obtain wallet address', requestError);
+          throw new Error('Connect your wallet before saving your profile.');
+        }
+      }
+
+      if (account && signerAddress !== account) {
+        throw new Error('The connected wallet changed. Please reconnect and try again.');
+      }
+
+      if (!account) {
+        setAccount(signerAddress);
+      }
+
+      const challengeResponse = await fetch(`${registrationApiBase}/auth/challenge`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ walletAddress: signerAddress })
+      });
+
+      if (!challengeResponse.ok) {
+        let message = 'Failed to request signature challenge.';
+        try {
+          const errorBody = await challengeResponse.json();
+          if (errorBody?.error) {
+            message = errorBody.error;
+          }
+        } catch (error) {
+          console.error('Failed to parse challenge error response', error);
+        }
+        throw new Error(message);
+      }
+
+      const challenge = await challengeResponse.json();
+      const authMessage = challenge?.message;
+
+      if (!authMessage) {
+        throw new Error('Challenge message missing from the server response.');
+      }
+
+      let signature;
+      try {
+        signature = await signer.signMessage(authMessage);
+      } catch (error) {
+        console.error('Signature request rejected', error);
+        throw new Error('You need to sign the message to save your profile.');
+      }
+
+      const trimmed = value => (typeof value === 'string' ? value.trim() : value);
+
+      const nameParts = [trimmed(values.firstName), trimmed(values.lastName)].filter(Boolean);
+      const displayName = nameParts.length ? nameParts.join(' ') : undefined;
+      const bio = trimmed(values.observations) || undefined;
+
+      const extraFieldsEntries = [
+        ['firstName', values.firstName],
+        ['lastName', values.lastName],
+        ['idType', values.idType],
+        ['idNumber', values.idNumber],
+        ['accommodation', values.accommodation],
+        ['nationality', values.nationality],
+        ['birthDate', values.birthDate],
+        ['contact', values.contact]
+      ]
+        .map(([field, value]) => ({
+          field,
+          value: trimmed(value)
+        }))
+        .filter(entry => entry.value);
+
+      if (bio) {
+        extraFieldsEntries.push({ field: 'observations', value: bio });
+      }
+
+      const payload = {
+        walletAddress: signerAddress,
+        signature,
+        displayName,
+        bio,
+        extraFields: extraFieldsEntries.length ? extraFieldsEntries : undefined
+      };
+
+      const body = Object.fromEntries(
+        Object.entries(payload).filter(([, value]) => value !== undefined)
+      );
+
+      const profileResponse = await fetch(`${registrationApiBase}/profile`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+
+      if (!profileResponse.ok) {
+        let message = 'Failed to save your profile.';
+        try {
+          const errorBody = await profileResponse.json();
+          if (errorBody?.error) {
+            message = errorBody.error;
+          }
+        } catch (error) {
+          console.error('Failed to parse profile error response', error);
+        }
+        throw new Error(message);
+      }
+
+      return profileResponse.json();
+    },
+    [account, getProvider, registrationApiBase, setAccount]
+  );
+
   const handleParticipantSubmit = useCallback(
-    values => {
+    async values => {
+      await persistParticipantProfile(values);
       setParticipantInfo(values);
       setIsParticipantModalOpen(false);
       if (pendingConnection) {
         setPendingConnection(false);
-        connectWallet();
+        if (!account) {
+          connectWallet();
+        }
       }
     },
-    [connectWallet, pendingConnection]
+    [account, connectWallet, pendingConnection, persistParticipantProfile]
   );
 
   const sendRegistrationDetails = useCallback(

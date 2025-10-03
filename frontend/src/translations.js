@@ -125,6 +125,8 @@ export const translations = {
       idTypeOther: 'Other',
       cancelButton: 'Cancel',
       saveButton: 'Save and continue',
+      savingButton: 'Saving...',
+      submitErrorMessage: 'We could not save your information. Please try again.',
       requiredField: 'This field is required.'
     }
   },
@@ -254,6 +256,8 @@ export const translations = {
       idTypeOther: 'Otro',
       cancelButton: 'Cancelar',
       saveButton: 'Guardar y continuar',
+      savingButton: 'Guardando...',
+      submitErrorMessage: 'No pudimos guardar tu información. Intentá nuevamente.',
       requiredField: 'Este campo es obligatorio.'
     }
   }

@@ -14,6 +14,8 @@ function ParticipantInfoModal({ isOpen, onClose, onSubmit, text = {}, initialVal
     observations: ''
   });
   const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState(null);
   const countries = useMemo(() => COUNTRIES, []);
   const defaultCountry = useMemo(
     () => countries.find(country => country.code === 'AR') || countries[0],
@@ -64,6 +66,8 @@ function ParticipantInfoModal({ isOpen, onClose, onSubmit, text = {}, initialVal
   useEffect(() => {
     if (!isOpen) {
       setErrors({});
+      setIsSubmitting(false);
+      setSubmitError(null);
     }
   }, [isOpen]);
 
@@ -120,7 +124,7 @@ function ParticipantInfoModal({ isOpen, onClose, onSubmit, text = {}, initialVal
     return newErrors;
   };
 
-  const handleSubmit = event => {
+  const handleSubmit = async event => {
     event.preventDefault();
     const validationErrors = validate(formValues);
     if (Object.keys(validationErrors).length) {
@@ -128,7 +132,22 @@ function ParticipantInfoModal({ isOpen, onClose, onSubmit, text = {}, initialVal
       return;
     }
     setErrors({});
-    onSubmit?.(formValues);
+    setSubmitError(null);
+
+    try {
+      setIsSubmitting(true);
+      await onSubmit?.(formValues);
+    } catch (error) {
+      console.error('Failed to submit participant information', error);
+      setSubmitError(
+        (error && error.message) ||
+          text.submitErrorMessage ||
+          'We could not save your information. Please try again.'
+      );
+      return;
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const title = text.title || 'Participant information';
@@ -320,18 +339,33 @@ function ParticipantInfoModal({ isOpen, onClose, onSubmit, text = {}, initialVal
           <div className="flex flex-col gap-2 sm:flex-row sm:justify-end">
             <button
               type="button"
+              disabled={isSubmitting}
               onClick={onClose}
-              className="inline-flex items-center justify-center rounded-xl border border-slate-300 px-4 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100"
+              className={`inline-flex items-center justify-center rounded-xl border border-slate-300 px-4 py-2 text-sm font-medium transition ${
+                isSubmitting
+                  ? 'cursor-not-allowed bg-slate-100 text-slate-400'
+                  : 'text-slate-600 hover:bg-slate-100'
+              }`}
             >
               {text.cancelButton || 'Cancel'}
             </button>
             <button
               type="submit"
-              className="inline-flex items-center justify-center rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800"
+              disabled={isSubmitting}
+              className={`inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold text-white shadow-sm transition ${
+                isSubmitting
+                  ? 'bg-slate-400'
+                  : 'bg-slate-900 hover:bg-slate-800'
+              }`}
             >
-              {text.saveButton || 'Save and continue'}
+              {isSubmitting
+                ? text.savingButton || 'Saving...'
+                : text.saveButton || 'Save and continue'}
             </button>
           </div>
+          {submitError && (
+            <p className="mt-2 text-sm text-red-600">{submitError}</p>
+          )}
         </form>
       </div>
     </div>
