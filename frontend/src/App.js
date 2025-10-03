@@ -41,10 +41,15 @@ function App() {
   const participantFormText = text?.participantForm || {};
   const registrationEndpoint = process.env.REACT_APP_REGISTRATION_ENDPOINT;
   const registrationApiBase = useMemo(() => {
-    if (!registrationEndpoint) {
-      return null;
+    if (registrationEndpoint && registrationEndpoint.trim()) {
+      return registrationEndpoint.replace(/\/+$/, '');
     }
-    return registrationEndpoint.replace(/\/+$/, '');
+
+    if (typeof window !== 'undefined' && window.location?.origin) {
+      return window.location.origin.replace(/\/+$/, '');
+    }
+
+    return null;
   }, [registrationEndpoint]);
   const metaMaskAlert = text?.alerts?.metaMask || 'Install MetaMask to continue.';
   const wrongNetworkAlert = text?.alerts?.wrongNetwork;
