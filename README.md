@@ -10,6 +10,8 @@ to the organizer's wallet—no smart contracts or escrow layers are involved.
 - Collect USDT payments that are sent immediately to the organizer's wallet.
 - Track real-time availability, registrations and participant wallets from the dashboard.
 - Offer a multilingual interface (English, Spanish and French) connected to the residency data.
+- Authenticate participants and organizers with their wallets and persist their profile data in
+  PostgreSQL.
 
 ## Payment flow
 
@@ -25,6 +27,7 @@ point at your deployment:
 
 - `REACT_APP_DESTINATION_WALLET`: wallet address that receives participant payments.
 - `REACT_APP_USDT_ADDRESS`: address of the ERC20 token accepted for payments.
+- `REACT_APP_REGISTRATION_ENDPOINT`: URL of the backend profile API.
 
 ## Hardcoded on-chain addresses
 
@@ -35,6 +38,50 @@ can copy the file into `.env` and override them when deploying elsewhere:
   (Hardhat default account #0 used for local testing).
 - **USDT token** (`REACT_APP_USDT_ADDRESS`): `0xdAC17F958D2ee523a2206206994597C13D831ec7` (Tether on
   Ethereum mainnet).
+
+## Backend API
+
+The `backend` folder exposes a lightweight Express server backed by Prisma and PostgreSQL 17. Wallet
+holders authenticate by signing a nonce-based challenge and can then persist profile information.
+
+### Environment variables
+
+Copy `backend/.env.example` to `backend/.env` and set at least the following variables:
+
+- `DATABASE_URL`: PostgreSQL connection string.
+- `PORT` (optional): API port, defaults to `4000`.
+- `CORS_ORIGIN` (optional): comma-separated origins allowed to call the API. Defaults to `*`.
+
+### Prisma setup
+
+Install dependencies and generate the Prisma client:
+
+```bash
+cd backend
+npm install
+npm run prisma:generate
+```
+
+Create and apply migrations before running the API (the command assumes an existing database):
+
+```bash
+npx prisma migrate dev --name init
+```
+
+### Available endpoints
+
+- `POST /auth/challenge` – creates or refreshes a login nonce for the supplied wallet address.
+- `POST /auth/verify` – validates a signature and rotates the nonce.
+- `GET /profile/:walletAddress` – fetches the persisted profile for a wallet.
+- `PUT /profile` – upserts profile metadata and optional custom fields.
+
+### Start the server
+
+```bash
+npm run dev
+# or
+npm start
+```
 
 ## Getting started
 
