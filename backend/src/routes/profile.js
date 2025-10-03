@@ -3,6 +3,7 @@ import { ethers } from 'ethers';
 import { z } from 'zod';
 
 import prisma from '../prismaClient.js';
+import { buildAuthMessage, generateNonce } from '../utils/auth.js';
 
 const router = Router();
 
@@ -22,6 +23,10 @@ const profileSchema = z.object({
       })
     )
     .optional()
+});
+
+const profileUpdateSchema = profileSchema.extend({
+  signature: z.string({ required_error: 'signature is required' }).min(1)
 });
 
 router.get('/:walletAddress', async (req, res, next) => {
@@ -55,13 +60,32 @@ router.get('/:walletAddress', async (req, res, next) => {
 
 router.put('/', async (req, res, next) => {
   try {
-    const { walletAddress, displayName, email, bio, avatarUrl, extraFields } =
-      profileSchema.parse(req.body);
+    const {
+      walletAddress,
+      displayName,
+      email,
+      bio,
+      avatarUrl,
+      extraFields,
+      signature
+    } = profileUpdateSchema.parse(req.body);
 
     const user = await prisma.user.findUnique({ where: { walletAddress } });
 
     if (!user) {
       return res.status(404).json({ error: 'User must authenticate before updating profile' });
+    }
+
+    const message = buildAuthMessage(user.nonce);
+    let recovered;
+    try {
+      recovered = ethers.verifyMessage(message, signature);
+    } catch (error) {
+      return res.status(400).json({ error: 'Invalid signature' });
+    }
+
+    if (ethers.getAddress(recovered) !== walletAddress) {
+      return res.status(401).json({ error: 'Signature verification failed' });
     }
 
     const updatedUser = await prisma.user.update({
@@ -71,6 +95,7 @@ router.put('/', async (req, res, next) => {
         email,
         bio,
         avatarUrl,
+        nonce: generateNonce(),
         profiles: {
           upsert: (extraFields || []).map(field => ({
             where: {

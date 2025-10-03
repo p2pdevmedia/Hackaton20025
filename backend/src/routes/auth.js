@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import { randomBytes } from 'crypto';
 import { ethers } from 'ethers';
 import { z } from 'zod';
 
 import prisma from '../prismaClient.js';
+import { buildAuthMessage, generateNonce } from '../utils/auth.js';
 
 const router = Router();
 
@@ -30,10 +30,6 @@ const verifySchema = z
     }
   });
 
-const generateNonce = () => randomBytes(16).toString('hex');
-
-const buildMessage = nonce => `EdgeCity login verification: ${nonce}`;
-
 router.post('/challenge', async (req, res, next) => {
   try {
     const { walletAddress } = walletSchema.parse(req.body);
@@ -48,7 +44,7 @@ router.post('/challenge', async (req, res, next) => {
     });
 
     res.json({
-      message: buildMessage(user.nonce),
+      message: buildAuthMessage(user.nonce),
       nonce: user.nonce,
       user: {
         id: user.id,
@@ -77,7 +73,7 @@ router.post('/verify', async (req, res, next) => {
       return res.status(404).json({ error: 'User not found for wallet address' });
     }
 
-    const message = buildMessage(user.nonce);
+    const message = buildAuthMessage(user.nonce);
     let recovered;
     try {
       recovered = ethers.verifyMessage(message, signature);
